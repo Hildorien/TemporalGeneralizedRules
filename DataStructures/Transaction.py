@@ -7,3 +7,6 @@ class Transaction:
         self.id = var1
         self.timestamp = var2
         self.items = var3
+
+    def addItem(self, item):
+        self.items.add(item)
