@@ -37,3 +37,19 @@ print("ID", "Timestamp", "Items", sep=' | ')
 for obj in transactions:
    print(obj.id, obj.timestamp, obj.items, sep=' | ')
 """
+
+df = pd.read_csv('Datasets/sales.csv',
+                 dtype={'time_id': int, 'customer_id': int, 'product_id': int,
+                        'the_date': "string", 'product_name': "string"})
+df.insert(0, 'order_id', -1)
+my_dict = {}
+orderId = 1
+for index, row in df.iterrows():
+    uniqueSale = str(row['time_id']) + "." + str(row['customer_id'])
+    if uniqueSale not in my_dict:
+        my_dict[uniqueSale] = orderId
+        orderId += 1
+    df.at[index, 'order_id'] = my_dict[uniqueSale]
+df.rename(columns={"the_date": "timestamp"}, inplace=True)
+dfFormated = df[['order_id', 'timestamp', 'product_name']]
+dfFormated.to_csv('Datasets/sales_formatted.csv', index=False)
