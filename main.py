@@ -1,10 +1,11 @@
 import pandas as pd
+import timeit
 import time
 import datetime
 from datetime import datetime
 from DataStructures.Parser import Parser
 from DataStructures.Transaction import Transaction
-
+from DataStructures.TransactionEncoder import  TransactionEncoder
 """
 dfTx = pd.read_csv('Datasets/transacciones.csv')
 dfTx['ProductID'] = dfTx['ProductID'].map(str)
@@ -39,7 +40,7 @@ print("ID", "Timestamp", "Items", sep=' | ')
 for obj in transactions:
    print(obj.id, obj.timestamp, obj.items, sep=' | ')
 """
-
+"""
 df = pd.read_csv('Datasets/sales.csv',
                  dtype={'time_id': int, 'customer_id': int, 'product_id': int,
                         'the_date': "string", 'product_name': "string"})
@@ -56,8 +57,40 @@ for index, row in df.iterrows():
     "Discard time since every date string has 00:00:00"
     df.at[index, 'the_date'] = df.at[index, 'the_date'].split()[0]
 
-    """Cast string date input to timestamp"""
+    #Cast string date input to timestamp
     df.at[index, 'the_date'] = str(int(time.mktime(datetime.strptime(df.at[index, 'the_date'], "%Y-%m-%d").timetuple())))
 df.rename(columns={"the_date": "timestamp"}, inplace=True)
 dfFormated = df[['order_id', 'timestamp', 'product_name']]
 dfFormated.to_csv('Datasets/sales_formatted.csv', index=False)
+"""
+
+df = pd.read_csv('Datasets/sales_formatted.csv', dtype={'order_id': int, 'timestamp': int, 'product_name': "string"})
+df['product_name'].replace(',', '.', inplace=True)
+dfG = df.groupby(['order_id', 'timestamp'])['product_name'].apply(lambda x: list(x)).reset_index()
+timestamps = dfG['timestamp'].array
+dataset = list(dfG['product_name'])
+te = TransactionEncoder()
+te_ary = te.fit(dataset).transform(dataset, sparse=True)
+sparse_df = pd.DataFrame.sparse.from_spmatrix(te_ary, columns=te.columns_)
+#print(sparse_df)
+
+sparse_df['timestamps'] = timestamps
+print(sparse_df)
+"""
+Memoria de los datos en esparsa: 1.2MB
+La clave esta aca https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sparse.from_spmatrix.html
+Pandas puede levantar un dataframe de una matriz esparsa de scipy.sparse
+print(sparse_df.info(memory_usage="deep"))
+
+
+Memoria de los datos en fila: 4.4MB
+print(dfG[['product_name']].info(memory_usage="deep"))
+
+
+#dfG -> convertirlo a matriz esparsa usando csr_matrix(data, indices, indptr) -> devuelve un array/matriz
+#convertir matriz esparsa a un dataframe:
+# dataFrameSparse = pd.DataFrame(array/matriz, columns=[Los productos que aprendi])
+# agregar columna extra de timestamp (deberia salir de una porque esta en orden):
+# dataFrameSparse['timestamp'] = dfG['timestamp']
+
+"""

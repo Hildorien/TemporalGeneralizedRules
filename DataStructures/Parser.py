@@ -12,7 +12,7 @@ class Parser:
         :return: List of Transaction
         """
         dataframe = pd.read_csv(filepath,
-                                dtype={'order_id': int, 'timestamp': "string", 'product_name': "string"}).dropna()
+                                dtype={'order_id': int, 'timestamp': int, 'product_name': "string"}).dropna()
         orderdict = {}
         for index, row in dataframe.iterrows():
             if row['order_id'] in orderdict:
