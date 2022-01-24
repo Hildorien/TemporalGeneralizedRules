@@ -1,5 +1,7 @@
 import pandas as pd
-
+import time
+import datetime
+from datetime import datetime
 from DataStructures.Parser import Parser
 from DataStructures.Transaction import Transaction
 
@@ -50,6 +52,12 @@ for index, row in df.iterrows():
         my_dict[uniqueSale] = orderId
         orderId += 1
     df.at[index, 'order_id'] = my_dict[uniqueSale]
+
+    "Discard time since every date string has 00:00:00"
+    df.at[index, 'the_date'] = df.at[index, 'the_date'].split()[0]
+
+    """Cast string date input to timestamp"""
+    df.at[index, 'the_date'] = str(int(time.mktime(datetime.strptime(df.at[index, 'the_date'], "%Y-%m-%d").timetuple())))
 df.rename(columns={"the_date": "timestamp"}, inplace=True)
 dfFormated = df[['order_id', 'timestamp', 'product_name']]
 dfFormated.to_csv('Datasets/sales_formatted.csv', index=False)
