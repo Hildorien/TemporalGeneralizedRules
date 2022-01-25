@@ -4,8 +4,6 @@ import time
 import datetime
 from datetime import datetime
 from DataStructures.Parser import Parser
-from DataStructures.Transaction import Transaction
-from DataStructures.TransactionEncoder import  TransactionEncoder
 """
 dfTx = pd.read_csv('Datasets/transacciones.csv')
 dfTx['ProductID'] = dfTx['ProductID'].map(str)
@@ -64,20 +62,16 @@ dfFormated = df[['order_id', 'timestamp', 'product_name']]
 dfFormated.to_csv('Datasets/sales_formatted.csv', index=False)
 """
 
-df = pd.read_csv('Datasets/sales_formatted.csv', dtype={'order_id': int, 'timestamp': int, 'product_name': "string"})
-df['product_name'].replace(',', '.', inplace=True)
-dfG = df.groupby(['order_id', 'timestamp'])['product_name'].apply(lambda x: list(x)).reset_index()
-timestamps = dfG['timestamp'].array
-dataset = list(dfG['product_name'])
-te = TransactionEncoder()
-te_ary = te.fit(dataset).transform(dataset, sparse=True)
-sparse_df = pd.DataFrame.sparse.from_spmatrix(te_ary, columns=te.columns_)
-#print(sparse_df)
+parser = Parser()
+finalDf = Parser.parseAndSparse(parser, "Datasets/sales_formatted.csv")
+print(finalDf)
+print(finalDf.info(memory_usage="deep"))
 
-sparse_df['timestamps'] = timestamps
-print(sparse_df)
+
+
+
 """
-Memoria de los datos en esparsa: 1.2MB
+Memoria de los datos en esparsa: 1.2MB (1.6MB con timestamps)
 La clave esta aca https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sparse.from_spmatrix.html
 Pandas puede levantar un dataframe de una matriz esparsa de scipy.sparse
 print(sparse_df.info(memory_usage="deep"))

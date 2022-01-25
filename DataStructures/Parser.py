@@ -1,9 +1,14 @@
 import pandas as pd
+import numpy as np
+from scipy.sparse import csr_matrix
 
 from DataStructures.Transaction import Transaction
 
 
 class Parser:
+    def __init__(self):
+        return None
+
     @staticmethod
     def parse(filepath):
         """
@@ -20,3 +25,43 @@ class Parser:
             else:
                 orderdict[row[0]] = Transaction(index, row['timestamp'], {row['product_name']})
         return list(orderdict.values())
+
+    def parseAndSparse(self, filepath):
+        df = pd.read_csv(filepath,
+                         dtype={'order_id': int, 'timestamp': int, 'product_name': "string"})
+        df['product_name'].replace(',', '.', inplace=True)
+        dfG = df.groupby(['order_id', 'timestamp'])['product_name'].apply(lambda x: list(x)).reset_index()
+        timestamps = dfG['timestamp']
+        dataset = list(dfG['product_name'])
+        sparse_matrix = self.fit(dataset).transform(dataset)
+        sparse_df = pd.DataFrame.sparse.from_spmatrix(sparse_matrix, columns=self.columns_)
+
+        return pd.concat([sparse_df, timestamps], axis=1)
+
+    def fit(self, X):
+        unique_items = set()
+        for transaction in X:
+            for item in transaction:
+                unique_items.add(item)
+        self.columns_ = sorted(unique_items)
+        columns_mapping = {}
+        for col_idx, item in enumerate(self.columns_):
+            columns_mapping[item] = col_idx
+        self.columns_mapping_ = columns_mapping
+        return self
+
+    def transform(self, X):
+        indptr = [0]
+        indices = []
+        for transaction in X:
+            for item in set(transaction):
+                col_idx = self.columns_mapping_[item]
+                indices.append(col_idx)
+            indptr.append(len(indices))
+        non_sparse_values = [True] * len(indices)
+        array = csr_matrix((non_sparse_values, indices, indptr),
+                           dtype=bool)
+        return array
+
+    def fit_transform(self, X):
+        return self.fit(X).transform(X)
