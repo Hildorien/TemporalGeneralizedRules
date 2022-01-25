@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import timeit
 import time
@@ -61,14 +62,10 @@ df.rename(columns={"the_date": "timestamp"}, inplace=True)
 dfFormated = df[['order_id', 'timestamp', 'product_name']]
 dfFormated.to_csv('Datasets/sales_formatted.csv', index=False)
 """
-
 parser = Parser()
-finalDf = Parser.parseAndSparse(parser, "Datasets/sales_formatted.csv")
-print(finalDf)
-print(finalDf.info(memory_usage="deep"))
-
-
-
+database = parser.parseAndSparse("Datasets/sales_formatted.csv")
+#print(finalDf.info(memory_usage="deep"))
+print(database.sparse_dataframe.iloc[:, 0])
 
 """
 Memoria de los datos en esparsa: 1.2MB (1.6MB con timestamps)

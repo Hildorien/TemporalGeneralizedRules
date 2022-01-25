@@ -3,7 +3,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 
 from DataStructures.Transaction import Transaction
-
+from DataStructures.Database import Database
 
 class Parser:
     def __init__(self):
@@ -35,8 +35,7 @@ class Parser:
         dataset = list(dfG['product_name'])
         sparse_matrix = self.fit(dataset).transform(dataset)
         sparse_df = pd.DataFrame.sparse.from_spmatrix(sparse_matrix, columns=self.columns_)
-
-        return pd.concat([sparse_df, timestamps], axis=1)
+        return Database(sparse_df, timestamps.to_dict())
 
     def fit(self, X):
         unique_items = set()
