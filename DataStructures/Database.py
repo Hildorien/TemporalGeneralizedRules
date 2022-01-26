@@ -14,7 +14,7 @@ class Database:
         self.row_count = len(self.sparse_dataframe.index)
 
         #example of supportOf usage. Delete afterwards.
-        print(self.supportOf({1,6}))
+        print(self.supportOf({499}))
 
     def supportOf(self, itemset):
         """
@@ -31,7 +31,13 @@ class Database:
 
         return len(final_intersection)/self.row_count
 
-
+    def confidenceOf(self, lhs, rhs):
+        """
+        :param lhs: a set of items
+        :param rhs: a set of one item
+        :return: float
+        """
+        return self.supportOf(lhs) / self.supportOf(rhs)
 
 
 
