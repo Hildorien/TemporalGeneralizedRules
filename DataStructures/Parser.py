@@ -35,7 +35,7 @@ class Parser:
         dataset = list(dfG['product_name'])
         sparse_matrix = self.fit(dataset).transform(dataset)
         sparse_df = pd.DataFrame.sparse.from_spmatrix(sparse_matrix, columns=self.columns_)
-        return Database(sparse_df, timestamps.to_dict())
+        return Database(sparse_df, timestamps.to_dict(), self.items_dic)
 
     def fit(self, X):
         unique_items = set()
@@ -52,9 +52,11 @@ class Parser:
     def transform(self, X):
         indptr = [0]
         indices = []
+        self.items_dic = {}
         for transaction in X:
             for item in set(transaction):
                 col_idx = self.columns_mapping_[item]
+                self.items_dic[col_idx] = item
                 indices.append(col_idx)
             indptr.append(len(indices))
         non_sparse_values = [True] * len(indices)

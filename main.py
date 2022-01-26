@@ -1,10 +1,16 @@
+import unittest
+
 import numpy as np
 import pandas as pd
 import timeit
 import time
 import datetime
 from datetime import datetime
+import functools
 from DataStructures.Parser import Parser
+from Tests.utilityTests import utilityTests
+import operator
+
 """
 dfTx = pd.read_csv('Datasets/transacciones.csv')
 dfTx['ProductID'] = dfTx['ProductID'].map(str)
@@ -65,7 +71,12 @@ dfFormated.to_csv('Datasets/sales_formatted.csv', index=False)
 parser = Parser()
 database = parser.parseAndSparse("Datasets/sales_formatted.csv")
 #print(finalDf.info(memory_usage="deep"))
-print(database.sparse_dataframe.iloc[:, 0])
+#print(database.sparse_dataframe.iloc[:, 0])
+
+#RunTests
+suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
+unittest.main()
+
 
 """
 Memoria de los datos en esparsa: 1.2MB (1.6MB con timestamps)
@@ -73,6 +84,16 @@ La clave esta aca https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.
 Pandas puede levantar un dataframe de una matriz esparsa de scipy.sparse
 print(sparse_df.info(memory_usage="deep"))
 
+array = [True,0,True]
+
+result = functools.reduce(lambda x, y: x and y,array, True)
+
+# printing each item from list
+print(result)
+if (0):
+    print("hola")
+else:
+    print("chau")
 
 Memoria de los datos en fila: 4.4MB
 print(dfG[['product_name']].info(memory_usage="deep"))
