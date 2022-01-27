@@ -1,5 +1,34 @@
 from itertools import combinations
 
+def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
+    """
+    :param frequent_itemset: An ORDERED set/list of itemsets in which each itemset is also ordered
+    :param frequent_dictionary: Auxiliary structure for fast lookup of frequents of size k-1
+    :return:
+    """
+    k = len(frequent_itemset_of_size_k_minus_1[0])+1
+    #STEP 1: JOIN
+    candidates_of_size_k = []
+    n = len(frequent_itemset_of_size_k_minus_1)
+    for i in range(n):
+        j = i+1
+        while j < n-1:
+            joined_itemset = getValidJoin(frequent_itemset_of_size_k_minus_1[i], frequent_itemset_of_size_k_minus_1[j])
+            if joined_itemset is None:
+                break
+            else:
+                candidates_of_size_k.append(joined_itemset)
+            j += 1
+    #STEP 2: PRUNE -> For each itemset in L_k check if all subsets are frequent
+    for a_candidate_of_size_k in candidates_of_size_k: #Iterating over a lists of lists
+        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k, k-1) #a_candidate_of_size_k is a list
+        for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
+            if not (joinlistOfInts(a_subset_of_size_k_minus_1) in frequent_dictionary[k-1]):
+                candidates_of_size_k.remove(a_candidate_of_size_k) #Prunes the entire candidate
+                break
+
+    return candidates_of_size_k
+
 
 def apriori(database, min_support, min_confidence):
     """
@@ -56,5 +85,20 @@ def apriori(database, min_support, min_confidence):
         frecuent_itemsets_by_k[k] = k_frecuent_itemset
 
     # Si K != len(frequent_size_1) o len(ITEMSET_FRECUENTE_TAMAÑO_K) = 0:
-    # STOP
+
+def apriori2(database, min_support, min_confidence):
+    """
+    :param database:
+    :param min_support:
+    :param min_confidence:
+    :return: a set of AssociationRules
+    """
+    all_items = sorted(list(database.items_dic.keys()))
+    # Pre-prune frequents_size_1 where support does not meet the min_support
+    frequent_size_1 = list(filter(lambda x: database.supportOf({x}) > min_support, all_items))
+    print(len(frequent_size_1))
+    candidates_size_2 = list(map(list, combinations(frequent_size_1, 2)))
+    print(len(candidates_size_2))
+    #frequent_size_2 = list(filter(lambda x: database.supportOf(x) > min_support, candidates_size_2))
+
 

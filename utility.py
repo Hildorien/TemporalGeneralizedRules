@@ -1,3 +1,5 @@
+from itertools import combinations
+
 def findOrderedIntersection(arr1, arr2):
     """
         :param: two ordered int arrays

@@ -11,6 +11,7 @@ from DataStructures.Parser import Parser
 from Tests.utilityTests import utilityTests
 import operator
 from Apriori.apriori import apriori
+from Apriori.apriori import apriori2
 """
 dfTx = pd.read_csv('Datasets/transacciones.csv')
 dfTx['ProductID'] = dfTx['ProductID'].map(str)
@@ -76,10 +77,9 @@ database = parser.parseAndSparse("Datasets/sales_formatted.csv")
 #RunTests
 #suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
 #unittest.main()
-#apriori(database, 0.1, 0)
-from itertools import combinations
-print(list(combinations( (2,3,4), 2)))
-#(T1, T2) -> { T1, T2 }
+apriori2(database, 0.003, 0)
+
+
 """
 Memoria de los datos en esparsa: 1.2MB (1.6MB con timestamps)
 La clave esta aca https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sparse.from_spmatrix.html
