@@ -18,7 +18,7 @@ class Database:
 
     def supportOf(self, itemset):
         """
-        :param itemset: set of integers
+        :param itemset: set/list of integers
         :return: float
         """
         final_intersection = []

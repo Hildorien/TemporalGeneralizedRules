@@ -81,26 +81,6 @@ apriori2(database, 0.003, 0)
 
 
 """
-Memoria de los datos en esparsa: 1.2MB (1.6MB con timestamps)
-La clave esta aca https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sparse.from_spmatrix.html
-Pandas puede levantar un dataframe de una matriz esparsa de scipy.sparse
-print(sparse_df.info(memory_usage="deep"))
-
-array = [True,0,True]
-
-result = functools.reduce(lambda x, y: x and y,array, True)
-
-# printing each item from list
-print(result)
-if (0):
-    print("hola")
-else:
-    print("chau")
-
-Memoria de los datos en fila: 4.4MB
-print(dfG[['product_name']].info(memory_usage="deep"))
-
-
 #dfG -> convertirlo a matriz esparsa usando csr_matrix(data, indices, indptr) -> devuelve un array/matriz
 #convertir matriz esparsa a un dataframe:
 # dataFrameSparse = pd.DataFrame(array/matriz, columns=[Los productos que aprendi])

@@ -1,4 +1,7 @@
 from itertools import combinations
+from utility import getValidJoin
+from utility import allSubsetofSizeKMinus1
+from utility import joinlistOfInts
 
 def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
     """
