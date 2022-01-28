@@ -1,4 +1,3 @@
-import pandas as pd
 from utility import findOrderedIntersection
 
 class Database:
@@ -11,10 +10,7 @@ class Database:
         self.sparse_dataframe = var1
         self.timestamp_mapping = var2
         self.items_dic = var3
-        self.row_count = len(self.sparse_dataframe.index)
-
-        #example of supportOf usage. Delete afterwards.
-        print(self.supportOf({499}))
+        self.row_count = var4
 
     def supportOf(self, itemset):
         """

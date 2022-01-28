@@ -70,14 +70,13 @@ dfFormated = df[['order_id', 'timestamp', 'product_name']]
 dfFormated.to_csv('Datasets/sales_formatted.csv', index=False)
 """
 parser = Parser()
-database = parser.parseAndSparse("Datasets/sales_formatted.csv")
+database = parser.parse("Datasets/sales_formatted.csv")
 #print(finalDf.info(memory_usage="deep"))
 #print(database.sparse_dataframe.iloc[:, 0])
 
 #RunTests
 #suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
 #unittest.main()
-apriori2(database, 0.003, 0)
 
 
 """

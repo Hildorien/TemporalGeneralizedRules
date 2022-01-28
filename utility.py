@@ -50,3 +50,6 @@ def allSubsetofSizeKMinus1(a_candidate_of_size_k, k):
 
 def joinlistOfInts(list):
     return ','.join(str(x) for x in list)
+
+def flatten(t):
+    return [item for sublist in t for item in sublist]
