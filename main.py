@@ -73,7 +73,8 @@ parser = Parser()
 database = parser.parse("Datasets/sales_formatted.csv")
 #print(finalDf.info(memory_usage="deep"))
 #print(database.sparse_dataframe.iloc[:, 0])
-
+dict = apriori2(database, 0.003, 0)
+#print(dict)
 #RunTests
 #suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
 #unittest.main()

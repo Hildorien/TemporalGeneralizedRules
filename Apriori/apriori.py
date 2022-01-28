@@ -2,6 +2,8 @@ from itertools import combinations
 from utility import getValidJoin
 from utility import allSubsetofSizeKMinus1
 from utility import joinlistOfInts
+from utility import flatten
+import time
 
 
 def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
@@ -121,4 +123,8 @@ def apriori2(database, min_support, min_confidence):
                 frequent_dictionary[k].append(a_candidate_size_k)
                 support_dictionary[joinlistOfInts(a_candidate_size_k)] = support
 
+        k += 1
+    return frequent_dictionary
+    #STEP 2: Rule Generation
+    #rules = rule_generation(frequent_dictionary)
 

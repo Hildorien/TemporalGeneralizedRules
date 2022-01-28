@@ -10,18 +10,29 @@ class Parser:
         dfG = df.groupby(['order_id', 'timestamp'])['product_name'].apply(lambda x: list(x)).reset_index()
         timestamps = dfG['timestamp']
         dataset = list(dfG['product_name'])
-        sparse_matrix = self.fit(dataset).transform(dataset)
-        sparse_df = pd.DataFrame.sparse.from_spmatrix(sparse_matrix, columns=self.columns_)
-        return Database(sparse_df, timestamps.to_dict(), self.items_dic)
+        matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)
+        return Database(matrix_dictionary, timestamps.to_dict(), self.item_name_by_index, len(dataset))
+
+    def create_matrix_dictionary(self, dataset):
+        matrix_dictionary = {}
+        for tid, transaction in enumerate(dataset):
+
+            for item in set(transaction):
+                if item in matrix_dictionary:
+                    matrix_dictionary[item].append(tid)
+                else:
+                    matrix_dictionary[item] = [tid]
+        return matrix_dictionary
 
     def fit(self, X):
+        self.item_name_by_index = {}
         unique_items = set()
         for transaction in X:
             for item in transaction:
                 unique_items.add(item)
-        self.columns_ = sorted(unique_items)
-        columns_mapping = {}
-        for col_idx, item in enumerate(self.columns_):
-            columns_mapping[item] = col_idx
-        self.columns_mapping_ = columns_mapping
+        self.item_names = sorted(unique_items)
+        self.item_index_by_name = {}
+        for col_idx, item in enumerate(self.item_names):
+            self.item_index_by_name[item] = col_idx
+            self.item_name_by_index[col_idx] = item
         return self
