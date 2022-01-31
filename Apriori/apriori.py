@@ -4,7 +4,7 @@ from utility import allSubsetofSizeKMinus1
 from utility import joinlistOfInts
 from utility import flatten
 import time
-
+from DataStructures.AssociationRule import AssociationRule
 
 def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
     """
@@ -25,19 +25,35 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
             else:
                 candidates_of_size_k.append(joined_itemset)
             j += 1
-
     # STEP 2: PRUNE -> For each itemset in L_k check if all subsets are frequent
     for a_candidate_of_size_k in candidates_of_size_k:  # Iterating over a lists of lists
-        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k,
-                                                           k - 1)  # a_candidate_of_size_k is a list
+        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k, k - 1)  # a_candidate_of_size_k is a list
         for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
-            if not (joinlistOfInts(a_subset_of_size_k_minus_1) in frequent_dictionary[k - 1]):
+            if not (a_subset_of_size_k_minus_1 in frequent_dictionary[k - 1]):
                 candidates_of_size_k.remove(a_candidate_of_size_k)  # Prunes the entire candidate
                 break
 
     return candidates_of_size_k
 
-#def rule_generation(frequent_)
+def rule_generation(frequent_dictionary, support_dictionary, min_confidence, database):
+    rules = []
+    for key in frequent_dictionary:
+        if key != 1:
+            frequent_itemset_k = frequent_dictionary[key]
+            for a_itemset_k in frequent_itemset_k:
+                for idx, item in enumerate(a_itemset_k):
+
+                    frequent_itemset_copy = a_itemset_k.copy()
+                    consequent = [frequent_itemset_copy.pop(idx)]
+                    antecedent = frequent_itemset_copy
+                    support_antecedent = support_dictionary[joinlistOfInts(antecedent)]
+                    support_all_items = support_dictionary[joinlistOfInts(a_itemset_k)]
+                    confidence = support_all_items / support_antecedent
+
+                    if confidence >= min_confidence:
+                        association_rule = AssociationRule(antecedent, consequent, support_all_items, confidence)
+                        rules.append(association_rule)
+    return rules
 
 def apriori(database, min_support, min_confidence):
     """
@@ -127,7 +143,7 @@ def apriori2(database, min_support, min_confidence):
         end = time.time()
         #print('Took ' + (str(end - start) + ' seconds'))
         k += 1
-    return frequent_dictionary
     #STEP 2: Rule Generation
-    #rules = rule_generation(frequent_dictionary)
+    rules = rule_generation(frequent_dictionary, support_dictionary, min_confidence, database)
+    return rules
 

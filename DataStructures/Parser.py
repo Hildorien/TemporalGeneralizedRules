@@ -21,7 +21,7 @@ class Parser:
             a_transaction = []
             string_split = line.rstrip().split(",")
             for item in string_split:
-                a_transaction.append(int(item))
+                a_transaction.append(item)
             dataset.append(a_transaction)
         matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)
         return Database(matrix_dictionary, {}, self.item_name_by_index, len(dataset))

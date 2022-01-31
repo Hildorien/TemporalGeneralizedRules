@@ -1,12 +1,13 @@
+
 class AssociationRule:
-    lhs = {}
-    rhs = {}
+    lhs = []
+    rhs = []
     support = 0
     confidence = 0
 
-    def __init__(self, lhs, rhs):
+    def __init__(self, lhs, rhs, support, confidence):
         self.lhs = lhs
         self.rhs = rhs
+        self.support = support
+        self.confidence = confidence
 
-    def print(self):
-        return str(self.lhs) + " => " + str(self.rhs) + " support: " + str(self.support) + " confidence: " + str(self.confidence)

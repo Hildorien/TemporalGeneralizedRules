@@ -20,14 +20,13 @@ datasets = ["Datasets/data.csv",
             "Datasets/data5.csv",
             "Datasets/data6.csv",
             "Datasets/data7.csv"]
-database = parser.parseBasketFile(datasets[0])
+database = parser.parseBasketFile(datasets[2])
 # Prints to get info of algorithm
 print('Database size: ' + str(database.row_count))
 print('Total items: ' + str((len(database.items_dic.keys()))))
-dict = apriori2(database, 0.05, 0)
-print('Frequent Itemsets: ')
-print(dict)
-
+rules = apriori2(database, 0.2, 0.8)
+#print('Frequent Itemsets: ')
+#print(dict)
 # RunTests
 # suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
 # unittest.main()
