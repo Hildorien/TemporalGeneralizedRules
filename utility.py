@@ -16,7 +16,7 @@ def findOrderedIntersection(arr1, arr2):
         if val_dif == 0:
             result_array.append(arr1[pointer_1])
             pointer_1 += 1
-            pointer_2 += 2
+            pointer_2 += 1
         elif val_dif > 0:
             pointer_2 += 1
         else:
