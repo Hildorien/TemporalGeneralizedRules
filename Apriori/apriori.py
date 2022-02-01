@@ -1,10 +1,14 @@
+import itertools
 from itertools import combinations
+from multiprocessing import freeze_support
+
 from utility import getValidJoin
 from utility import allSubsetofSizeKMinus1
 from utility import joinlistOfInts
 from utility import flatten
 import time
 from DataStructures.AssociationRule import AssociationRule
+import multiprocessing
 
 def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
     """
@@ -91,3 +95,51 @@ def apriori(database, min_support, min_confidence):
     rules = rule_generation(frequent_dictionary, support_dictionary, min_confidence, database)
     return rules
 
+
+def apriori_mapreduce(database, min_support, min_confidence):
+    """
+        :param database:
+        :param min_support:
+        :param min_confidence:
+        :return: a set of AssociationRules
+        """
+    # STEP 1: Frequent itemset generation
+    all_items = sorted(list(database.items_dic.keys()))
+    k = 1
+    support_dictionary = {}
+    frequent_dictionary = {}
+    while (k == 1 or frequent_dictionary[k - 1] != []) and k < len(all_items):
+        candidates_size_k = []
+        if k == 1:
+            candidates_size_k = list(map(lambda x: [x], all_items))
+        elif k == 2:
+            candidates_size_k = list(
+                map(list, combinations(flatten(frequent_dictionary[1]), 2)))  # Treat k = 2 as a special case
+        else:
+            candidates_size_k = apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
+        print('Candidates of size ' + str(k) + ' is ' + str(len(candidates_size_k)))
+        # print('Calculating support of each candidate of size ' + str(k))
+        frequent_dictionary[k] = []
+        start = time.time()
+        pool = multiprocessing.Pool(8)
+        results = pool.starmap(calculateSupport, zip(candidates_size_k, itertools.repeat(database)))
+        for a_result in results:
+            if a_result[1] >= min_support:
+                frequent_dictionary[k].append(a_result[0])
+                support_dictionary[joinlistOfInts(a_result[0])] = a_result[1]
+
+        """for a_candidate_size_k in candidates_size_k:
+            support = database.supportOf(a_candidate_size_k)
+            if support >= min_support:
+                frequent_dictionary[k].append(a_candidate_size_k)
+                support_dictionary[joinlistOfInts(a_candidate_size_k)] = support
+        """
+        end = time.time()
+        print('Iteration ' + str(k) + ' took ' + (str(end - start) + ' seconds'))
+        k += 1
+    # STEP 2: Rule Generation
+    rules = rule_generation(frequent_dictionary, support_dictionary, min_confidence, database)
+    return rules
+
+def calculateSupport(a_candidate, database):
+    return (a_candidate, database.supportOf(a_candidate))
