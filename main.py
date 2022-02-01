@@ -1,7 +1,7 @@
 import unittest
 from DataStructures.Parser import Parser
 from Tests.utilityTests import utilityTests
-from Apriori.apriori import apriori2
+from Apriori.apriori import apriori
 
 # Parse dataset in transaction format
 """
@@ -20,11 +20,13 @@ datasets = ["Datasets/data.csv",
             "Datasets/data5.csv",
             "Datasets/data6.csv",
             "Datasets/data7.csv"]
-database = parser.parseBasketFile(datasets[2])
+database = parser.parseBasketFile(datasets[5])
 # Prints to get info of algorithm
 print('Database size: ' + str(database.row_count))
 print('Total items: ' + str((len(database.items_dic.keys()))))
-rules = apriori2(database, 0.2, 0.8)
+rules = apriori(database, 0.01, 0.5)
+for rule in rules:
+    print(database.printAssociationRule(rule))
 #print('Frequent Itemsets: ')
 #print(dict)
 # RunTests
