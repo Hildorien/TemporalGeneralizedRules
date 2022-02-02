@@ -1,0 +1,1561 @@
+product_id;product_name;product_class_id;product_category;product_subcategory;product_department;product_family
+1;Washington Berry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+2;Washington Mango Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+3;Washington Strawberry Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+4;Washington Cream Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+5;Washington Diet Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+6;Washington Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+7;Washington Diet Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+8;Washington Orange Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+9;Washington Cranberry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+10;Washington Apple Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+11;Washington Apple Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+12;Jeffers Oatmeal;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+13;Jeffers Corn Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+14;Jeffers Wheat Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+15;Jeffers Grits;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+16;Blue Label Canned Beets;62;Vegetables;Canned Vegetables;Canned Foods;Food
+17;Blue Label Creamed Corn;62;Vegetables;Canned Vegetables;Canned Foods;Food
+18;Blue Label Canned String Beans;62;Vegetables;Canned Vegetables;Canned Foods;Food
+19;Blue Label Chicken Soup;58;Canned Soup;Soup;Canned Foods;Food
+20;Blue Label Canned Yams;62;Vegetables;Canned Vegetables;Canned Foods;Food
+21;Blue Label Vegetable Soup;58;Canned Soup;Soup;Canned Foods;Food
+22;Blue Label Canned Tomatos;62;Vegetables;Canned Vegetables;Canned Foods;Food
+23;Blue Label Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+24;Blue Label Regular Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+25;Blue Label Chicken Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+26;Blue Label Turkey Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+27;Blue Label Beef Soup;58;Canned Soup;Soup;Canned Foods;Food
+28;Blue Label Canned Peas;62;Vegetables;Canned Vegetables;Canned Foods;Food
+29;Blue Label Chicken Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+30;Blue Label Canned Tuna in Water;93;Canned Tuna;Tuna;Canned Foods;Food
+31;Blue Label Canned Tuna in Oil;93;Canned Tuna;Tuna;Canned Foods;Food
+32;Blue Label Large Canned Shrimp;94;Canned Shrimp;Shrimp;Canned Foods;Food
+33;Blue Label Fancy Canned Anchovies;95;Canned Anchovies;Anchovies;Canned Foods;Food
+34;Blue Label Fancy Canned Clams;96;Canned Clams;Clams;Canned Foods;Food
+35;Blue Label Fancy Canned Oysters;97;Canned Oysters;Oysters;Canned Foods;Food
+36;Blue Label Fancy Canned Sardines;98;Canned Sardines;Sardines;Canned Foods;Food
+37;Blue Label Rice Soup;58;Canned Soup;Soup;Canned Foods;Food
+38;Green Ribbon Canned Mixed Fruit;3;Fruit;Canned Fruit;Canned Products;Food
+39;Green Ribbon Canned Peaches;3;Fruit;Canned Fruit;Canned Products;Food
+40;King Rosy Sunglasses;89;Specialty;Sunglasses;Carousel;Non-Consumable
+41;Queen Eyeglass Screwdriver;103;Hardware;Screwdrivers;Checkout;Non-Consumable
+42;Queen City Map;102;Miscellaneous;Maps;Checkout;Non-Consumable
+43;Club Low Fat Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+44;Club Low Fat Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+45;Club Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+46;Club Jack Cheese;11;Dairy;Cheese;Dairy;Food
+47;Club Muenster Cheese;11;Dairy;Cheese;Dairy;Food
+48;Club String Cheese;11;Dairy;Cheese;Dairy;Food
+49;Club Low Fat String Cheese;11;Dairy;Cheese;Dairy;Food
+50;Club Havarti Cheese;11;Dairy;Cheese;Dairy;Food
+51;Club Head Cheese;11;Dairy;Cheese;Dairy;Food
+52;Club Cheese Spread;11;Dairy;Cheese;Dairy;Food
+53;Club Sharp Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+54;Club Mild Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+55;Club Large Curd Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+56;Club 2% Milk;76;Dairy;Milk;Dairy;Drink
+57;Club Buttermilk;76;Dairy;Milk;Dairy;Drink
+58;Club Chocolate Milk;76;Dairy;Milk;Dairy;Drink
+59;Club 1% Milk;76;Dairy;Milk;Dairy;Drink
+60;Club Whole Milk;76;Dairy;Milk;Dairy;Drink
+61;Club Strawberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+62;Club Blueberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+63;Red Spade Chicken Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+64;Red Spade Pimento Loaf;91;Meat;Bologna;Deli;Food
+65;Red Spade Beef Bologna;91;Meat;Bologna;Deli;Food
+66;Red Spade Low Fat Bologna;91;Meat;Bologna;Deli;Food
+67;Red Spade Turkey Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+68;Red Spade Foot-Long Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+69;Red Spade Low Fat Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+70;Red Spade Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+71;Red Spade Roasted Chicken;77;Meat;Fresh Chicken;Deli;Food
+72;Red Spade Corned Beef;8;Meat;Deli Meats;Deli;Food
+73;Red Spade Sliced Turkey;8;Meat;Deli Meats;Deli;Food
+74;Red Spade Sliced Ham;8;Meat;Deli Meats;Deli;Food
+75;Red Spade Potato Salad;16;Side Dishes;Deli Salads;Deli;Food
+76;Red Spade Sliced Chicken;8;Meat;Deli Meats;Deli;Food
+77;Blue Medal Small Brown Eggs;66;Eggs;Eggs;Eggs;Food
+78;Blue Medal Large Brown Eggs;66;Eggs;Eggs;Eggs;Food
+79;Blue Medal Small Eggs;66;Eggs;Eggs;Eggs;Food
+80;Blue Medal Large Eggs;66;Eggs;Eggs;Eggs;Food
+81;Blue Medal Egg Substitute;66;Eggs;Eggs;Eggs;Food
+82;Golden Low Fat Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+83;Golden Orange Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+84;Golden Frozen Chicken Breast;100;Meat;Frozen Chicken;Frozen Foods;Food
+85;Golden Frozen Pancakes;29;Breakfast Foods;Pancakes;Frozen Foods;Food
+86;Golden Low Fat French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+87;Golden Frozen Sausage Pizza;64;Pizza;Pizza;Frozen Foods;Food
+88;Golden Blueberry Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+89;Golden Fajita French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+90;Golden Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+91;Golden Frozen Pepperoni Pizza;64;Pizza;Pizza;Frozen Foods;Food
+92;Golden Frozen Cheese Pizza;64;Pizza;Pizza;Frozen Foods;Food
+93;Golden Frozen Mushroom Pizza;64;Pizza;Pizza;Frozen Foods;Food
+94;Golden Apple Cinnamon Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+95;Golden Frozen Carrots;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+96;Golden Turkey TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+97;Golden Chicken TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+98;Golden Beef TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+99;Golden Pancake Mix;28;Breakfast Foods;Pancake Mix;Frozen Foods;Food
+100;Golden Grape Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+101;Golden Home Style French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+102;Golden Lime Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+103;Golden Ice Cream;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+104;Golden Ice Cream Sandwich;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+105;Golden Frozen Cauliflower;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+106;Golden Frozen Broccoli;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+107;Golden Frozen Corn;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+108;Golden Frozen Peas;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+109;Golden Popsicles;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+110;Golden Frozen Chicken Thighs;100;Meat;Frozen Chicken;Frozen Foods;Food
+111;Golden Frozen Chicken Wings;100;Meat;Frozen Chicken;Frozen Foods;Food
+112;Golden Lemon Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+113;Faux Products Silky Smooth Hair Conditioner;78;Bathroom Products;Conditioner;Health and Hygiene;Non-Consumable
+114;Faux Products Tartar Control Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+115;Faux Products Whitening Toothpast;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+116;Faux Products Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+117;Faux Products Deodorant;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+118;Faux Products Conditioning Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+119;Faux Products Extra Moisture Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+120;Faux Products Angled Toothbrush;88;Bathroom Products;Toothbrushes;Health and Hygiene;Non-Consumable
+121;Faux Products Apricot Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+122;Faux Products Childrens Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+123;Faux Products Buffered Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+124;Faux Products 200 MG Ibuprofen;71;Pain Relievers;Ibuprofen;Health and Hygiene;Non-Consumable
+125;Faux Products 200 MG Acetominifen;72;Pain Relievers;Acetominifen;Health and Hygiene;Non-Consumable
+126;Faux Products HCL Nasal Spray;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+127;Faux Products Dishwasher Detergent;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+128;Faux Products Multi-Symptom Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+129;Faux Products Childrens Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+130;Faux Products Laundry Detergent;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+131;Faux Products Mint Mouthwash;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+132;Denny 60 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+133;Denny Plastic Forks;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+134;Denny Plastic Spoons;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+135;Denny Plastic Knives;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+136;Denny C-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+137;Denny 100 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+138;Denny AAA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+139;Denny Paper Plates;55;Paper Products;Paper Dishes;Household;Non-Consumable
+140;Denny Paper Cups;55;Paper Products;Paper Dishes;Household;Non-Consumable
+141;Denny 75 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+142;Denny Toilet Bowl Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+143;Denny Counter Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+144;Denny Glass Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+145;Denny 25 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+146;Denny AA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+147;Denny D-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+148;Denny Paper Towels;18;Paper Products;Paper Wipes;Household;Non-Consumable
+149;Denny Soft Napkins;18;Paper Products;Paper Wipes;Household;Non-Consumable
+150;Denny Scented Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+151;Denny Toilet Paper;18;Paper Products;Paper Wipes;Household;Non-Consumable
+152;Denny Tissues;18;Paper Products;Paper Wipes;Household;Non-Consumable
+153;Denny Scented Toilet Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+154;Denny Room Freshener;20;Cleaning Supplies;Deodorizers;Household;Non-Consumable
+155;Denny Frying Pan;40;Kitchen Products;Pots and Pans;Household;Non-Consumable
+156;Denny Copper Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+157;Denny Bees Wax Candles;47;Candles;Candles;Household;Non-Consumable
+158;Denny Silver Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+159;Denny Copper Pot Scrubber;86;Kitchen Products;Pot Scrubbers;Household;Non-Consumable
+160;Denny Economy Toilet Brush;85;Bathroom Products;Toilet Brushes;Household;Non-Consumable
+161;Denny Scissors;41;Hardware;Tools;Household;Non-Consumable
+162;Denny Large Sponge;42;Kitchen Products;Sponges;Household;Non-Consumable
+163;Denny Screw Driver;41;Hardware;Tools;Household;Non-Consumable
+164;Ship Shape Extra Lean Hamburger;65;Meat;Hamburger;Meat;Food
+165;Ship Shape Seasoned Hamburger;65;Meat;Hamburger;Meat;Food
+166;Robust Monthly Sports Magazine;104;Magazines;Sports Magazines;Periodicals;Non-Consumable
+167;Robust Monthly Auto Magazine;108;Magazines;Auto Magazines;Periodicals;Non-Consumable
+168;Robust Monthly Computer Magazine;107;Magazines;Computer Magazines;Periodicals;Non-Consumable
+169;Robust Monthly Home Magazine;105;Magazines;Home Magazines;Periodicals;Non-Consumable
+170;Robust Monthly Fashion Magazine;106;Magazines;Fashion Magazines;Periodicals;Non-Consumable
+171;High Top Summer Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+172;High Top Corn on the Cob;61;Vegetables;Fresh Vegetables;Produce;Food
+173;High Top Asparagus;61;Vegetables;Fresh Vegetables;Produce;Food
+174;High Top Sweet Peas;61;Vegetables;Fresh Vegetables;Produce;Food
+175;High Top New Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+176;High Top Beets;61;Vegetables;Fresh Vegetables;Produce;Food
+177;High Top Prepared Salad;61;Vegetables;Fresh Vegetables;Produce;Food
+178;High Top Onions;61;Vegetables;Fresh Vegetables;Produce;Food
+179;High Top Green Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+180;High Top Shitake Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+181;High Top Lettuce;61;Vegetables;Fresh Vegetables;Produce;Food
+182;High Top Elephant Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+183;High Top Red Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+184;High Top Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+185;High Top Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+186;High Top Cauliflower;61;Vegetables;Fresh Vegetables;Produce;Food
+187;High Top Tomatos;61;Vegetables;Fresh Vegetables;Produce;Food
+188;High Top Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+189;High Top Baby Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+190;High Top Dried Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+191;High Top Fresh Lima Beans;61;Vegetables;Fresh Vegetables;Produce;Food
+192;High Top Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+193;High Top Limes;99;Fruit;Fresh Fruit;Produce;Food
+194;High Top Firm Tofu;67;Packaged Vegetables;Tofu;Produce;Food
+195;High Top Almonds;1;Specialty;Nuts;Produce;Food
+196;High Top Macintosh Apples;99;Fruit;Fresh Fruit;Produce;Food
+197;High Top Golden Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+198;High Top Red Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+199;High Top Lemons;99;Fruit;Fresh Fruit;Produce;Food
+200;High Top Fancy Plums;99;Fruit;Fresh Fruit;Produce;Food
+201;High Top Plums;99;Fruit;Fresh Fruit;Produce;Food
+202;High Top Peaches;99;Fruit;Fresh Fruit;Produce;Food
+203;High Top Broccoli;61;Vegetables;Fresh Vegetables;Produce;Food
+204;High Top Mandarin Oranges;99;Fruit;Fresh Fruit;Produce;Food
+205;High Top Mixed Nuts;1;Specialty;Nuts;Produce;Food
+206;High Top Canned Peanuts;1;Specialty;Nuts;Produce;Food
+207;High Top Sweet Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+208;High Top Cantelope;99;Fruit;Fresh Fruit;Produce;Food
+209;High Top Honey Dew;99;Fruit;Fresh Fruit;Produce;Food
+210;High Top Fuji Apples;99;Fruit;Fresh Fruit;Produce;Food
+211;High Top Walnuts;1;Specialty;Nuts;Produce;Food
+212;High Top Oranges;99;Fruit;Fresh Fruit;Produce;Food
+213;High Top Tangerines;99;Fruit;Fresh Fruit;Produce;Food
+214;High Top Party Nuts;1;Specialty;Nuts;Produce;Food
+215;Tip Top Lox;24;Seafood;Fresh Fish;Seafood;Food
+216;Tip Top Scallops;2;Seafood;Shellfish;Seafood;Food
+217;Best Choice Low Fat Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+218;Best Choice BBQ Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+219;Best Choice Corn Chips;12;Snack Foods;Chips;Snack Foods;Food
+220;Best Choice Low Fat BBQ Chips;12;Snack Foods;Chips;Snack Foods;Food
+221;Best Choice Sugar Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+222;Best Choice Chocolate Chip Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+223;Best Choice Fudge Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+224;Best Choice Fudge Brownies;45;Snack Foods;Cookies;Snack Foods;Food
+225;Best Choice Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+226;Best Choice Lemon Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+227;Best Choice Graham Crackers;45;Snack Foods;Cookies;Snack Foods;Food
+228;Best Choice Cheese Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+229;Best Choice Buttered Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+230;Best Choice No Salt Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+231;Best Choice Low Fat Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+232;Best Choice Salsa Dip;83;Snack Foods;Dips;Snack Foods;Food
+233;Best Choice Avocado Dip;83;Snack Foods;Dips;Snack Foods;Food
+234;Best Choice Salted Pretzels;46;Snack Foods;Pretzels;Snack Foods;Food
+235;Best Choice Cheese Dip;83;Snack Foods;Dips;Snack Foods;Food
+236;Best Choice Fondue Mix;83;Snack Foods;Dips;Snack Foods;Food
+237;Best Choice Mini Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+238;Best Choice Beef Jerky;17;Snack Foods;Dried Meat;Snack Foods;Food
+239;Best Choice Chocolate Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+240;Best Choice Low Fat Chips;12;Snack Foods;Chips;Snack Foods;Food
+241;Best Choice Sesame Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+242;Best Choice Frosted Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+243;Best Choice Dried Apples;109;Snack Foods;Dried Fruit;Snack Foods;Food
+244;Best Choice Apple Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+245;Best Choice Strawberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+246;Best Choice Raspberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+247;Best Choice Grape Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+248;Best Choice Dried Dates;109;Snack Foods;Dried Fruit;Snack Foods;Food
+249;Best Choice Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+250;Best Choice Golden Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+251;Best Choice Dried Apricots;109;Snack Foods;Dried Fruit;Snack Foods;Food
+252;Best Choice Frosted Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+253;Choice Tasty Candy Bar;36;Candy;Chocolate Candy;Snacks;Food
+254;Choice Mint Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+255;Choice Malted Milk Balls;36;Candy;Chocolate Candy;Snacks;Food
+256;Choice Semi-Sweet Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+257;Choice Bubble Gum;37;Candy;Gum;Snacks;Food
+258;Choice Spicy Mints;38;Candy;Hard Candy;Snacks;Food
+259;Choice Mints;38;Candy;Hard Candy;Snacks;Food
+260;Choice White Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+261;Medalist Ravioli;5;Starchy Foods;Pasta;Starchy Foods;Food
+262;Medalist Manicotti;5;Starchy Foods;Pasta;Starchy Foods;Food
+263;Medalist Spaghetti;5;Starchy Foods;Pasta;Starchy Foods;Food
+264;Medalist Thai Rice;57;Starchy Foods;Rice;Starchy Foods;Food
+265;Medalist Rice Medly;57;Starchy Foods;Rice;Starchy Foods;Food
+266;Good Imported Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+267;Good Light Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+268;Good Chardonnay Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+269;Good Chablis Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+270;Good Merlot Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+271;Good Chardonnay;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+272;Good White Zinfandel Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+273;Good Light Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+274;Great Pumpernickel Bread;27;Bread;Sliced Bread;Baked Goods;Food
+275;Great White Bread;27;Bread;Sliced Bread;Baked Goods;Food
+276;Great Rye Bread;27;Bread;Sliced Bread;Baked Goods;Food
+277;Great English Muffins;26;Bread;Muffins;Baked Goods;Food
+278;Great Cranberry Muffins;26;Bread;Muffins;Baked Goods;Food
+279;Great Muffins;26;Bread;Muffins;Baked Goods;Food
+280;Great Bagels;25;Bread;Bagels;Baked Goods;Food
+281;Great Blueberry Muffins;26;Bread;Muffins;Baked Goods;Food
+282;Great Wheat Bread;27;Bread;Sliced Bread;Baked Goods;Food
+283;Super Sesame Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+284;Super Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+285;Super Hot Chocolate;51;Hot Beverages;Chocolate;Beverages;Drink
+286;Super Brown Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+287;Super White Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+288;Super French Roast Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+289;Super Decaf Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+290;Super Regular Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+291;Super Vegetable Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+292;Super Corn Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+293;Super Tomato Sauce;48;Baking Goods;Sauces;Baking Goods;Food
+294;Super Canola Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+295;Super Grape Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+296;Super Columbian Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+297;Super Strawberry Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+298;Super Pepper;4;Baking Goods;Spices;Baking Goods;Food
+299;Super Low Fat Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+300;Super Salt;4;Baking Goods;Spices;Baking Goods;Food
+301;Super Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+302;Super Oregano;4;Baking Goods;Spices;Baking Goods;Food
+303;Super Apple Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+304;Super Grape Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+305;Super Apple Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+306;Super Strawberry Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+307;Super Creamy Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+308;Super Strawberry Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+309;Super Extra Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+310;Super Apple Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+311;Super Grape Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+312;Excellent Berry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+313;Excellent Mango Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+314;Excellent Strawberry Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+315;Excellent Cream Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+316;Excellent Diet Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+317;Excellent Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+318;Excellent Diet Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+319;Excellent Orange Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+320;Excellent Cranberry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+321;Excellent Apple Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+322;Excellent Apple Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+323;Best Oatmeal;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+324;Best Corn Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+325;Best Wheat Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+326;Best Grits;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+327;Better Canned Beets;62;Vegetables;Canned Vegetables;Canned Foods;Food
+328;Better Creamed Corn;62;Vegetables;Canned Vegetables;Canned Foods;Food
+329;Better Canned String Beans;62;Vegetables;Canned Vegetables;Canned Foods;Food
+330;Better Chicken Soup;58;Canned Soup;Soup;Canned Foods;Food
+331;Better Canned Yams;62;Vegetables;Canned Vegetables;Canned Foods;Food
+332;Better Vegetable Soup;58;Canned Soup;Soup;Canned Foods;Food
+333;Better Canned Tomatos;62;Vegetables;Canned Vegetables;Canned Foods;Food
+334;Better Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+335;Better Regular Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+336;Better Chicken Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+337;Better Turkey Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+338;Better Beef Soup;58;Canned Soup;Soup;Canned Foods;Food
+339;Better Canned Peas;62;Vegetables;Canned Vegetables;Canned Foods;Food
+340;Better Chicken Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+341;Better Canned Tuna in Water;93;Canned Tuna;Tuna;Canned Foods;Food
+342;Better Canned Tuna in Oil;93;Canned Tuna;Tuna;Canned Foods;Food
+343;Better Large Canned Shrimp;94;Canned Shrimp;Shrimp;Canned Foods;Food
+344;Better Fancy Canned Anchovies;95;Canned Anchovies;Anchovies;Canned Foods;Food
+345;Better Fancy Canned Clams;96;Canned Clams;Clams;Canned Foods;Food
+346;Better Fancy Canned Oysters;97;Canned Oysters;Oysters;Canned Foods;Food
+347;Better Fancy Canned Sardines;98;Canned Sardines;Sardines;Canned Foods;Food
+348;Better Rice Soup;58;Canned Soup;Soup;Canned Foods;Food
+349;Swell Canned Mixed Fruit;3;Fruit;Canned Fruit;Canned Products;Food
+350;Swell Canned Peaches;3;Fruit;Canned Fruit;Canned Products;Food
+351;ADJ Rosy Sunglasses;89;Specialty;Sunglasses;Carousel;Non-Consumable
+352;Black Tie Eyeglass Screwdriver;103;Hardware;Screwdrivers;Checkout;Non-Consumable
+353;Black Tie City Map;102;Miscellaneous;Maps;Checkout;Non-Consumable
+354;Carlson Low Fat Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+355;Carlson Low Fat Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+356;Carlson Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+357;Carlson Jack Cheese;11;Dairy;Cheese;Dairy;Food
+358;Carlson Muenster Cheese;11;Dairy;Cheese;Dairy;Food
+359;Carlson String Cheese;11;Dairy;Cheese;Dairy;Food
+360;Carlson Low Fat String Cheese;11;Dairy;Cheese;Dairy;Food
+361;Carlson Havarti Cheese;11;Dairy;Cheese;Dairy;Food
+362;Carlson Head Cheese;11;Dairy;Cheese;Dairy;Food
+363;Carlson Cheese Spread;11;Dairy;Cheese;Dairy;Food
+364;Carlson Sharp Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+365;Carlson Mild Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+366;Carlson Large Curd Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+367;Carlson 2% Milk;76;Dairy;Milk;Dairy;Drink
+368;Carlson Buttermilk;76;Dairy;Milk;Dairy;Drink
+369;Carlson Chocolate Milk;76;Dairy;Milk;Dairy;Drink
+370;Carlson 1% Milk;76;Dairy;Milk;Dairy;Drink
+371;Carlson Whole Milk;76;Dairy;Milk;Dairy;Drink
+372;Carlson Strawberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+373;Carlson Blueberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+374;Moms Chicken Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+375;Moms Pimento Loaf;91;Meat;Bologna;Deli;Food
+376;Moms Beef Bologna;91;Meat;Bologna;Deli;Food
+377;Moms Low Fat Bologna;91;Meat;Bologna;Deli;Food
+378;Moms Turkey Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+379;Moms Foot-Long Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+380;Moms Low Fat Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+381;Moms Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+382;Moms Roasted Chicken;77;Meat;Fresh Chicken;Deli;Food
+383;Moms Corned Beef;8;Meat;Deli Meats;Deli;Food
+384;Moms Sliced Turkey;8;Meat;Deli Meats;Deli;Food
+385;Moms Sliced Ham;8;Meat;Deli Meats;Deli;Food
+386;Moms Potato Salad;16;Side Dishes;Deli Salads;Deli;Food
+387;Moms Sliced Chicken;8;Meat;Deli Meats;Deli;Food
+388;Urban Small Brown Eggs;66;Eggs;Eggs;Eggs;Food
+389;Urban Large Brown Eggs;66;Eggs;Eggs;Eggs;Food
+390;Urban Small Eggs;66;Eggs;Eggs;Eggs;Food
+391;Urban Large Eggs;66;Eggs;Eggs;Eggs;Food
+392;Urban Egg Substitute;66;Eggs;Eggs;Eggs;Food
+393;Big Time Low Fat Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+394;Big Time Orange Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+395;Big Time Frozen Chicken Breast;100;Meat;Frozen Chicken;Frozen Foods;Food
+396;Big Time Frozen Pancakes;29;Breakfast Foods;Pancakes;Frozen Foods;Food
+397;Big Time Low Fat French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+398;Big Time Frozen Sausage Pizza;64;Pizza;Pizza;Frozen Foods;Food
+399;Big Time Blueberry Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+400;Big Time Fajita French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+401;Big Time Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+402;Big Time Frozen Pepperoni Pizza;64;Pizza;Pizza;Frozen Foods;Food
+403;Big Time Frozen Cheese Pizza;64;Pizza;Pizza;Frozen Foods;Food
+404;Big Time Frozen Mushroom Pizza;64;Pizza;Pizza;Frozen Foods;Food
+405;Big Time Apple Cinnamon Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+406;Big Time Frozen Carrots;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+407;Big Time Turkey TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+408;Big Time Chicken TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+409;Big Time Beef TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+410;Big Time Pancake Mix;28;Breakfast Foods;Pancake Mix;Frozen Foods;Food
+411;Big Time Grape Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+412;Big Time Home Style French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+413;Big Time Lime Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+414;Big Time Ice Cream;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+415;Big Time Ice Cream Sandwich;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+416;Big Time Frozen Cauliflower;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+417;Big Time Frozen Broccoli;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+418;Big Time Frozen Corn;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+419;Big Time Frozen Peas;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+420;Big Time Popsicles;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+421;Big Time Frozen Chicken Thighs;100;Meat;Frozen Chicken;Frozen Foods;Food
+422;Big Time Frozen Chicken Wings;100;Meat;Frozen Chicken;Frozen Foods;Food
+423;Big Time Lemon Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+424;Steady Silky Smooth Hair Conditioner;78;Bathroom Products;Conditioner;Health and Hygiene;Non-Consumable
+425;Steady Tartar Control Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+426;Steady Whitening Toothpast;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+427;Steady Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+428;Steady Deodorant;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+429;Steady Conditioning Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+430;Steady Extra Moisture Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+431;Steady Angled Toothbrush;88;Bathroom Products;Toothbrushes;Health and Hygiene;Non-Consumable
+432;Steady Apricot Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+433;Steady Childrens Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+434;Steady Buffered Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+435;Steady 200 MG Ibuprofen;71;Pain Relievers;Ibuprofen;Health and Hygiene;Non-Consumable
+436;Steady 200 MG Acetominifen;72;Pain Relievers;Acetominifen;Health and Hygiene;Non-Consumable
+437;Steady HCL Nasal Spray;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+438;Steady Dishwasher Detergent;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+439;Steady Multi-Symptom Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+440;Steady Childrens Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+441;Steady Laundry Detergent;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+442;Steady Mint Mouthwash;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+443;Red Wing 60 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+444;Red Wing Plastic Forks;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+445;Red Wing Plastic Spoons;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+446;Red Wing Plastic Knives;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+447;Red Wing C-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+448;Red Wing 100 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+449;Red Wing AAA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+450;Red Wing Paper Plates;55;Paper Products;Paper Dishes;Household;Non-Consumable
+451;Red Wing Paper Cups;55;Paper Products;Paper Dishes;Household;Non-Consumable
+452;Red Wing 75 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+453;Red Wing Toilet Bowl Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+454;Red Wing Counter Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+455;Red Wing Glass Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+456;Red Wing 25 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+457;Red Wing AA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+458;Red Wing D-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+459;Red Wing Paper Towels;18;Paper Products;Paper Wipes;Household;Non-Consumable
+460;Red Wing Soft Napkins;18;Paper Products;Paper Wipes;Household;Non-Consumable
+461;Red Wing Scented Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+462;Red Wing Toilet Paper;18;Paper Products;Paper Wipes;Household;Non-Consumable
+463;Red Wing Tissues;18;Paper Products;Paper Wipes;Household;Non-Consumable
+464;Red Wing Scented Toilet Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+465;Red Wing Room Freshener;20;Cleaning Supplies;Deodorizers;Household;Non-Consumable
+466;Red Wing Frying Pan;40;Kitchen Products;Pots and Pans;Household;Non-Consumable
+467;Red Wing Copper Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+468;Red Wing Bees Wax Candles;47;Candles;Candles;Household;Non-Consumable
+469;Red Wing Silver Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+470;Red Wing Copper Pot Scrubber;86;Kitchen Products;Pot Scrubbers;Household;Non-Consumable
+471;Red Wing Economy Toilet Brush;85;Bathroom Products;Toilet Brushes;Household;Non-Consumable
+472;Red Wing Scissors;41;Hardware;Tools;Household;Non-Consumable
+473;Red Wing Large Sponge;42;Kitchen Products;Sponges;Household;Non-Consumable
+474;Red Wing Screw Driver;41;Hardware;Tools;Household;Non-Consumable
+475;Quick Extra Lean Hamburger;65;Meat;Hamburger;Meat;Food
+476;Quick Seasoned Hamburger;65;Meat;Hamburger;Meat;Food
+477;Dollar Monthly Sports Magazine;104;Magazines;Sports Magazines;Periodicals;Non-Consumable
+478;Dollar Monthly Auto Magazine;108;Magazines;Auto Magazines;Periodicals;Non-Consumable
+479;Dollar Monthly Computer Magazine;107;Magazines;Computer Magazines;Periodicals;Non-Consumable
+480;Dollar Monthly Home Magazine;105;Magazines;Home Magazines;Periodicals;Non-Consumable
+481;Dollar Monthly Fashion Magazine;106;Magazines;Fashion Magazines;Periodicals;Non-Consumable
+482;Tell Tale Summer Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+483;Tell Tale Corn on the Cob;61;Vegetables;Fresh Vegetables;Produce;Food
+484;Tell Tale Asparagus;61;Vegetables;Fresh Vegetables;Produce;Food
+485;Tell Tale Sweet Peas;61;Vegetables;Fresh Vegetables;Produce;Food
+486;Tell Tale New Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+487;Tell Tale Beets;61;Vegetables;Fresh Vegetables;Produce;Food
+488;Tell Tale Prepared Salad;61;Vegetables;Fresh Vegetables;Produce;Food
+489;Tell Tale Onions;61;Vegetables;Fresh Vegetables;Produce;Food
+490;Tell Tale Green Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+491;Tell Tale Shitake Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+492;Tell Tale Lettuce;61;Vegetables;Fresh Vegetables;Produce;Food
+493;Tell Tale Elephant Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+494;Tell Tale Red Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+495;Tell Tale Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+496;Tell Tale Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+497;Tell Tale Cauliflower;61;Vegetables;Fresh Vegetables;Produce;Food
+498;Tell Tale Tomatos;61;Vegetables;Fresh Vegetables;Produce;Food
+499;Tell Tale Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+500;Tell Tale Baby Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+501;Tell Tale Dried Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+502;Tell Tale Fresh Lima Beans;61;Vegetables;Fresh Vegetables;Produce;Food
+503;Tell Tale Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+504;Tell Tale Limes;99;Fruit;Fresh Fruit;Produce;Food
+505;Tell Tale Firm Tofu;67;Packaged Vegetables;Tofu;Produce;Food
+506;Tell Tale Almonds;1;Specialty;Nuts;Produce;Food
+507;Tell Tale Macintosh Apples;99;Fruit;Fresh Fruit;Produce;Food
+508;Tell Tale Golden Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+509;Tell Tale Red Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+510;Tell Tale Lemons;99;Fruit;Fresh Fruit;Produce;Food
+511;Tell Tale Fancy Plums;99;Fruit;Fresh Fruit;Produce;Food
+512;Tell Tale Plums;99;Fruit;Fresh Fruit;Produce;Food
+513;Tell Tale Peaches;99;Fruit;Fresh Fruit;Produce;Food
+514;Tell Tale Broccoli;61;Vegetables;Fresh Vegetables;Produce;Food
+515;Tell Tale Mandarin Oranges;99;Fruit;Fresh Fruit;Produce;Food
+516;Tell Tale Mixed Nuts;1;Specialty;Nuts;Produce;Food
+517;Tell Tale Canned Peanuts;1;Specialty;Nuts;Produce;Food
+518;Tell Tale Sweet Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+519;Tell Tale Cantelope;99;Fruit;Fresh Fruit;Produce;Food
+520;Tell Tale Honey Dew;99;Fruit;Fresh Fruit;Produce;Food
+521;Tell Tale Fuji Apples;99;Fruit;Fresh Fruit;Produce;Food
+522;Tell Tale Walnuts;1;Specialty;Nuts;Produce;Food
+523;Tell Tale Oranges;99;Fruit;Fresh Fruit;Produce;Food
+524;Tell Tale Tangerines;99;Fruit;Fresh Fruit;Produce;Food
+525;Tell Tale Party Nuts;1;Specialty;Nuts;Produce;Food
+526;Kiwi Lox;24;Seafood;Fresh Fish;Seafood;Food
+527;Kiwi Scallops;2;Seafood;Shellfish;Seafood;Food
+528;Fast Low Fat Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+529;Fast BBQ Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+530;Fast Corn Chips;12;Snack Foods;Chips;Snack Foods;Food
+531;Fast Low Fat BBQ Chips;12;Snack Foods;Chips;Snack Foods;Food
+532;Fast Sugar Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+533;Fast Chocolate Chip Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+534;Fast Fudge Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+535;Fast Fudge Brownies;45;Snack Foods;Cookies;Snack Foods;Food
+536;Fast Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+537;Fast Lemon Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+538;Fast Graham Crackers;45;Snack Foods;Cookies;Snack Foods;Food
+539;Fast Cheese Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+540;Fast Buttered Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+541;Fast No Salt Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+542;Fast Low Fat Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+543;Fast Salsa Dip;83;Snack Foods;Dips;Snack Foods;Food
+544;Fast Avocado Dip;83;Snack Foods;Dips;Snack Foods;Food
+545;Fast Salted Pretzels;46;Snack Foods;Pretzels;Snack Foods;Food
+546;Fast Cheese Dip;83;Snack Foods;Dips;Snack Foods;Food
+547;Fast Fondue Mix;83;Snack Foods;Dips;Snack Foods;Food
+548;Fast Mini Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+549;Fast Beef Jerky;17;Snack Foods;Dried Meat;Snack Foods;Food
+550;Fast Chocolate Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+551;Fast Low Fat Chips;12;Snack Foods;Chips;Snack Foods;Food
+552;Fast Sesame Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+553;Fast Frosted Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+554;Fast Dried Apples;109;Snack Foods;Dried Fruit;Snack Foods;Food
+555;Fast Apple Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+556;Fast Strawberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+557;Fast Raspberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+558;Fast Grape Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+559;Fast Dried Dates;109;Snack Foods;Dried Fruit;Snack Foods;Food
+560;Fast Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+561;Fast Golden Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+562;Fast Dried Apricots;109;Snack Foods;Dried Fruit;Snack Foods;Food
+563;Fast Frosted Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+564;Atomic Tasty Candy Bar;36;Candy;Chocolate Candy;Snacks;Food
+565;Atomic Mint Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+566;Atomic Malted Milk Balls;36;Candy;Chocolate Candy;Snacks;Food
+567;Atomic Semi-Sweet Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+568;Atomic Bubble Gum;37;Candy;Gum;Snacks;Food
+569;Atomic Spicy Mints;38;Candy;Hard Candy;Snacks;Food
+570;Atomic Mints;38;Candy;Hard Candy;Snacks;Food
+571;Atomic White Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+572;Shady Lake Ravioli;5;Starchy Foods;Pasta;Starchy Foods;Food
+573;Shady Lake Manicotti;5;Starchy Foods;Pasta;Starchy Foods;Food
+574;Shady Lake Spaghetti;5;Starchy Foods;Pasta;Starchy Foods;Food
+575;Shady Lake Thai Rice;57;Starchy Foods;Rice;Starchy Foods;Food
+576;Shady Lake Rice Medly;57;Starchy Foods;Rice;Starchy Foods;Food
+577;Walrus Imported Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+578;Walrus Light Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+579;Walrus Chardonnay Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+580;Walrus Chablis Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+581;Walrus Merlot Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+582;Walrus Chardonnay;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+583;Walrus White Zinfandel Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+584;Walrus Light Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+585;Colony Pumpernickel Bread;27;Bread;Sliced Bread;Baked Goods;Food
+586;Colony White Bread;27;Bread;Sliced Bread;Baked Goods;Food
+587;Colony Rye Bread;27;Bread;Sliced Bread;Baked Goods;Food
+588;Colony English Muffins;26;Bread;Muffins;Baked Goods;Food
+589;Colony Cranberry Muffins;26;Bread;Muffins;Baked Goods;Food
+590;Colony Muffins;26;Bread;Muffins;Baked Goods;Food
+591;Colony Bagels;25;Bread;Bagels;Baked Goods;Food
+592;Colony Blueberry Muffins;26;Bread;Muffins;Baked Goods;Food
+593;Colony Wheat Bread;27;Bread;Sliced Bread;Baked Goods;Food
+594;Landslide Sesame Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+595;Landslide Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+596;Landslide Hot Chocolate;51;Hot Beverages;Chocolate;Beverages;Drink
+597;Landslide Brown Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+598;Landslide White Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+599;Landslide French Roast Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+600;Landslide Decaf Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+601;Landslide Regular Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+602;Landslide Vegetable Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+603;Landslide Corn Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+604;Landslide Tomato Sauce;48;Baking Goods;Sauces;Baking Goods;Food
+605;Landslide Canola Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+606;Landslide Grape Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+607;Landslide Columbian Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+608;Landslide Strawberry Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+609;Landslide Pepper;4;Baking Goods;Spices;Baking Goods;Food
+610;Landslide Low Fat Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+611;Landslide Salt;4;Baking Goods;Spices;Baking Goods;Food
+612;Landslide Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+613;Landslide Oregano;4;Baking Goods;Spices;Baking Goods;Food
+614;Landslide Apple Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+615;Landslide Grape Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+616;Landslide Apple Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+617;Landslide Strawberry Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+618;Landslide Creamy Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+619;Landslide Strawberry Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+620;Landslide Extra Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+621;Landslide Apple Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+622;Landslide Grape Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+623;Token Berry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+624;Token Mango Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+625;Token Strawberry Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+626;Token Cream Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+627;Token Diet Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+628;Token Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+629;Token Diet Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+630;Token Orange Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+631;Token Cranberry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+632;Token Apple Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+633;Token Apple Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+634;Radius Oatmeal;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+635;Radius Corn Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+636;Radius Wheat Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+637;Radius Grits;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+638;Bravo Canned Beets;62;Vegetables;Canned Vegetables;Canned Foods;Food
+639;Bravo Creamed Corn;62;Vegetables;Canned Vegetables;Canned Foods;Food
+640;Bravo Canned String Beans;62;Vegetables;Canned Vegetables;Canned Foods;Food
+641;Bravo Chicken Soup;58;Canned Soup;Soup;Canned Foods;Food
+642;Bravo Canned Yams;62;Vegetables;Canned Vegetables;Canned Foods;Food
+643;Bravo Vegetable Soup;58;Canned Soup;Soup;Canned Foods;Food
+644;Bravo Canned Tomatos;62;Vegetables;Canned Vegetables;Canned Foods;Food
+645;Bravo Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+646;Bravo Regular Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+647;Bravo Chicken Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+648;Bravo Turkey Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+649;Bravo Beef Soup;58;Canned Soup;Soup;Canned Foods;Food
+650;Bravo Canned Peas;62;Vegetables;Canned Vegetables;Canned Foods;Food
+651;Bravo Chicken Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+652;Bravo Canned Tuna in Water;93;Canned Tuna;Tuna;Canned Foods;Food
+653;Bravo Canned Tuna in Oil;93;Canned Tuna;Tuna;Canned Foods;Food
+654;Bravo Large Canned Shrimp;94;Canned Shrimp;Shrimp;Canned Foods;Food
+655;Bravo Fancy Canned Anchovies;95;Canned Anchovies;Anchovies;Canned Foods;Food
+656;Bravo Fancy Canned Clams;96;Canned Clams;Clams;Canned Foods;Food
+657;Bravo Fancy Canned Oysters;97;Canned Oysters;Oysters;Canned Foods;Food
+658;Bravo Fancy Canned Sardines;98;Canned Sardines;Sardines;Canned Foods;Food
+659;Bravo Rice Soup;58;Canned Soup;Soup;Canned Foods;Food
+660;Applause Canned Mixed Fruit;3;Fruit;Canned Fruit;Canned Products;Food
+661;Applause Canned Peaches;3;Fruit;Canned Fruit;Canned Products;Food
+662;Prelude Rosy Sunglasses;89;Specialty;Sunglasses;Carousel;Non-Consumable
+663;Akron Eyeglass Screwdriver;103;Hardware;Screwdrivers;Checkout;Non-Consumable
+664;Akron City Map;102;Miscellaneous;Maps;Checkout;Non-Consumable
+665;Gorilla Low Fat Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+666;Gorilla Low Fat Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+667;Gorilla Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+668;Gorilla Jack Cheese;11;Dairy;Cheese;Dairy;Food
+669;Gorilla Muenster Cheese;11;Dairy;Cheese;Dairy;Food
+670;Gorilla String Cheese;11;Dairy;Cheese;Dairy;Food
+671;Gorilla Low Fat String Cheese;11;Dairy;Cheese;Dairy;Food
+672;Gorilla Havarti Cheese;11;Dairy;Cheese;Dairy;Food
+673;Gorilla Head Cheese;11;Dairy;Cheese;Dairy;Food
+674;Gorilla Cheese Spread;11;Dairy;Cheese;Dairy;Food
+675;Gorilla Sharp Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+676;Gorilla Mild Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+677;Gorilla Large Curd Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+678;Gorilla 2% Milk;76;Dairy;Milk;Dairy;Drink
+679;Gorilla Buttermilk;76;Dairy;Milk;Dairy;Drink
+680;Gorilla Chocolate Milk;76;Dairy;Milk;Dairy;Drink
+681;Gorilla 1% Milk;76;Dairy;Milk;Dairy;Drink
+682;Gorilla Whole Milk;76;Dairy;Milk;Dairy;Drink
+683;Gorilla Strawberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+684;Gorilla Blueberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+685;Cutting Edge Chicken Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+686;Cutting Edge Pimento Loaf;91;Meat;Bologna;Deli;Food
+687;Cutting Edge Beef Bologna;91;Meat;Bologna;Deli;Food
+688;Cutting Edge Low Fat Bologna;91;Meat;Bologna;Deli;Food
+689;Cutting Edge Turkey Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+690;Cutting Edge Foot-Long Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+691;Cutting Edge Low Fat Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+692;Cutting Edge Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+693;Cutting Edge Roasted Chicken;77;Meat;Fresh Chicken;Deli;Food
+694;Cutting Edge Corned Beef;8;Meat;Deli Meats;Deli;Food
+695;Cutting Edge Sliced Turkey;8;Meat;Deli Meats;Deli;Food
+696;Cutting Edge Sliced Ham;8;Meat;Deli Meats;Deli;Food
+697;Cutting Edge Potato Salad;16;Side Dishes;Deli Salads;Deli;Food
+698;Cutting Edge Sliced Chicken;8;Meat;Deli Meats;Deli;Food
+699;Jumbo Small Brown Eggs;66;Eggs;Eggs;Eggs;Food
+700;Jumbo Large Brown Eggs;66;Eggs;Eggs;Eggs;Food
+701;Jumbo Small Eggs;66;Eggs;Eggs;Eggs;Food
+702;Jumbo Large Eggs;66;Eggs;Eggs;Eggs;Food
+703;Jumbo Egg Substitute;66;Eggs;Eggs;Eggs;Food
+704;Imagine Low Fat Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+705;Imagine Orange Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+706;Imagine Frozen Chicken Breast;100;Meat;Frozen Chicken;Frozen Foods;Food
+707;Imagine Frozen Pancakes;29;Breakfast Foods;Pancakes;Frozen Foods;Food
+708;Imagine Low Fat French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+709;Imagine Frozen Sausage Pizza;64;Pizza;Pizza;Frozen Foods;Food
+710;Imagine Blueberry Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+711;Imagine Fajita French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+712;Imagine Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+713;Imagine Frozen Pepperoni Pizza;64;Pizza;Pizza;Frozen Foods;Food
+714;Imagine Frozen Cheese Pizza;64;Pizza;Pizza;Frozen Foods;Food
+715;Imagine Frozen Mushroom Pizza;64;Pizza;Pizza;Frozen Foods;Food
+716;Imagine Apple Cinnamon Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+717;Imagine Frozen Carrots;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+718;Imagine Turkey TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+719;Imagine Chicken TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+720;Imagine Beef TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+721;Imagine Pancake Mix;28;Breakfast Foods;Pancake Mix;Frozen Foods;Food
+722;Imagine Grape Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+723;Imagine Home Style French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+724;Imagine Lime Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+725;Imagine Ice Cream;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+726;Imagine Ice Cream Sandwich;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+727;Imagine Frozen Cauliflower;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+728;Imagine Frozen Broccoli;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+729;Imagine Frozen Corn;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+730;Imagine Frozen Peas;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+731;Imagine Popsicles;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+732;Imagine Frozen Chicken Thighs;100;Meat;Frozen Chicken;Frozen Foods;Food
+733;Imagine Frozen Chicken Wings;100;Meat;Frozen Chicken;Frozen Foods;Food
+734;Imagine Lemon Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+735;Consolidated Silky Smooth Hair Conditioner;78;Bathroom Products;Conditioner;Health and Hygiene;Non-Consumable
+736;Consolidated Tartar Control Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+737;Consolidated Whitening Toothpast;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+738;Consolidated Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+739;Consolidated Deodorant;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+740;Consolidated Conditioning Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+741;Consolidated Extra Moisture Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+742;Consolidated Angled Toothbrush;88;Bathroom Products;Toothbrushes;Health and Hygiene;Non-Consumable
+743;Consolidated Apricot Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+744;Consolidated Childrens Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+745;Consolidated Buffered Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+746;Consolidated 200 MG Ibuprofen;71;Pain Relievers;Ibuprofen;Health and Hygiene;Non-Consumable
+747;Consolidated 200 MG Acetominifen;72;Pain Relievers;Acetominifen;Health and Hygiene;Non-Consumable
+748;Consolidated HCL Nasal Spray;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+749;Consolidated Dishwasher Detergent;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+750;Consolidated Multi-Symptom Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+751;Consolidated Childrens Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+752;Consolidated Laundry Detergent;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+753;Consolidated Mint Mouthwash;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+754;Cormorant 60 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+755;Cormorant Plastic Forks;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+756;Cormorant Plastic Spoons;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+757;Cormorant Plastic Knives;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+758;Cormorant C-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+759;Cormorant 100 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+760;Cormorant AAA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+761;Cormorant Paper Plates;55;Paper Products;Paper Dishes;Household;Non-Consumable
+762;Cormorant Paper Cups;55;Paper Products;Paper Dishes;Household;Non-Consumable
+763;Cormorant 75 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+764;Cormorant Toilet Bowl Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+765;Cormorant Counter Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+766;Cormorant Glass Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+767;Cormorant 25 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+768;Cormorant AA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+769;Cormorant D-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+770;Cormorant Paper Towels;18;Paper Products;Paper Wipes;Household;Non-Consumable
+771;Cormorant Soft Napkins;18;Paper Products;Paper Wipes;Household;Non-Consumable
+772;Cormorant Scented Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+773;Cormorant Toilet Paper;18;Paper Products;Paper Wipes;Household;Non-Consumable
+774;Cormorant Tissues;18;Paper Products;Paper Wipes;Household;Non-Consumable
+775;Cormorant Scented Toilet Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+776;Cormorant Room Freshener;20;Cleaning Supplies;Deodorizers;Household;Non-Consumable
+777;Cormorant Frying Pan;40;Kitchen Products;Pots and Pans;Household;Non-Consumable
+778;Cormorant Copper Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+779;Cormorant Bees Wax Candles;47;Candles;Candles;Household;Non-Consumable
+780;Cormorant Silver Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+781;Cormorant Copper Pot Scrubber;86;Kitchen Products;Pot Scrubbers;Household;Non-Consumable
+782;Cormorant Economy Toilet Brush;85;Bathroom Products;Toilet Brushes;Household;Non-Consumable
+783;Cormorant Scissors;41;Hardware;Tools;Household;Non-Consumable
+784;Cormorant Large Sponge;42;Kitchen Products;Sponges;Household;Non-Consumable
+785;Cormorant Screw Driver;41;Hardware;Tools;Household;Non-Consumable
+786;Footnote Extra Lean Hamburger;65;Meat;Hamburger;Meat;Food
+787;Footnote Seasoned Hamburger;65;Meat;Hamburger;Meat;Food
+788;Excel Monthly Sports Magazine;104;Magazines;Sports Magazines;Periodicals;Non-Consumable
+789;Excel Monthly Auto Magazine;108;Magazines;Auto Magazines;Periodicals;Non-Consumable
+790;Excel Monthly Computer Magazine;107;Magazines;Computer Magazines;Periodicals;Non-Consumable
+791;Excel Monthly Home Magazine;105;Magazines;Home Magazines;Periodicals;Non-Consumable
+792;Excel Monthly Fashion Magazine;106;Magazines;Fashion Magazines;Periodicals;Non-Consumable
+793;Ebony Summer Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+794;Ebony Corn on the Cob;61;Vegetables;Fresh Vegetables;Produce;Food
+795;Ebony Asparagus;61;Vegetables;Fresh Vegetables;Produce;Food
+796;Ebony Sweet Peas;61;Vegetables;Fresh Vegetables;Produce;Food
+797;Ebony New Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+798;Ebony Beets;61;Vegetables;Fresh Vegetables;Produce;Food
+799;Ebony Prepared Salad;61;Vegetables;Fresh Vegetables;Produce;Food
+800;Ebony Onions;61;Vegetables;Fresh Vegetables;Produce;Food
+801;Ebony Green Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+802;Ebony Shitake Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+803;Ebony Lettuce;61;Vegetables;Fresh Vegetables;Produce;Food
+804;Ebony Elephant Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+805;Ebony Red Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+806;Ebony Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+807;Ebony Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+808;Ebony Cauliflower;61;Vegetables;Fresh Vegetables;Produce;Food
+809;Ebony Tomatos;61;Vegetables;Fresh Vegetables;Produce;Food
+810;Ebony Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+811;Ebony Baby Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+812;Ebony Dried Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+813;Ebony Fresh Lima Beans;61;Vegetables;Fresh Vegetables;Produce;Food
+814;Ebony Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+815;Ebony Limes;99;Fruit;Fresh Fruit;Produce;Food
+816;Ebony Firm Tofu;67;Packaged Vegetables;Tofu;Produce;Food
+817;Ebony Almonds;1;Specialty;Nuts;Produce;Food
+818;Ebony Macintosh Apples;99;Fruit;Fresh Fruit;Produce;Food
+819;Ebony Golden Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+820;Ebony Red Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+821;Ebony Lemons;99;Fruit;Fresh Fruit;Produce;Food
+822;Ebony Fancy Plums;99;Fruit;Fresh Fruit;Produce;Food
+823;Ebony Plums;99;Fruit;Fresh Fruit;Produce;Food
+824;Ebony Peaches;99;Fruit;Fresh Fruit;Produce;Food
+825;Ebony Broccoli;61;Vegetables;Fresh Vegetables;Produce;Food
+826;Ebony Mandarin Oranges;99;Fruit;Fresh Fruit;Produce;Food
+827;Ebony Mixed Nuts;1;Specialty;Nuts;Produce;Food
+828;Ebony Canned Peanuts;1;Specialty;Nuts;Produce;Food
+829;Ebony Sweet Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+830;Ebony Cantelope;99;Fruit;Fresh Fruit;Produce;Food
+831;Ebony Honey Dew;99;Fruit;Fresh Fruit;Produce;Food
+832;Ebony Fuji Apples;99;Fruit;Fresh Fruit;Produce;Food
+833;Ebony Walnuts;1;Specialty;Nuts;Produce;Food
+834;Ebony Oranges;99;Fruit;Fresh Fruit;Produce;Food
+835;Ebony Tangerines;99;Fruit;Fresh Fruit;Produce;Food
+836;Ebony Party Nuts;1;Specialty;Nuts;Produce;Food
+837;Curlew Lox;24;Seafood;Fresh Fish;Seafood;Food
+838;Curlew Scallops;2;Seafood;Shellfish;Seafood;Food
+839;Nationeel Low Fat Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+840;Nationeel BBQ Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+841;Nationeel Corn Chips;12;Snack Foods;Chips;Snack Foods;Food
+842;Nationeel Low Fat BBQ Chips;12;Snack Foods;Chips;Snack Foods;Food
+843;Nationeel Sugar Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+844;Nationeel Chocolate Chip Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+845;Nationeel Fudge Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+846;Nationeel Fudge Brownies;45;Snack Foods;Cookies;Snack Foods;Food
+847;Nationeel Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+848;Nationeel Lemon Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+849;Nationeel Graham Crackers;45;Snack Foods;Cookies;Snack Foods;Food
+850;Nationeel Cheese Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+851;Nationeel Buttered Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+852;Nationeel No Salt Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+853;Nationeel Low Fat Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+854;Nationeel Salsa Dip;83;Snack Foods;Dips;Snack Foods;Food
+855;Nationeel Avocado Dip;83;Snack Foods;Dips;Snack Foods;Food
+856;Nationeel Salted Pretzels;46;Snack Foods;Pretzels;Snack Foods;Food
+857;Nationeel Cheese Dip;83;Snack Foods;Dips;Snack Foods;Food
+858;Nationeel Fondue Mix;83;Snack Foods;Dips;Snack Foods;Food
+859;Nationeel Mini Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+860;Nationeel Beef Jerky;17;Snack Foods;Dried Meat;Snack Foods;Food
+861;Nationeel Chocolate Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+862;Nationeel Low Fat Chips;12;Snack Foods;Chips;Snack Foods;Food
+863;Nationeel Sesame Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+864;Nationeel Frosted Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+865;Nationeel Dried Apples;109;Snack Foods;Dried Fruit;Snack Foods;Food
+866;Nationeel Apple Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+867;Nationeel Strawberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+868;Nationeel Raspberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+869;Nationeel Grape Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+870;Nationeel Dried Dates;109;Snack Foods;Dried Fruit;Snack Foods;Food
+871;Nationeel Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+872;Nationeel Golden Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+873;Nationeel Dried Apricots;109;Snack Foods;Dried Fruit;Snack Foods;Food
+874;Nationeel Frosted Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+875;Thresher Tasty Candy Bar;36;Candy;Chocolate Candy;Snacks;Food
+876;Thresher Mint Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+877;Thresher Malted Milk Balls;36;Candy;Chocolate Candy;Snacks;Food
+878;Thresher Semi-Sweet Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+879;Thresher Bubble Gum;37;Candy;Gum;Snacks;Food
+880;Thresher Spicy Mints;38;Candy;Hard Candy;Snacks;Food
+881;Thresher Mints;38;Candy;Hard Candy;Snacks;Food
+882;Thresher White Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+883;Monarch Ravioli;5;Starchy Foods;Pasta;Starchy Foods;Food
+884;Monarch Manicotti;5;Starchy Foods;Pasta;Starchy Foods;Food
+885;Monarch Spaghetti;5;Starchy Foods;Pasta;Starchy Foods;Food
+886;Monarch Thai Rice;57;Starchy Foods;Rice;Starchy Foods;Food
+887;Monarch Rice Medly;57;Starchy Foods;Rice;Starchy Foods;Food
+888;Discover Ravioli;5;Starchy Foods;Pasta;Starchy Foods;Food
+889;Discover Manicotti;5;Starchy Foods;Pasta;Starchy Foods;Food
+890;Discover Spaghetti;5;Starchy Foods;Pasta;Starchy Foods;Food
+891;Discover Thai Rice;57;Starchy Foods;Rice;Starchy Foods;Food
+892;Discover Rice Medly;57;Starchy Foods;Rice;Starchy Foods;Food
+893;Pearl Imported Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+894;Pearl Light Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+895;Pearl Chardonnay Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+896;Pearl Chablis Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+897;Pearl Merlot Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+898;Pearl Chardonnay;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+899;Pearl White Zinfandel Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+900;Pearl Light Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+901;Fantastic Pumpernickel Bread;27;Bread;Sliced Bread;Baked Goods;Food
+902;Fantastic White Bread;27;Bread;Sliced Bread;Baked Goods;Food
+903;Fantastic Rye Bread;27;Bread;Sliced Bread;Baked Goods;Food
+904;Fantastic English Muffins;26;Bread;Muffins;Baked Goods;Food
+905;Fantastic Cranberry Muffins;26;Bread;Muffins;Baked Goods;Food
+906;Fantastic Muffins;26;Bread;Muffins;Baked Goods;Food
+907;Fantastic Bagels;25;Bread;Bagels;Baked Goods;Food
+908;Fantastic Blueberry Muffins;26;Bread;Muffins;Baked Goods;Food
+909;Fantastic Wheat Bread;27;Bread;Sliced Bread;Baked Goods;Food
+910;BBB Best Sesame Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+911;BBB Best Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+912;BBB Best Hot Chocolate;51;Hot Beverages;Chocolate;Beverages;Drink
+913;BBB Best Brown Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+914;BBB Best White Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+915;BBB Best French Roast Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+916;BBB Best Decaf Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+917;BBB Best Regular Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+918;BBB Best Vegetable Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+919;BBB Best Corn Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+920;BBB Best Tomato Sauce;48;Baking Goods;Sauces;Baking Goods;Food
+921;BBB Best Canola Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+922;BBB Best Grape Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+923;BBB Best Columbian Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+924;BBB Best Strawberry Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+925;BBB Best Pepper;4;Baking Goods;Spices;Baking Goods;Food
+926;BBB Best Low Fat Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+927;BBB Best Salt;4;Baking Goods;Spices;Baking Goods;Food
+928;BBB Best Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+929;BBB Best Oregano;4;Baking Goods;Spices;Baking Goods;Food
+930;BBB Best Apple Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+931;BBB Best Grape Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+932;BBB Best Apple Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+933;BBB Best Strawberry Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+934;BBB Best Creamy Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+935;BBB Best Strawberry Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+936;BBB Best Extra Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+937;BBB Best Apple Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+938;BBB Best Grape Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+939;Fabulous Berry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+940;Fabulous Mango Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+941;Fabulous Strawberry Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+942;Fabulous Cream Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+943;Fabulous Diet Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+944;Fabulous Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+945;Fabulous Diet Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+946;Fabulous Orange Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+947;Fabulous Cranberry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+948;Fabulous Apple Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+949;Fabulous Apple Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+950;Special Oatmeal;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+951;Special Corn Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+952;Special Wheat Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+953;Special Grits;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+954;Just Right Canned Beets;62;Vegetables;Canned Vegetables;Canned Foods;Food
+955;Just Right Creamed Corn;62;Vegetables;Canned Vegetables;Canned Foods;Food
+956;Just Right Canned String Beans;62;Vegetables;Canned Vegetables;Canned Foods;Food
+957;Just Right Chicken Soup;58;Canned Soup;Soup;Canned Foods;Food
+958;Just Right Canned Yams;62;Vegetables;Canned Vegetables;Canned Foods;Food
+959;Just Right Vegetable Soup;58;Canned Soup;Soup;Canned Foods;Food
+960;Just Right Canned Tomatos;62;Vegetables;Canned Vegetables;Canned Foods;Food
+961;Just Right Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+962;Just Right Regular Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+963;Just Right Chicken Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+964;Just Right Turkey Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+965;Just Right Beef Soup;58;Canned Soup;Soup;Canned Foods;Food
+966;Just Right Canned Peas;62;Vegetables;Canned Vegetables;Canned Foods;Food
+967;Just Right Chicken Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+968;Just Right Canned Tuna in Water;93;Canned Tuna;Tuna;Canned Foods;Food
+969;Just Right Canned Tuna in Oil;93;Canned Tuna;Tuna;Canned Foods;Food
+970;Just Right Large Canned Shrimp;94;Canned Shrimp;Shrimp;Canned Foods;Food
+971;Just Right Fancy Canned Anchovies;95;Canned Anchovies;Anchovies;Canned Foods;Food
+972;Just Right Fancy Canned Clams;96;Canned Clams;Clams;Canned Foods;Food
+973;Just Right Fancy Canned Oysters;97;Canned Oysters;Oysters;Canned Foods;Food
+974;Just Right Fancy Canned Sardines;98;Canned Sardines;Sardines;Canned Foods;Food
+975;Just Right Rice Soup;58;Canned Soup;Soup;Canned Foods;Food
+976;Big City Canned Mixed Fruit;3;Fruit;Canned Fruit;Canned Products;Food
+977;Big City Canned Peaches;3;Fruit;Canned Fruit;Canned Products;Food
+978;Symphony Rosy Sunglasses;89;Specialty;Sunglasses;Carousel;Non-Consumable
+979;James Bay Eyeglass Screwdriver;103;Hardware;Screwdrivers;Checkout;Non-Consumable
+980;James Bay City Map;102;Miscellaneous;Maps;Checkout;Non-Consumable
+981;Even Better Low Fat Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+982;Even Better Low Fat Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+983;Even Better Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+984;Even Better Jack Cheese;11;Dairy;Cheese;Dairy;Food
+985;Even Better Muenster Cheese;11;Dairy;Cheese;Dairy;Food
+986;Even Better String Cheese;11;Dairy;Cheese;Dairy;Food
+987;Even Better Low Fat String Cheese;11;Dairy;Cheese;Dairy;Food
+988;Even Better Havarti Cheese;11;Dairy;Cheese;Dairy;Food
+989;Even Better Head Cheese;11;Dairy;Cheese;Dairy;Food
+990;Even Better Cheese Spread;11;Dairy;Cheese;Dairy;Food
+991;Even Better Sharp Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+992;Even Better Mild Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+993;Even Better Large Curd Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+994;Even Better 2% Milk;76;Dairy;Milk;Dairy;Drink
+995;Even Better Buttermilk;76;Dairy;Milk;Dairy;Drink
+996;Even Better Chocolate Milk;76;Dairy;Milk;Dairy;Drink
+997;Even Better 1% Milk;76;Dairy;Milk;Dairy;Drink
+998;Even Better Whole Milk;76;Dairy;Milk;Dairy;Drink
+999;Even Better Strawberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+1000;Even Better Blueberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+1001;American Chicken Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+1002;American Pimento Loaf;91;Meat;Bologna;Deli;Food
+1003;American Beef Bologna;91;Meat;Bologna;Deli;Food
+1004;American Low Fat Bologna;91;Meat;Bologna;Deli;Food
+1005;American Turkey Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+1006;American Foot-Long Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+1007;American Low Fat Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+1008;American Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+1009;American Roasted Chicken;77;Meat;Fresh Chicken;Deli;Food
+1010;American Corned Beef;8;Meat;Deli Meats;Deli;Food
+1011;American Sliced Turkey;8;Meat;Deli Meats;Deli;Food
+1012;American Sliced Ham;8;Meat;Deli Meats;Deli;Food
+1013;American Potato Salad;16;Side Dishes;Deli Salads;Deli;Food
+1014;American Sliced Chicken;8;Meat;Deli Meats;Deli;Food
+1015;National Small Brown Eggs;66;Eggs;Eggs;Eggs;Food
+1016;National Large Brown Eggs;66;Eggs;Eggs;Eggs;Food
+1017;National Small Eggs;66;Eggs;Eggs;Eggs;Food
+1018;National Large Eggs;66;Eggs;Eggs;Eggs;Food
+1019;National Egg Substitute;66;Eggs;Eggs;Eggs;Food
+1020;PigTail Low Fat Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+1021;PigTail Orange Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+1022;PigTail Frozen Chicken Breast;100;Meat;Frozen Chicken;Frozen Foods;Food
+1023;PigTail Frozen Pancakes;29;Breakfast Foods;Pancakes;Frozen Foods;Food
+1024;PigTail Low Fat French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+1025;PigTail Frozen Sausage Pizza;64;Pizza;Pizza;Frozen Foods;Food
+1026;PigTail Blueberry Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+1027;PigTail Fajita French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+1028;PigTail Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+1029;PigTail Frozen Pepperoni Pizza;64;Pizza;Pizza;Frozen Foods;Food
+1030;PigTail Frozen Cheese Pizza;64;Pizza;Pizza;Frozen Foods;Food
+1031;PigTail Frozen Mushroom Pizza;64;Pizza;Pizza;Frozen Foods;Food
+1032;PigTail Apple Cinnamon Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+1033;PigTail Frozen Carrots;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1034;PigTail Turkey TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+1035;PigTail Chicken TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+1036;PigTail Beef TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+1037;PigTail Pancake Mix;28;Breakfast Foods;Pancake Mix;Frozen Foods;Food
+1038;PigTail Grape Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+1039;PigTail Home Style French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+1040;PigTail Lime Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+1041;PigTail Ice Cream;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+1042;PigTail Ice Cream Sandwich;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+1043;PigTail Frozen Cauliflower;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1044;PigTail Frozen Broccoli;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1045;PigTail Frozen Corn;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1046;PigTail Frozen Peas;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1047;PigTail Popsicles;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+1048;PigTail Frozen Chicken Thighs;100;Meat;Frozen Chicken;Frozen Foods;Food
+1049;PigTail Frozen Chicken Wings;100;Meat;Frozen Chicken;Frozen Foods;Food
+1050;PigTail Lemon Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+1051;Bird Call Silky Smooth Hair Conditioner;78;Bathroom Products;Conditioner;Health and Hygiene;Non-Consumable
+1052;Bird Call Tartar Control Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+1053;Bird Call Whitening Toothpast;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+1054;Bird Call Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+1055;Bird Call Deodorant;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+1056;Bird Call Conditioning Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+1057;Bird Call Extra Moisture Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+1058;Bird Call Angled Toothbrush;88;Bathroom Products;Toothbrushes;Health and Hygiene;Non-Consumable
+1059;Bird Call Apricot Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+1060;Bird Call Childrens Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+1061;Bird Call Buffered Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+1062;Bird Call 200 MG Ibuprofen;71;Pain Relievers;Ibuprofen;Health and Hygiene;Non-Consumable
+1063;Bird Call 200 MG Acetominifen;72;Pain Relievers;Acetominifen;Health and Hygiene;Non-Consumable
+1064;Bird Call HCL Nasal Spray;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+1065;Bird Call Dishwasher Detergent;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+1066;Bird Call Multi-Symptom Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+1067;Bird Call Childrens Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+1068;Bird Call Laundry Detergent;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+1069;Bird Call Mint Mouthwash;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+1070;High Quality 60 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+1071;High Quality Plastic Forks;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+1072;High Quality Plastic Spoons;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+1073;High Quality Plastic Knives;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+1074;High Quality C-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+1075;High Quality 100 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+1076;High Quality AAA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+1077;High Quality Paper Plates;55;Paper Products;Paper Dishes;Household;Non-Consumable
+1078;High Quality Paper Cups;55;Paper Products;Paper Dishes;Household;Non-Consumable
+1079;High Quality 75 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+1080;High Quality Toilet Bowl Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+1081;High Quality Counter Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+1082;High Quality Glass Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+1083;High Quality 25 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+1084;High Quality AA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+1085;High Quality D-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+1086;High Quality Paper Towels;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1087;High Quality Soft Napkins;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1088;High Quality Scented Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1089;High Quality Toilet Paper;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1090;High Quality Tissues;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1091;High Quality Scented Toilet Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1092;High Quality Room Freshener;20;Cleaning Supplies;Deodorizers;Household;Non-Consumable
+1093;High Quality Frying Pan;40;Kitchen Products;Pots and Pans;Household;Non-Consumable
+1094;High Quality Copper Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+1095;High Quality Bees Wax Candles;47;Candles;Candles;Household;Non-Consumable
+1096;High Quality Silver Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+1097;High Quality Copper Pot Scrubber;86;Kitchen Products;Pot Scrubbers;Household;Non-Consumable
+1098;High Quality Economy Toilet Brush;85;Bathroom Products;Toilet Brushes;Household;Non-Consumable
+1099;High Quality Scissors;41;Hardware;Tools;Household;Non-Consumable
+1100;High Quality Large Sponge;42;Kitchen Products;Sponges;Household;Non-Consumable
+1101;High Quality Screw Driver;41;Hardware;Tools;Household;Non-Consumable
+1102;Genteel Extra Lean Hamburger;65;Meat;Hamburger;Meat;Food
+1103;Genteel Seasoned Hamburger;65;Meat;Hamburger;Meat;Food
+1104;Mighty Good Monthly Sports Magazine;104;Magazines;Sports Magazines;Periodicals;Non-Consumable
+1105;Mighty Good Monthly Auto Magazine;108;Magazines;Auto Magazines;Periodicals;Non-Consumable
+1106;Mighty Good Monthly Computer Magazine;107;Magazines;Computer Magazines;Periodicals;Non-Consumable
+1107;Mighty Good Monthly Home Magazine;105;Magazines;Home Magazines;Periodicals;Non-Consumable
+1108;Mighty Good Monthly Fashion Magazine;106;Magazines;Fashion Magazines;Periodicals;Non-Consumable
+1109;Tri-State Summer Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+1110;Tri-State Corn on the Cob;61;Vegetables;Fresh Vegetables;Produce;Food
+1111;Tri-State Asparagus;61;Vegetables;Fresh Vegetables;Produce;Food
+1112;Tri-State Sweet Peas;61;Vegetables;Fresh Vegetables;Produce;Food
+1113;Tri-State New Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+1114;Tri-State Beets;61;Vegetables;Fresh Vegetables;Produce;Food
+1115;Tri-State Prepared Salad;61;Vegetables;Fresh Vegetables;Produce;Food
+1116;Tri-State Onions;61;Vegetables;Fresh Vegetables;Produce;Food
+1117;Tri-State Green Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+1118;Tri-State Shitake Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+1119;Tri-State Lettuce;61;Vegetables;Fresh Vegetables;Produce;Food
+1120;Tri-State Elephant Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+1121;Tri-State Red Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+1122;Tri-State Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+1123;Tri-State Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+1124;Tri-State Cauliflower;61;Vegetables;Fresh Vegetables;Produce;Food
+1125;Tri-State Tomatos;61;Vegetables;Fresh Vegetables;Produce;Food
+1126;Tri-State Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+1127;Tri-State Baby Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+1128;Tri-State Dried Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+1129;Tri-State Fresh Lima Beans;61;Vegetables;Fresh Vegetables;Produce;Food
+1130;Tri-State Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+1131;Tri-State Limes;99;Fruit;Fresh Fruit;Produce;Food
+1132;Tri-State Firm Tofu;67;Packaged Vegetables;Tofu;Produce;Food
+1133;Tri-State Almonds;1;Specialty;Nuts;Produce;Food
+1134;Tri-State Macintosh Apples;99;Fruit;Fresh Fruit;Produce;Food
+1135;Tri-State Golden Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+1136;Tri-State Red Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+1137;Tri-State Lemons;99;Fruit;Fresh Fruit;Produce;Food
+1138;Tri-State Fancy Plums;99;Fruit;Fresh Fruit;Produce;Food
+1139;Tri-State Plums;99;Fruit;Fresh Fruit;Produce;Food
+1140;Tri-State Peaches;99;Fruit;Fresh Fruit;Produce;Food
+1141;Tri-State Broccoli;61;Vegetables;Fresh Vegetables;Produce;Food
+1142;Tri-State Mandarin Oranges;99;Fruit;Fresh Fruit;Produce;Food
+1143;Tri-State Mixed Nuts;1;Specialty;Nuts;Produce;Food
+1144;Tri-State Canned Peanuts;1;Specialty;Nuts;Produce;Food
+1145;Tri-State Sweet Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+1146;Tri-State Cantelope;99;Fruit;Fresh Fruit;Produce;Food
+1147;Tri-State Honey Dew;99;Fruit;Fresh Fruit;Produce;Food
+1148;Tri-State Fuji Apples;99;Fruit;Fresh Fruit;Produce;Food
+1149;Tri-State Walnuts;1;Specialty;Nuts;Produce;Food
+1150;Tri-State Oranges;99;Fruit;Fresh Fruit;Produce;Food
+1151;Tri-State Tangerines;99;Fruit;Fresh Fruit;Produce;Food
+1152;Tri-State Party Nuts;1;Specialty;Nuts;Produce;Food
+1153;Dual City Lox;24;Seafood;Fresh Fish;Seafood;Food
+1154;Dual City Scallops;2;Seafood;Shellfish;Seafood;Food
+1155;Horatio Low Fat Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1156;Horatio BBQ Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+1157;Horatio Corn Chips;12;Snack Foods;Chips;Snack Foods;Food
+1158;Horatio Low Fat BBQ Chips;12;Snack Foods;Chips;Snack Foods;Food
+1159;Horatio Sugar Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1160;Horatio Chocolate Chip Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1161;Horatio Fudge Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1162;Horatio Fudge Brownies;45;Snack Foods;Cookies;Snack Foods;Food
+1163;Horatio Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+1164;Horatio Lemon Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1165;Horatio Graham Crackers;45;Snack Foods;Cookies;Snack Foods;Food
+1166;Horatio Cheese Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+1167;Horatio Buttered Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+1168;Horatio No Salt Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+1169;Horatio Low Fat Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+1170;Horatio Salsa Dip;83;Snack Foods;Dips;Snack Foods;Food
+1171;Horatio Avocado Dip;83;Snack Foods;Dips;Snack Foods;Food
+1172;Horatio Salted Pretzels;46;Snack Foods;Pretzels;Snack Foods;Food
+1173;Horatio Cheese Dip;83;Snack Foods;Dips;Snack Foods;Food
+1174;Horatio Fondue Mix;83;Snack Foods;Dips;Snack Foods;Food
+1175;Horatio Mini Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+1176;Horatio Beef Jerky;17;Snack Foods;Dried Meat;Snack Foods;Food
+1177;Horatio Chocolate Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+1178;Horatio Low Fat Chips;12;Snack Foods;Chips;Snack Foods;Food
+1179;Horatio Sesame Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+1180;Horatio Frosted Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1181;Horatio Dried Apples;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1182;Horatio Apple Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1183;Horatio Strawberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1184;Horatio Raspberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1185;Horatio Grape Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1186;Horatio Dried Dates;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1187;Horatio Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1188;Horatio Golden Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1189;Horatio Dried Apricots;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1190;Horatio Frosted Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+1191;Musial Tasty Candy Bar;36;Candy;Chocolate Candy;Snacks;Food
+1192;Musial Mint Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+1193;Musial Malted Milk Balls;36;Candy;Chocolate Candy;Snacks;Food
+1194;Musial Semi-Sweet Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+1195;Musial Bubble Gum;37;Candy;Gum;Snacks;Food
+1196;Musial Spicy Mints;38;Candy;Hard Candy;Snacks;Food
+1197;Musial Mints;38;Candy;Hard Candy;Snacks;Food
+1198;Musial White Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+1199;Colossal Ravioli;5;Starchy Foods;Pasta;Starchy Foods;Food
+1200;Colossal Manicotti;5;Starchy Foods;Pasta;Starchy Foods;Food
+1201;Colossal Spaghetti;5;Starchy Foods;Pasta;Starchy Foods;Food
+1202;Colossal Thai Rice;57;Starchy Foods;Rice;Starchy Foods;Food
+1203;Colossal Rice Medly;57;Starchy Foods;Rice;Starchy Foods;Food
+1204;Portsmouth Imported Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+1205;Portsmouth Light Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1206;Portsmouth Chardonnay Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1207;Portsmouth Chablis Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1208;Portsmouth Merlot Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1209;Portsmouth Chardonnay;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1210;Portsmouth White Zinfandel Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1211;Portsmouth Light Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+1212;Sphinx Pumpernickel Bread;27;Bread;Sliced Bread;Baked Goods;Food
+1213;Sphinx White Bread;27;Bread;Sliced Bread;Baked Goods;Food
+1214;Sphinx Rye Bread;27;Bread;Sliced Bread;Baked Goods;Food
+1215;Sphinx English Muffins;26;Bread;Muffins;Baked Goods;Food
+1216;Sphinx Cranberry Muffins;26;Bread;Muffins;Baked Goods;Food
+1217;Sphinx Muffins;26;Bread;Muffins;Baked Goods;Food
+1218;Sphinx Bagels;25;Bread;Bagels;Baked Goods;Food
+1219;Sphinx Blueberry Muffins;26;Bread;Muffins;Baked Goods;Food
+1220;Sphinx Wheat Bread;27;Bread;Sliced Bread;Baked Goods;Food
+1221;Plato Sesame Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+1222;Plato Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+1223;Plato Hot Chocolate;51;Hot Beverages;Chocolate;Beverages;Drink
+1224;Plato Brown Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+1225;Plato White Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+1226;Plato French Roast Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+1227;Plato Decaf Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+1228;Plato Regular Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+1229;Plato Vegetable Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+1230;Plato Corn Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+1231;Plato Tomato Sauce;48;Baking Goods;Sauces;Baking Goods;Food
+1232;Plato Canola Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+1233;Plato Grape Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+1234;Plato Columbian Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+1235;Plato Strawberry Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+1236;Plato Pepper;4;Baking Goods;Spices;Baking Goods;Food
+1237;Plato Low Fat Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+1238;Plato Salt;4;Baking Goods;Spices;Baking Goods;Food
+1239;Plato Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+1240;Plato Oregano;4;Baking Goods;Spices;Baking Goods;Food
+1241;Plato Apple Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+1242;Plato Grape Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+1243;Plato Apple Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+1244;Plato Strawberry Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+1245;Plato Creamy Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+1246;Plato Strawberry Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+1247;Plato Extra Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+1248;Plato Apple Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+1249;Plato Grape Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+1250;Skinner Berry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+1251;Skinner Mango Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+1252;Skinner Strawberry Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+1253;Skinner Cream Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+1254;Skinner Diet Soda;19;Carbonated Beverages;Soda;Beverages;Drink
+1255;Skinner Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+1256;Skinner Diet Cola;19;Carbonated Beverages;Soda;Beverages;Drink
+1257;Skinner Orange Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+1258;Skinner Cranberry Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+1259;Skinner Apple Juice;30;Pure Juice Beverages;Juice;Beverages;Drink
+1260;Skinner Apple Drink;52;Drinks;Flavored Drinks;Beverages;Drink
+1261;Johnson Oatmeal;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+1262;Johnson Corn Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+1263;Johnson Wheat Puffs;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+1264;Johnson Grits;35;Breakfast Foods;Cereal;Breakfast Foods;Food
+1265;Pleasant Canned Beets;62;Vegetables;Canned Vegetables;Canned Foods;Food
+1266;Pleasant Creamed Corn;62;Vegetables;Canned Vegetables;Canned Foods;Food
+1267;Pleasant Canned String Beans;62;Vegetables;Canned Vegetables;Canned Foods;Food
+1268;Pleasant Chicken Soup;58;Canned Soup;Soup;Canned Foods;Food
+1269;Pleasant Canned Yams;62;Vegetables;Canned Vegetables;Canned Foods;Food
+1270;Pleasant Vegetable Soup;58;Canned Soup;Soup;Canned Foods;Food
+1271;Pleasant Canned Tomatos;62;Vegetables;Canned Vegetables;Canned Foods;Food
+1272;Pleasant Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+1273;Pleasant Regular Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+1274;Pleasant Chicken Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+1275;Pleasant Turkey Noodle Soup;58;Canned Soup;Soup;Canned Foods;Food
+1276;Pleasant Beef Soup;58;Canned Soup;Soup;Canned Foods;Food
+1277;Pleasant Canned Peas;62;Vegetables;Canned Vegetables;Canned Foods;Food
+1278;Pleasant Chicken Ramen Soup;58;Canned Soup;Soup;Canned Foods;Food
+1279;Pleasant Canned Tuna in Water;93;Canned Tuna;Tuna;Canned Foods;Food
+1280;Pleasant Canned Tuna in Oil;93;Canned Tuna;Tuna;Canned Foods;Food
+1281;Pleasant Large Canned Shrimp;94;Canned Shrimp;Shrimp;Canned Foods;Food
+1282;Pleasant Fancy Canned Anchovies;95;Canned Anchovies;Anchovies;Canned Foods;Food
+1283;Pleasant Fancy Canned Clams;96;Canned Clams;Clams;Canned Foods;Food
+1284;Pleasant Fancy Canned Oysters;97;Canned Oysters;Oysters;Canned Foods;Food
+1285;Pleasant Fancy Canned Sardines;98;Canned Sardines;Sardines;Canned Foods;Food
+1286;Pleasant Rice Soup;58;Canned Soup;Soup;Canned Foods;Food
+1287;Toucan Canned Mixed Fruit;3;Fruit;Canned Fruit;Canned Products;Food
+1288;Toucan Canned Peaches;3;Fruit;Canned Fruit;Canned Products;Food
+1289;Toretti Rosy Sunglasses;89;Specialty;Sunglasses;Carousel;Non-Consumable
+1290;Framton Eyeglass Screwdriver;103;Hardware;Screwdrivers;Checkout;Non-Consumable
+1291;Framton City Map;102;Miscellaneous;Maps;Checkout;Non-Consumable
+1292;Booker Low Fat Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+1293;Booker Low Fat Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+1294;Booker Sour Cream;14;Dairy;Sour Cream;Dairy;Food
+1295;Booker Jack Cheese;11;Dairy;Cheese;Dairy;Food
+1296;Booker Muenster Cheese;11;Dairy;Cheese;Dairy;Food
+1297;Booker String Cheese;11;Dairy;Cheese;Dairy;Food
+1298;Booker Low Fat String Cheese;11;Dairy;Cheese;Dairy;Food
+1299;Booker Havarti Cheese;11;Dairy;Cheese;Dairy;Food
+1300;Booker Head Cheese;11;Dairy;Cheese;Dairy;Food
+1301;Booker Cheese Spread;11;Dairy;Cheese;Dairy;Food
+1302;Booker Sharp Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+1303;Booker Mild Cheddar Cheese;11;Dairy;Cheese;Dairy;Food
+1304;Booker Large Curd Cottage Cheese;15;Dairy;Cottage Cheese;Dairy;Food
+1305;Booker 2% Milk;76;Dairy;Milk;Dairy;Drink
+1306;Booker Buttermilk;76;Dairy;Milk;Dairy;Drink
+1307;Booker Chocolate Milk;76;Dairy;Milk;Dairy;Drink
+1308;Booker 1% Milk;76;Dairy;Milk;Dairy;Drink
+1309;Booker Whole Milk;76;Dairy;Milk;Dairy;Drink
+1310;Booker Strawberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+1311;Booker Blueberry Yogurt;6;Dairy;Yogurt;Dairy;Food
+1312;Lake Chicken Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+1313;Lake Pimento Loaf;91;Meat;Bologna;Deli;Food
+1314;Lake Beef Bologna;91;Meat;Bologna;Deli;Food
+1315;Lake Low Fat Bologna;91;Meat;Bologna;Deli;Food
+1316;Lake Turkey Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+1317;Lake Foot-Long Hot Dogs;81;Meat;Hot Dogs;Deli;Food
+1318;Lake Low Fat Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+1319;Lake Cole Slaw;16;Side Dishes;Deli Salads;Deli;Food
+1320;Lake Roasted Chicken;77;Meat;Fresh Chicken;Deli;Food
+1321;Lake Corned Beef;8;Meat;Deli Meats;Deli;Food
+1322;Lake Sliced Turkey;8;Meat;Deli Meats;Deli;Food
+1323;Lake Sliced Ham;8;Meat;Deli Meats;Deli;Food
+1324;Lake Potato Salad;16;Side Dishes;Deli Salads;Deli;Food
+1325;Lake Sliced Chicken;8;Meat;Deli Meats;Deli;Food
+1326;Giant Small Brown Eggs;66;Eggs;Eggs;Eggs;Food
+1327;Giant Large Brown Eggs;66;Eggs;Eggs;Eggs;Food
+1328;Giant Small Eggs;66;Eggs;Eggs;Eggs;Food
+1329;Giant Large Eggs;66;Eggs;Eggs;Eggs;Food
+1330;Giant Egg Substitute;66;Eggs;Eggs;Eggs;Food
+1331;Carrington Low Fat Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+1332;Carrington Orange Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+1333;Carrington Frozen Chicken Breast;100;Meat;Frozen Chicken;Frozen Foods;Food
+1334;Carrington Frozen Pancakes;29;Breakfast Foods;Pancakes;Frozen Foods;Food
+1335;Carrington Low Fat French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+1336;Carrington Frozen Sausage Pizza;64;Pizza;Pizza;Frozen Foods;Food
+1337;Carrington Blueberry Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+1338;Carrington Fajita French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+1339;Carrington Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+1340;Carrington Frozen Pepperoni Pizza;64;Pizza;Pizza;Frozen Foods;Food
+1341;Carrington Frozen Cheese Pizza;64;Pizza;Pizza;Frozen Foods;Food
+1342;Carrington Frozen Mushroom Pizza;64;Pizza;Pizza;Frozen Foods;Food
+1343;Carrington Apple Cinnamon Waffles;34;Breakfast Foods;Waffles;Frozen Foods;Food
+1344;Carrington Frozen Carrots;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1345;Carrington Turkey TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+1346;Carrington Chicken TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+1347;Carrington Beef TV Dinner;10;Frozen Entrees;TV Dinner;Frozen Foods;Food
+1348;Carrington Pancake Mix;28;Breakfast Foods;Pancake Mix;Frozen Foods;Food
+1349;Carrington Grape Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+1350;Carrington Home Style French Fries;63;Vegetables;French Fries;Frozen Foods;Food
+1351;Carrington Lime Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+1352;Carrington Ice Cream;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+1353;Carrington Ice Cream Sandwich;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+1354;Carrington Frozen Cauliflower;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1355;Carrington Frozen Broccoli;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1356;Carrington Frozen Corn;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1357;Carrington Frozen Peas;60;Vegetables;Frozen Vegetables;Frozen Foods;Food
+1358;Carrington Popsicles;9;Frozen Desserts;Ice Cream;Frozen Foods;Food
+1359;Carrington Frozen Chicken Thighs;100;Meat;Frozen Chicken;Frozen Foods;Food
+1360;Carrington Frozen Chicken Wings;100;Meat;Frozen Chicken;Frozen Foods;Food
+1361;Carrington Lemon Popsicles;110;Frozen Desserts;Popsicles;Frozen Foods;Food
+1362;Hilltop Silky Smooth Hair Conditioner;78;Bathroom Products;Conditioner;Health and Hygiene;Non-Consumable
+1363;Hilltop Tartar Control Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+1364;Hilltop Whitening Toothpast;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+1365;Hilltop Toothpaste;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+1366;Hilltop Deodorant;39;Hygiene;Personal Hygiene;Health and Hygiene;Non-Consumable
+1367;Hilltop Conditioning Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+1368;Hilltop Extra Moisture Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+1369;Hilltop Angled Toothbrush;88;Bathroom Products;Toothbrushes;Health and Hygiene;Non-Consumable
+1370;Hilltop Apricot Shampoo;79;Bathroom Products;Shampoo;Health and Hygiene;Non-Consumable
+1371;Hilltop Childrens Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+1372;Hilltop Buffered Aspirin;70;Pain Relievers;Aspirin;Health and Hygiene;Non-Consumable
+1373;Hilltop 200 MG Ibuprofen;71;Pain Relievers;Ibuprofen;Health and Hygiene;Non-Consumable
+1374;Hilltop 200 MG Acetominifen;72;Pain Relievers;Acetominifen;Health and Hygiene;Non-Consumable
+1375;Hilltop HCL Nasal Spray;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+1376;Hilltop Dishwasher Detergent;73;Decongestants;Nasal Sprays;Health and Hygiene;Non-Consumable
+1377;Hilltop Multi-Symptom Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+1378;Hilltop Childrens Cold Remedy;75;Cold Remedies;Cold Remedies;Health and Hygiene;Non-Consumable
+1379;Hilltop Laundry Detergent;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+1380;Hilltop Mint Mouthwash;74;Bathroom Products;Mouthwash;Health and Hygiene;Non-Consumable
+1381;Sunset 60 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+1382;Sunset Plastic Forks;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+1383;Sunset Plastic Spoons;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+1384;Sunset Plastic Knives;56;Plastic Products;Plastic Utensils;Household;Non-Consumable
+1385;Sunset C-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+1386;Sunset 100 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+1387;Sunset AAA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+1388;Sunset Paper Plates;55;Paper Products;Paper Dishes;Household;Non-Consumable
+1389;Sunset Paper Cups;55;Paper Products;Paper Dishes;Household;Non-Consumable
+1390;Sunset 75 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+1391;Sunset Toilet Bowl Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+1392;Sunset Counter Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+1393;Sunset Glass Cleaner;22;Cleaning Supplies;Cleaners;Household;Non-Consumable
+1394;Sunset 25 Watt Lightbulb;80;Electrical;Lightbulbs;Household;Non-Consumable
+1395;Sunset AA-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+1396;Sunset D-Size Batteries;101;Electrical;Batteries;Household;Non-Consumable
+1397;Sunset Paper Towels;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1398;Sunset Soft Napkins;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1399;Sunset Scented Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1400;Sunset Toilet Paper;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1401;Sunset Tissues;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1481;Fort West Salsa Dip;83;Snack Foods;Dips;Snack Foods;Food
+1402;Sunset Scented Toilet Tissue;18;Paper Products;Paper Wipes;Household;Non-Consumable
+1403;Sunset Room Freshener;20;Cleaning Supplies;Deodorizers;Household;Non-Consumable
+1404;Sunset Frying Pan;40;Kitchen Products;Pots and Pans;Household;Non-Consumable
+1405;Sunset Copper Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+1406;Sunset Bees Wax Candles;47;Candles;Candles;Household;Non-Consumable
+1407;Sunset Silver Cleaner;87;Kitchen Products;Pot Cleaners;Household;Non-Consumable
+1408;Sunset Copper Pot Scrubber;86;Kitchen Products;Pot Scrubbers;Household;Non-Consumable
+1409;Sunset Economy Toilet Brush;85;Bathroom Products;Toilet Brushes;Household;Non-Consumable
+1410;Sunset Scissors;41;Hardware;Tools;Household;Non-Consumable
+1411;Sunset Large Sponge;42;Kitchen Products;Sponges;Household;Non-Consumable
+1412;Sunset Screw Driver;41;Hardware;Tools;Household;Non-Consumable
+1413;Gerolli Extra Lean Hamburger;65;Meat;Hamburger;Meat;Food
+1414;Gerolli Seasoned Hamburger;65;Meat;Hamburger;Meat;Food
+1415;Gauss Monthly Sports Magazine;104;Magazines;Sports Magazines;Periodicals;Non-Consumable
+1416;Gauss Monthly Auto Magazine;108;Magazines;Auto Magazines;Periodicals;Non-Consumable
+1417;Gauss Monthly Computer Magazine;107;Magazines;Computer Magazines;Periodicals;Non-Consumable
+1418;Gauss Monthly Home Magazine;105;Magazines;Home Magazines;Periodicals;Non-Consumable
+1419;Gauss Monthly Fashion Magazine;106;Magazines;Fashion Magazines;Periodicals;Non-Consumable
+1420;Hermanos Summer Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+1421;Hermanos Corn on the Cob;61;Vegetables;Fresh Vegetables;Produce;Food
+1422;Hermanos Asparagus;61;Vegetables;Fresh Vegetables;Produce;Food
+1423;Hermanos Sweet Peas;61;Vegetables;Fresh Vegetables;Produce;Food
+1424;Hermanos New Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+1425;Hermanos Beets;61;Vegetables;Fresh Vegetables;Produce;Food
+1426;Hermanos Prepared Salad;61;Vegetables;Fresh Vegetables;Produce;Food
+1427;Hermanos Onions;61;Vegetables;Fresh Vegetables;Produce;Food
+1428;Hermanos Green Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+1429;Hermanos Shitake Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+1430;Hermanos Lettuce;61;Vegetables;Fresh Vegetables;Produce;Food
+1431;Hermanos Elephant Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+1432;Hermanos Red Pepper;61;Vegetables;Fresh Vegetables;Produce;Food
+1433;Hermanos Garlic;61;Vegetables;Fresh Vegetables;Produce;Food
+1434;Hermanos Potatos;61;Vegetables;Fresh Vegetables;Produce;Food
+1435;Hermanos Cauliflower;61;Vegetables;Fresh Vegetables;Produce;Food
+1436;Hermanos Tomatos;61;Vegetables;Fresh Vegetables;Produce;Food
+1437;Hermanos Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+1438;Hermanos Baby Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+1439;Hermanos Dried Mushrooms;61;Vegetables;Fresh Vegetables;Produce;Food
+1440;Hermanos Fresh Lima Beans;61;Vegetables;Fresh Vegetables;Produce;Food
+1441;Hermanos Squash;61;Vegetables;Fresh Vegetables;Produce;Food
+1442;Hermanos Limes;99;Fruit;Fresh Fruit;Produce;Food
+1443;Hermanos Firm Tofu;67;Packaged Vegetables;Tofu;Produce;Food
+1444;Hermanos Almonds;1;Specialty;Nuts;Produce;Food
+1445;Hermanos Macintosh Apples;99;Fruit;Fresh Fruit;Produce;Food
+1446;Hermanos Golden Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+1447;Hermanos Red Delcious Apples;99;Fruit;Fresh Fruit;Produce;Food
+1448;Hermanos Lemons;99;Fruit;Fresh Fruit;Produce;Food
+1449;Hermanos Fancy Plums;99;Fruit;Fresh Fruit;Produce;Food
+1450;Hermanos Plums;99;Fruit;Fresh Fruit;Produce;Food
+1451;Hermanos Peaches;99;Fruit;Fresh Fruit;Produce;Food
+1452;Hermanos Broccoli;61;Vegetables;Fresh Vegetables;Produce;Food
+1453;Hermanos Mandarin Oranges;99;Fruit;Fresh Fruit;Produce;Food
+1454;Hermanos Mixed Nuts;1;Specialty;Nuts;Produce;Food
+1455;Hermanos Canned Peanuts;1;Specialty;Nuts;Produce;Food
+1456;Hermanos Sweet Onion;61;Vegetables;Fresh Vegetables;Produce;Food
+1457;Hermanos Cantelope;99;Fruit;Fresh Fruit;Produce;Food
+1458;Hermanos Honey Dew;99;Fruit;Fresh Fruit;Produce;Food
+1459;Hermanos Fuji Apples;99;Fruit;Fresh Fruit;Produce;Food
+1460;Hermanos Walnuts;1;Specialty;Nuts;Produce;Food
+1461;Hermanos Oranges;99;Fruit;Fresh Fruit;Produce;Food
+1462;Hermanos Tangerines;99;Fruit;Fresh Fruit;Produce;Food
+1463;Hermanos Party Nuts;1;Specialty;Nuts;Produce;Food
+1464;Amigo Lox;24;Seafood;Fresh Fish;Seafood;Food
+1465;Amigo Scallops;2;Seafood;Shellfish;Seafood;Food
+1466;Fort West Low Fat Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1467;Fort West BBQ Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+1468;Fort West Corn Chips;12;Snack Foods;Chips;Snack Foods;Food
+1469;Fort West Low Fat BBQ Chips;12;Snack Foods;Chips;Snack Foods;Food
+1470;Fort West Sugar Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1471;Fort West Chocolate Chip Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1472;Fort West Fudge Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1473;Fort West Fudge Brownies;45;Snack Foods;Cookies;Snack Foods;Food
+1474;Fort West Potato Chips;12;Snack Foods;Chips;Snack Foods;Food
+1475;Fort West Lemon Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1476;Fort West Graham Crackers;45;Snack Foods;Cookies;Snack Foods;Food
+1477;Fort West Cheese Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+1478;Fort West Buttered Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+1479;Fort West No Salt Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+1480;Fort West Low Fat Popcorn;54;Snack Foods;Popcorn;Snack Foods;Food
+1482;Fort West Avocado Dip;83;Snack Foods;Dips;Snack Foods;Food
+1483;Fort West Salted Pretzels;46;Snack Foods;Pretzels;Snack Foods;Food
+1484;Fort West Cheese Dip;83;Snack Foods;Dips;Snack Foods;Food
+1485;Fort West Fondue Mix;83;Snack Foods;Dips;Snack Foods;Food
+1486;Fort West Mini Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+1487;Fort West Beef Jerky;17;Snack Foods;Dried Meat;Snack Foods;Food
+1488;Fort West Chocolate Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+1489;Fort West Low Fat Chips;12;Snack Foods;Chips;Snack Foods;Food
+1490;Fort West Sesame Crackers;82;Snack Foods;Crackers;Snack Foods;Food
+1491;Fort West Frosted Cookies;45;Snack Foods;Cookies;Snack Foods;Food
+1492;Fort West Dried Apples;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1493;Fort West Apple Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1494;Fort West Strawberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1495;Fort West Raspberry Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1496;Fort West Grape Fruit Roll;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1497;Fort West Dried Dates;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1498;Fort West Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1499;Fort West Golden Raisins;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1500;Fort West Dried Apricots;109;Snack Foods;Dried Fruit;Snack Foods;Food
+1501;Fort West Frosted Donuts;84;Snack Foods;Donuts;Snack Foods;Food
+1502;Gulf Coast Tasty Candy Bar;36;Candy;Chocolate Candy;Snacks;Food
+1503;Gulf Coast Mint Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+1504;Gulf Coast Malted Milk Balls;36;Candy;Chocolate Candy;Snacks;Food
+1505;Gulf Coast Semi-Sweet Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+1506;Gulf Coast Bubble Gum;37;Candy;Gum;Snacks;Food
+1507;Gulf Coast Spicy Mints;38;Candy;Hard Candy;Snacks;Food
+1508;Gulf Coast Mints;38;Candy;Hard Candy;Snacks;Food
+1509;Gulf Coast White Chocolate Bar;36;Candy;Chocolate Candy;Snacks;Food
+1510;Jardon Ravioli;5;Starchy Foods;Pasta;Starchy Foods;Food
+1511;Jardon Manicotti;5;Starchy Foods;Pasta;Starchy Foods;Food
+1512;Jardon Spaghetti;5;Starchy Foods;Pasta;Starchy Foods;Food
+1513;Jardon Thai Rice;57;Starchy Foods;Rice;Starchy Foods;Food
+1514;Jardon Rice Medly;57;Starchy Foods;Rice;Starchy Foods;Food
+1515;Top Measure Imported Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+1516;Top Measure Light Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1517;Top Measure Chardonnay Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1518;Top Measure Chablis Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1519;Top Measure Merlot Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1520;Top Measure Chardonnay;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1521;Top Measure White Zinfandel Wine;44;Beer and Wine;Wine;Alcoholic Beverages;Drink
+1522;Top Measure Light Beer;43;Beer and Wine;Beer;Alcoholic Beverages;Drink
+1523;Modell Pumpernickel Bread;27;Bread;Sliced Bread;Baked Goods;Food
+1524;Modell White Bread;27;Bread;Sliced Bread;Baked Goods;Food
+1525;Modell Rye Bread;27;Bread;Sliced Bread;Baked Goods;Food
+1526;Modell English Muffins;26;Bread;Muffins;Baked Goods;Food
+1527;Modell Cranberry Muffins;26;Bread;Muffins;Baked Goods;Food
+1528;Modell Muffins;26;Bread;Muffins;Baked Goods;Food
+1529;Modell Bagels;25;Bread;Bagels;Baked Goods;Food
+1530;Modell Blueberry Muffins;26;Bread;Muffins;Baked Goods;Food
+1531;Modell Wheat Bread;27;Bread;Sliced Bread;Baked Goods;Food
+1532;CDR Sesame Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+1533;CDR Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+1534;CDR Hot Chocolate;51;Hot Beverages;Chocolate;Beverages;Drink
+1535;CDR Brown Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+1536;CDR White Sugar;50;Baking Goods;Sugar;Baking Goods;Food
+1537;CDR French Roast Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+1538;CDR Decaf Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+1539;CDR Regular Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+1540;CDR Vegetable Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+1541;CDR Corn Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+1542;CDR Tomato Sauce;48;Baking Goods;Sauces;Baking Goods;Food
+1543;CDR Canola Oil;49;Baking Goods;Cooking Oil;Baking Goods;Food
+1544;CDR Grape Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+1545;CDR Columbian Coffee;90;Hot Beverages;Coffee;Beverages;Drink
+1546;CDR Strawberry Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+1547;CDR Pepper;4;Baking Goods;Spices;Baking Goods;Food
+1548;CDR Low Fat Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+1549;CDR Salt;4;Baking Goods;Spices;Baking Goods;Food
+1550;CDR Apple Butter;33;Jams and Jellies;Preserves;Baking Goods;Food
+1551;CDR Oregano;4;Baking Goods;Spices;Baking Goods;Food
+1552;CDR Apple Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
+1553;CDR Grape Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+1554;CDR Apple Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+1555;CDR Strawberry Jam;32;Jams and Jellies;Jam;Baking Goods;Food
+1556;CDR Creamy Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+1557;CDR Strawberry Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+1558;CDR Extra Chunky Peanut Butter;53;Jams and Jellies;Peanut Butter;Baking Goods;Food
+1559;CDR Apple Preserves;33;Jams and Jellies;Preserves;Baking Goods;Food
+1560;CDR Grape Jelly;31;Jams and Jellies;Jelly;Baking Goods;Food
