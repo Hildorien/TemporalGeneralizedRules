@@ -1,12 +1,13 @@
 import math
 import unittest
 from multiprocessing import freeze_support
-
+import pandas as pd
 from DataStructures.Parser import Parser
 from Tests.utilityTests import utilityTests
 from Apriori.apriori import apriori
 from Apriori.apriori import apriori_mapreduce
 from joblib import Parallel, delayed
+
 # Parse dataset in transaction format
 """
 parser = Parser()
@@ -28,7 +29,7 @@ database = parser.parseBasketFile(datasets[6])
 # Prints to get info of algorithm
 print('Database size: ' + str(database.row_count))
 print('Total items: ' + str((len(database.items_dic.keys()))))
-rules = apriori_mapreduce(database, 0.1, 0.5)
+rules = apriori(database, 0.1, 0.5)
 print(len(rules))
 """
 #for rule in rules:
@@ -36,8 +37,9 @@ print(len(rules))
 #print('Frequent Itemsets: ')
 #print(dict)
 # RunTests
-# suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
-# unittest.main()
+#suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
+#unittest.main()
+
 
 def main():
     parser = Parser()
@@ -59,3 +61,5 @@ def main():
 if __name__=="__main__":
     freeze_support()
     main()
+
+

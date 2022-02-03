@@ -26,7 +26,19 @@ class Parser:
         matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)
         return Database(matrix_dictionary, {}, self.item_name_by_index, len(dataset))
 
-
+    def parseTaxonomy(self, taxonomy_filepath):
+        taxonomy = {}
+        with open(taxonomy_filepath) as file:
+            lines = file.readlines()[1:] #skips header
+        for line in lines:
+            a_hierarchy = []
+            string_split = line.rstrip().split(",")
+            product = string_split[0]
+            taxonomy[product] = []
+            for i, ancestor in enumerate(string_split):
+                if i != 0:
+                    taxonomy[product].append(ancestor)
+        return taxonomy
 
     def create_matrix_dictionary(self, dataset):
         matrix_dictionary = {}
