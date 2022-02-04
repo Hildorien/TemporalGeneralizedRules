@@ -9,11 +9,16 @@ class Database:
     #{product : transaccions_where_it_appears(int[])}
     matrix_data_by_item = {}
 
-    def __init__(self, var1, var2, var3, var4):
-        self.matrix_data_by_item = var1
-        self.timestamp_mapping = var2
-        self.items_dic = var3
-        self.row_count = var4
+    #{ 'product_name' : [ancestor] }
+    taxonomy = {}
+
+    def __init__(self, matrix_data_by_item,
+                 timestamp_dict, items_dict, row_count, taxonomy_dict):
+        self.matrix_data_by_item = matrix_data_by_item
+        self.timestamp_mapping = timestamp_dict
+        self.items_dic = items_dict
+        self.row_count = row_count
+        self.taxonomy = taxonomy_dict
 
     def supportOf(self, itemset):
         """

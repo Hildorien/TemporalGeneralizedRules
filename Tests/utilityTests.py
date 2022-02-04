@@ -39,8 +39,11 @@ class utilityTests(unittest.TestCase):
         self.assertEqual('Milk' in dic, True, 'Milk in dataset')
         self.assertEqual(dic['Milk'] , [0,2,3], 'Milk in transactions 0,2 and 3')
 
-    def test_parseTaxonomy(self):
+    def test_parse_taxonomy(self):
         parser = Parser()
-        taxonomy = parser.parseTaxonomy('Taxonomies/salesfact_taxonomy.csv')
+        taxonomy = parser.parse_taxonomy('Taxonomies/salesfact_taxonomy.csv')
         #Assert that taxonomy builds with all items in database
         self.assertEqual(len(list(taxonomy.keys())), 1560, 'Taxonomy has ' + str(1560) + ' items in database')
+
+
+

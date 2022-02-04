@@ -1,4 +1,5 @@
 import math
+import time
 import unittest
 from multiprocessing import freeze_support
 import pandas as pd
@@ -6,7 +7,6 @@ from DataStructures.Parser import Parser
 from Tests.utilityTests import utilityTests
 from Apriori.apriori import apriori
 from Apriori.apriori import apriori_mapreduce
-from joblib import Parallel, delayed
 
 # Parse dataset in transaction format
 """
@@ -50,8 +50,13 @@ def main():
                 "Datasets/data5.csv",
                 "Datasets/data6.csv",
                 "Datasets/data7.csv"]
-    #database = parser.parseBasketFile(datasets[6])
-    database = parser.parse("Datasets/sales_formatted.csv")
+    print('Parsing dataset...')
+    start = time.time()
+    #database = parser.parse(datasets[6], 'basket')
+    database = parser.parse("Datasets/sales_formatted.csv", 'single')
+    #database = parser.parse("Datasets/sales_formatted.csv", 'single', 'Taxonomies/salesfact_taxonomy.csv')
+    end = time.time()
+    print('Took ' + (str(end - start) + ' seconds'))
     # Prints to get info of algorithm
     print('Database size: ' + str(database.row_count))
     print('Total items: ' + str((len(database.items_dic.keys()))))
