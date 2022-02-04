@@ -21,7 +21,6 @@ class utilityTests(unittest.TestCase):
         orderedlist2 = [1, 3, 5]
         self.assertEqual(getValidJoin(orderedlist1, orderedlist2), None, 'invalid join')
 
-    """This test fails"""
     def test_join_frequents_size_3(self):
         frequents_size_3 = [[1, 2, 3], [1, 2, 4], [1, 3, 4], [1, 3, 5], [2, 3, 4]]
         frequent_dictionary = {3: {}}
