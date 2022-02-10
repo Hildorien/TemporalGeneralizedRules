@@ -1,6 +1,7 @@
 import unittest
 from utility import findOrderedIntersection
 from utility import getValidJoin
+from utility import getPeriodStampFromTimestamp
 from Apriori.apriori import apriori_gen
 from DataStructures.Parser import Parser
 
@@ -44,6 +45,19 @@ class utilityTests(unittest.TestCase):
         taxonomy = parser.parse_taxonomy('Taxonomies/salesfact_taxonomy.csv')
         #Assert that taxonomy builds with all items in database
         self.assertEqual(len(list(taxonomy.keys())), 1560, 'Taxonomy has ' + str(1560) + ' items in database')
+
+    def test_get_period_stamp_from_timestamp(self):
+        t1 = 631234984 # 1/1/1990
+        t2 = 503276584 # 12/12/1985
+        t3 = 1118962984 # 16/6/2005
+        t4 = 1442876584 # 21/9/2015
+
+        self.assertEqual(getPeriodStampFromTimestamp(t1), [1,1,1], 'Periodstamp 1')
+        self.assertEqual(getPeriodStampFromTimestamp(t2), [23, 12, 4], 'Periodstamp 2')
+        self.assertEqual(getPeriodStampFromTimestamp(t3), [12, 6, 2], 'Periodstamp 3')
+        self.assertEqual(getPeriodStampFromTimestamp(t4), [18, 9, 3], 'Periodstamp 4')
+
+
 
 
 
