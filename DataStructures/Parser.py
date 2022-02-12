@@ -1,5 +1,8 @@
 import pandas as pd
 from DataStructures.Database import Database
+from DataStructures.HorizontalDatabase import HorizontalDatabase
+from DataStructures.Transaction import Transaction
+
 
 class Parser:
 
@@ -147,3 +150,27 @@ class Parser:
         dataset = self.build_dataset_from_basket(dataset_filepath)
         taxonomy = self.parse_taxonomy(taxonomy_filepath)
         return self.fit_database(dataset, {}, taxonomy)
+
+    def fit_horizontal_database(self, dataset, timestamps, taxonomy):
+        transactions = []
+        unique_items = set()
+        items_dic = {}
+        index_items_dic = {}
+        for tid, a_transaction in enumerate(dataset):
+            transactions.append(Transaction(tid, timestamps[tid], a_transaction))
+            for item in a_transaction:
+                unique_items.add(item)
+        #Add ancestors to unique items
+        for key in taxonomy:
+            for ancestor in taxonomy[key]:
+                unique_items.add(ancestor)
+        sorted_items = sorted(unique_items)
+        for id_item, item in enumerate(sorted_items):
+            items_dic[id_item] = item
+            index_items_dic[item] = id_item
+        return HorizontalDatabase(transactions, taxonomy, items_dic, index_items_dic)
+
+    def parse_single_file_for_horizontal_database(self, dataset_filepath, taxonomy_filepath):
+        dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
+        taxonomy = self.parse_taxonomy(taxonomy_filepath)
+        return self.fit_horizontal_database(dataset, timestamps.to_dict(), taxonomy)

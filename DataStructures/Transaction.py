@@ -3,10 +3,7 @@ class Transaction:
     timestamp = 0
     items = {}
 
-    def __init__(self, var1, var2, var3):
-        self.id = var1
-        self.timestamp = var2
-        self.items = var3
-
-    def addItem(self, item):
-        self.items.add(item)
+    def __init__(self, id, timestamp, items):
+        self.id = id
+        self.timestamp = timestamp
+        self.items = items
