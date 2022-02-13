@@ -11,37 +11,29 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     :param min_r: User-defined minimum R insteresting measure
     :return: Set of association rules
     """
+    #Instantiate local variables
     frequent_dictionary = {}
-    # Calculate L1
-    frequent_dictionary[1] = calculate_L1(horizontal_database, min_supp)
-    k = 2
-    # Instantiate local variables
+    k = 1
     transactions = horizontal_database.transactions
     transaction_count = horizontal_database.transaction_count
-    taxonomy = horizontal_database.taxonomy
-
-    while frequent_dictionary[k - 1] != []:
+    taxonomy = horizontal_database.taxonomy #Cumulate Optimization 2 in original paper
+    all_items = sorted(list(horizontal_database.items_dic.keys()))
+    while k == 1 or frequent_dictionary[k - 1] != []:
         # Candidate Generation
         print('Iteration ' + str(k))
         print('Candidate generation step...')
-        candidate_hashmap = {}
-        if k == 2:
-            start = time.time()
-            [hash_candidate(list(x), candidate_hashmap) for x in combinations(flatten(frequent_dictionary[1]), 2)]
-            end = time.time()
-            print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(list(candidate_hashmap.keys()))) +  ' candidates of size ' + str(k) + ' using combinations'))
+        if k == 1:
+            candidate_hashmap = calculate_C1(all_items, k)
+        elif k == 2:
+            candidate_hashmap = calculate_C2(frequent_dictionary, k)
         else:
-            start = time.time()
-            candidate_hashmap = apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
-            end = time.time()
-            print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using apriori-gen'))
+            candidate_hashmap = calculate_Ck(frequent_dictionary, k)
         if k == 2:
-            prune_candidates_in_same_family(candidate_hashmap, taxonomy)
+            prune_candidates_in_same_family(candidate_hashmap, taxonomy) #Cumulate Optimization 3 in original paper
         candidates_size_k = list(candidate_hashmap.values())
-
         print('Pruning taxonomy...')
         start = time.time()
-        taxonomy_pruned = prune_ancestors(candidates_size_k, taxonomy)
+        taxonomy_pruned = prune_ancestors(candidates_size_k, taxonomy) #Cumulate Optimization 1 in original paper
         end = time.time()
         print('Took ' + (str(end - start) + ' seconds to prune taxonomy'))
         # Count Candidates of size k in transactions
@@ -50,11 +42,7 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
         support_dictionary = dict.fromkeys(candidate_hashmap.keys(), 0) #Auxiliary structure for counting supports of size k
         start = time.time()
         for a_transaction in transactions:
-            # print('Expanding transaction smartly...')
-            # start = time.time()
             expanded_transaction = expand_transaction(a_transaction, taxonomy_pruned)
-            # end = time.time()
-            # print('Took ' + (str(end - start) + ' seconds to expand transaction'))
             count_candidates_in_transaction(k, expanded_transaction, support_dictionary, candidate_hashmap)
         end = time.time()
         print('Took ' + (str(end - start) + ' seconds to count candidates of size ' + str(k) + ' in transactions'))
@@ -72,32 +60,33 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     return frequent_dictionary
 
 
-def calculate_L1(horizontal_database, min_supp):
-    """
-    :param horizontal_database: A horizontal database
-    :param min_supp: User-specified minimum support
-    :return: A list of list of frequent items [ ['Apple'], ['Carrot'], ...]
-    """
-    support_dictionary = {}
-    frequent_items = []
-    transactions = horizontal_database.transactions
-    transaction_count = horizontal_database.transaction_count
-    taxonomy = horizontal_database.taxonomy
+def calculate_Ck(frequent_dictionary, k):
+    start = time.time()
+    candidate_hashmap = apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
+    end = time.time()
+    print('Took ' + (str(end - start) + ' seconds to generate ' + str(
+        len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using apriori-gen'))
+    return candidate_hashmap
 
-    for a_transaction in transactions:
-        expanded_transaction = expand_transaction(a_transaction, taxonomy)
-        # Work with expanded_transaction
-        for item in set(expanded_transaction):
-            if item in support_dictionary:
-                support_dictionary[item] += 1
-            else:
-                support_dictionary[item] = 1
 
-    for item in support_dictionary:
-        support = support_dictionary[item] / transaction_count
-        if support >= min_supp:
-            frequent_items.append([item])
-    return frequent_items
+def calculate_C2(frequent_dictionary, k):
+    candidate_hashmap = {}
+    start = time.time()
+    [hash_candidate(list(x), candidate_hashmap) for x in combinations(flatten(frequent_dictionary[1]), 2)]
+    end = time.time()
+    print('Took ' + (str(end - start) + ' seconds to generate ' + str(
+        len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using combinations'))
+    return candidate_hashmap
+
+
+def calculate_C1(all_items, k):
+    candidate_hashmap = {}
+    start = time.time()
+    [hash_candidate(list(x), candidate_hashmap) for x in list(map(lambda x: [x], all_items))]
+    end = time.time()
+    print('Took ' + (str(end - start) + ' seconds to generate ' + str(
+        len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k)))
+    return candidate_hashmap
 
 
 def expand_transaction(a_transaction, taxonomy):
@@ -166,6 +155,8 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
     # STEP 1: JOIN
     candidate_hashmap = {}
     n = len(frequent_itemset_of_size_k_minus_1)
+    print('Joining ' + str(n) + ' candidate of size ' + str(k-1) + ' using apriori_gen')
+    start = time.time()
     for i in range(n):
         j = i + 1
         while j < n:
@@ -175,17 +166,25 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
             else:
                 candidate_hashmap[str(joined_itemset)] = joined_itemset
             j += 1
+    end = time.time()
+    print('Took ' + (str(end - start) + ' seconds to JOIN ' + str(n) + ' candidates of size ' + str(k-1)))
     # STEP 2: PRUNE -> For each itemset in L_k check if all subsets are frequent
     if k > 2:
-        for a_candidate_of_size_k in list(candidate_hashmap.values()):  # Iterating over a lists of lists
-            subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k,
-                                                               k - 1)  # a_candidate_of_size_k is a list
+        candidates_size_k = list(candidate_hashmap.values()).copy()
+        n = len(candidates_size_k)
+        print('Pruning ' + str(n) + ' candidates of size ' + str(k) + ' using apriori_gen')
+        start = time.time()
+        for i in range(n):
+            subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(candidates_size_k[i], k - 1)  # candidates_size_k[i] is a list
             for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
                 if not (a_subset_of_size_k_minus_1 in frequent_dictionary[k - 1]):
-                    candidate_hashmap.pop(str(a_candidate_of_size_k), None)  # Prunes the entire candidate
+                    candidate_hashmap.pop(str(candidates_size_k[i]), None)  # Prunes the entire candidate
                     break
+        end = time.time()
+        print('Took ' + (str(end - start) + ' seconds to PRUNE ' + str(n) + ' candidates of size ' + str(k)) +
+              '. Left with ' + str(len(list(candidate_hashmap.keys()))) + ' candidates.')
     return candidate_hashmap
 
 
-def hash_candidate(list, candidate_hashmap):
-    candidate_hashmap[str(list)] = list
+def hash_candidate(lst, candidate_hashmap):
+    candidate_hashmap[str(lst)] = lst
