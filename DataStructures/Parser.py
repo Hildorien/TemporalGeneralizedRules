@@ -2,23 +2,24 @@ import pandas as pd
 from DataStructures.Database import Database
 from DataStructures.HorizontalDatabase import HorizontalDatabase
 from DataStructures.Transaction import Transaction
+from utility import getPeriodStampFromTimestamp
 
 
 class Parser:
 
-    def parse(self, filepath, csv_format='single', taxonomy_filepath=''):
-        if csv_format == 'basket' and taxonomy_filepath == '':
+    def parse(self, filepath, csv_format='single', taxonomy_filepath= None, usingTimestamp = False):
+        if csv_format == 'basket' and taxonomy_filepath is None:
             return self.parse_basket_file(filepath)
-        elif csv_format == 'single' and taxonomy_filepath == '':
-            return self.parse_single_file(filepath)
-        elif csv_format == 'basket' and taxonomy_filepath != '':
+        elif csv_format == 'single' and taxonomy_filepath is None:
+            return self.parse_single_file(filepath, usingTimestamp)
+        elif csv_format == 'basket' and taxonomy_filepath is not None:
             return self.parse_basket_with_taxonomy(filepath, taxonomy_filepath)
-        elif csv_format == 'single' and taxonomy_filepath != '':
+        elif csv_format == 'single' and taxonomy_filepath is not None:
             return self.parse_single_with_taxonomy(filepath, taxonomy_filepath)
 
-    def parse_single_file(self, filepath):
+    def parse_single_file(self, filepath, usingTimestamp = False):
         dataset, timestamps = self.build_dataset_timestamp_from_file(filepath)
-        return self.fit_database(dataset, timestamps.to_dict())
+        return self.fit_database(dataset, timestamps.to_dict(), None, usingTimestamp)
 
     def build_dataset_timestamp_from_file(self, filepath):
         df = pd.read_csv(filepath,
@@ -44,15 +45,23 @@ class Parser:
             dataset.append(a_transaction)
         return dataset
 
-    def fit_database(self, dataset, timestamps, taxonomy=None):
-        if taxonomy is None:
-            matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)
+    def fit_database(self, dataset, timestamps, taxonomy=None, usingTimestamps=False):
+        if taxonomy is not None:
+            matrix_dictionary_with_tax = self.fit_with_taxonomy(dataset,
+                                                                taxonomy).create_matrix_dictionary_with_taxonomy(
+                dataset, taxonomy)
+            return Database(matrix_dictionary_with_tax, timestamps, self.item_name_by_index,
+                            len(dataset), taxonomy)
+
+        elif usingTimestamps:
+            matrix_dictionary = self.fit(dataset).create_matrix_dictionary_using_timestamps(dataset, timestamps)
             return Database(matrix_dictionary, timestamps, self.item_name_by_index,
                             len(dataset), {})
         else:
-            matrix_dictionary_with_tax = self.fit_with_taxonomy(dataset, taxonomy).create_matrix_dictionary_with_taxonomy(dataset, taxonomy)
-            return Database(matrix_dictionary_with_tax, timestamps, self.item_name_by_index,
-                            len(dataset), taxonomy)
+            matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)
+            return Database(matrix_dictionary, timestamps, self.item_name_by_index,
+                            len(dataset), {})
+
 
     def parse_taxonomy(self, taxonomy_filepath):
         taxonomy = {}
@@ -71,15 +80,43 @@ class Parser:
     def create_matrix_dictionary(self, dataset):
         matrix_dictionary = {}
         for tid, transaction in enumerate(dataset):
-
             for item in set(transaction):
                 if item in matrix_dictionary:
-                    matrix_dictionary[item].append(tid)
+                    matrix_dictionary[item]['tids'].append(tid)
                 else:
-                    matrix_dictionary[item] = [tid]
+                    matrix_dictionary[item] = {}
+                    matrix_dictionary[item]['tids'] = [tid]
+        return matrix_dictionary
+
+    def create_matrix_dictionary_using_timestamps(self, dataset, timestamps):
+        matrix_dictionary = {}
+        for tid, transaction in enumerate(dataset):
+            for item in set(transaction):
+                transactionHTG = getPeriodStampFromTimestamp(timestamps[tid])
+                if item in matrix_dictionary:
+                    matrix_dictionary[item]['tids'].append(tid)
+                else:
+                    matrix_dictionary[item] = {}
+                    matrix_dictionary[item]['tids'] = [tid]
+                    matrix_dictionary[item]['fap'] = transactionHTG
+
         return matrix_dictionary
 
     def fit(self, dataset):
+        self.item_name_by_index = {}
+        unique_items = set()
+        for transaction in dataset:
+            for item in transaction:
+                unique_items.add(item)
+        self.item_names = sorted(unique_items)
+        self.item_index_by_name = {}
+        for col_idx, item in enumerate(self.item_names):
+            self.item_index_by_name[item] = col_idx
+            self.item_name_by_index[col_idx] = item
+        return self
+
+
+    def fit_with_timestamps(self, dataset):
         self.item_name_by_index = {}
         unique_items = set()
         for transaction in dataset:
@@ -135,9 +172,10 @@ class Parser:
             #Work with expanded_transaction
             for item in set(expanded_transaction):
                 if item in matrix_dictionary:
-                    matrix_dictionary[item].append(tid)
+                    matrix_dictionary[item]['tids'].append(tid)
                 else:
-                    matrix_dictionary[item] = [tid]
+                    matrix_dictionary[item] = {}
+                    matrix_dictionary[item]['tids'] = [tid]
 
         return matrix_dictionary
 

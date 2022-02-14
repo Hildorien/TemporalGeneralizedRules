@@ -6,7 +6,10 @@ class Database:
     items_dic = {} #{itemIndex(int) : itemName(string)}
     row_count = 0
 
-    #{product : transaccions_where_it_appears(int[])}
+
+    #{item : {tids:int[], fap:HTG}}
+    #tids: Array of transaction id, in order, where the item i appears
+    #fap: First Appereance Periods from the transaction where the item i was first discovered
     matrix_data_by_item = {}
 
     #{ 'product_name' : [ancestor] }
@@ -28,7 +31,7 @@ class Database:
         final_intersection = []
         for itemColumnIndex in itemset:
 
-           item_valid_indexes = self.matrix_data_by_item[self.items_dic[itemColumnIndex]]
+           item_valid_indexes = self.matrix_data_by_item[self.items_dic[itemColumnIndex]]['tids']
 
            if len(final_intersection) == 0:
                 final_intersection = item_valid_indexes

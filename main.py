@@ -36,6 +36,7 @@ print(len(rules))
 #    print(database.printAssociationRule(rule))
 #print('Frequent Itemsets: ')
 #print(dict)
+
 # RunTests
 #suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
 #unittest.main()
@@ -53,7 +54,14 @@ def main():
     print('Parsing dataset...')
     start = time.time()
     #database = parser.parse(datasets[6], 'basket')
+
+    #Vanilla
     database = parser.parse("Datasets/sales_formatted.csv", 'single')
+
+    #HTG
+    #database = parser.parse("Datasets/sales_formatted.csv", 'single', None, True)
+
+    #Taxonomy
     #database = parser.parse("Datasets/sales_formatted.csv", 'single', 'Taxonomies/salesfact_taxonomy.csv')
     end = time.time()
     print('Took ' + (str(end - start) + ' seconds'))
@@ -62,6 +70,7 @@ def main():
     print('Total items: ' + str((len(database.items_dic.keys()))))
     rules = apriori_mapreduce(database, 0.002, 0.4)
     print(len(rules))
+
 
 if __name__=="__main__":
     freeze_support()
