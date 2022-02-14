@@ -18,7 +18,7 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     transaction_count = horizontal_database.transaction_count
     taxonomy = horizontal_database.taxonomy #Cumulate Optimization 2 in original paper
     all_items = sorted(list(horizontal_database.items_dic.keys()))
-    while k == 1 or frequent_dictionary[k - 1] != []:
+    while (k == 1 or frequent_dictionary[k - 1] != []):
         # Candidate Generation
         print('Iteration ' + str(k))
         print('Candidate generation step...')
@@ -126,16 +126,6 @@ def count_candidates_in_transaction(k, expanded_transaction, support_dictionary,
             support_dictionary[hashed_subset] += 1
 
 
-def is_in_transaction(a_candidate, expanded_transaction):
-    """
-    Check if a candidate is in the list of items expanded_transaction
-    :param a_candidate: a list of string representing candidate items
-    :param expanded_transaction: list of strings representing items
-    :return:
-    """
-    return set(a_candidate).issubset(set(expanded_transaction))
-
-
 def prune_ancestors(candidates_size_k, taxonomy):
     taxonomy_pruned = {}
     for a_candidate in candidates_size_k:
@@ -174,15 +164,21 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
         n = len(candidates_size_k)
         print('Pruning ' + str(n) + ' candidates of size ' + str(k) + ' using apriori_gen')
         start = time.time()
+        sum_time_cost = 0
         for i in range(n):
+            start_loop = time.time()
             subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(candidates_size_k[i], k - 1)  # candidates_size_k[i] is a list
             for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
                 if not (a_subset_of_size_k_minus_1 in frequent_dictionary[k - 1]):
                     candidate_hashmap.pop(str(candidates_size_k[i]), None)  # Prunes the entire candidate
                     break
+            end_loop = time.time()
+            sum_time_cost += end_loop-start_loop
         end = time.time()
-        print('Took ' + (str(end - start) + ' seconds to PRUNE ' + str(n) + ' candidates of size ' + str(k)) +
-              '. Left with ' + str(len(list(candidate_hashmap.keys()))) + ' candidates.')
+        total_loop_cost = end - start
+        avg_loop_cost = sum_time_cost / total_loop_cost
+        print('Took ' + (str(total_loop_cost) + ' seconds to PRUNE ' + str(n) + ' candidates of size ' + str(k)) +
+              '.\n Left with ' + str(len(list(candidate_hashmap.keys()))) + ' candidates. Avarage loop time cost: ' + str(avg_loop_cost))
     return candidate_hashmap
 
 
