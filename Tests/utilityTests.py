@@ -38,7 +38,7 @@ class utilityTests(unittest.TestCase):
         parser = Parser()
         dic = parser.create_matrix_dictionary(dataset)
         self.assertEqual('Milk' in dic, True, 'Milk in dataset')
-        self.assertEqual(dic['Milk'] , [0,2,3], 'Milk in transactions 0,2 and 3')
+        self.assertEqual(dic['Milk']['tids'] , [0,2,3], 'Milk in transactions 0,2 and 3')
 
     def test_parse_taxonomy(self):
         parser = Parser()
