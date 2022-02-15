@@ -68,13 +68,11 @@ class Parser:
         with open(taxonomy_filepath) as file:
             lines = file.readlines()[1:] #skips header
         for line in lines:
-            a_hierarchy = []
-            string_split = line.rstrip().split(",")
-            product = string_split[0]
-            taxonomy[product] = []
-            for i, ancestor in enumerate(string_split):
-                if i != 0: #append only ancestors
-                    taxonomy[product].append(ancestor)
+            products = line.rstrip().split(",")
+            for i, a_product in enumerate(products):
+                if a_product not in taxonomy:
+                    taxonomy[a_product] = []
+                    taxonomy[a_product].extend(products[i+1:len(products)])
         return taxonomy
 
     def create_matrix_dictionary(self, dataset):
@@ -210,7 +208,7 @@ class Parser:
             indexed_transaction = []
             for an_item in a_transaction:
                 indexed_transaction.append(index_items_dic[an_item])
-            transactions.append(Transaction(tid, timestamps[tid], indexed_transaction))
+            transactions.append(Transaction(tid, timestamps[tid], sorted(indexed_transaction)))
 
         indexed_taxonomy = {}
         for an_item in taxonomy:

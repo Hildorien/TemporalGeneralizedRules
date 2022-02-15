@@ -31,15 +31,17 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
         if k == 2:
             prune_candidates_in_same_family(candidate_hashmap, taxonomy) #Cumulate Optimization 3 in original paper
         candidates_size_k = list(candidate_hashmap.values())
+        frequent_dictionary[k] = []
+        if len(candidates_size_k) == 0:
+            break
         print('Pruning taxonomy...')
         start = time.time()
         taxonomy_pruned = prune_ancestors(candidates_size_k, taxonomy) #Cumulate Optimization 1 in original paper
         end = time.time()
         print('Took ' + (str(end - start) + ' seconds to prune taxonomy'))
+        support_dictionary = dict.fromkeys(candidate_hashmap.keys(), 0) #Auxiliary structure for counting supports of size k
         # Count Candidates of size k in transactions
         print('Counting candidates step...')
-        frequent_dictionary[k] = []
-        support_dictionary = dict.fromkeys(candidate_hashmap.keys(), 0) #Auxiliary structure for counting supports of size k
         start = time.time()
         for a_transaction in transactions:
             expanded_transaction = expand_transaction(a_transaction, taxonomy_pruned)
@@ -99,15 +101,20 @@ def expand_transaction(a_transaction, taxonomy):
             for ancestor in ancestors:
                 if ancestor not in expanded_transaction:
                     expanded_transaction.append(ancestor)
-    return expanded_transaction
+    return sorted(expanded_transaction)
+
+
 
 
 def prune_candidates_in_same_family(candidate_hashmap, taxonomy):
     for item in taxonomy:
         for ancestor in taxonomy[item]:
-            hashed_itemset = str([item, ancestor])
-            if hashed_itemset in candidate_hashmap:
-                candidate_hashmap.pop(hashed_itemset)
+            hashed_itemset_1 = str([item, ancestor])
+            hashed_itemset_2 = str([ancestor, item])
+            if hashed_itemset_1 in candidate_hashmap:
+                candidate_hashmap.pop(hashed_itemset_1)
+            elif hashed_itemset_2 in candidate_hashmap:
+                candidate_hashmap.pop(hashed_itemset_2)
 
 
 def count_candidates_in_transaction(k, expanded_transaction, support_dictionary, candidate_hashmap):
@@ -127,11 +134,22 @@ def count_candidates_in_transaction(k, expanded_transaction, support_dictionary,
 
 
 def prune_ancestors(candidates_size_k, taxonomy):
-    taxonomy_pruned = {}
-    for a_candidate in candidates_size_k:
-        for an_item in a_candidate:
-            if an_item in taxonomy:
-                taxonomy_pruned[an_item] = taxonomy[an_item]
+    """
+    Delete any ancestors in taxonomy that are not present in any of the candidates in candidates_size_k
+    :param candidates_size_k:
+    :param taxonomy:
+    :return:
+    """
+    taxonomy_pruned = taxonomy.copy()
+    checked = set()
+    for item in taxonomy_pruned:
+        ancestors = taxonomy_pruned[item]
+        for an_ancestor in ancestors:
+            if an_ancestor not in checked:
+                checked.add(an_ancestor)
+                contained_in_a_candidate = an_ancestor in (item for sublist in candidates_size_k for item in sublist)
+                if not contained_in_a_candidate:
+                    ancestors.remove(an_ancestor)
     return taxonomy_pruned
 
 
@@ -176,7 +194,10 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
             sum_time_cost += end_loop-start_loop
         end = time.time()
         total_loop_cost = end - start
-        avg_loop_cost = sum_time_cost / total_loop_cost
+        if total_loop_cost != 0:
+            avg_loop_cost = sum_time_cost / total_loop_cost
+        else:
+            avg_loop_cost = 0
         print('Took ' + (str(total_loop_cost) + ' seconds to PRUNE ' + str(n) + ' candidates of size ' + str(k)) +
               '.\n Left with ' + str(len(list(candidate_hashmap.keys()))) + ' candidates. Avarage loop time cost: ' + str(avg_loop_cost))
     return candidate_hashmap
