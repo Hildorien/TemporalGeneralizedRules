@@ -208,7 +208,7 @@ class Parser:
             indexed_transaction = []
             for an_item in a_transaction:
                 indexed_transaction.append(index_items_dic[an_item])
-            transactions.append(Transaction(tid, timestamps[tid], sorted(indexed_transaction)))
+            transactions.append(Transaction(tid, timestamps.get(tid, 0), sorted(indexed_transaction)))
 
         indexed_taxonomy = {}
         for an_item in taxonomy:
@@ -224,3 +224,14 @@ class Parser:
         dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
         taxonomy = self.parse_taxonomy(taxonomy_filepath)
         return self.fit_horizontal_database(dataset, timestamps.to_dict(), taxonomy)
+
+    def parse_basket_file_for_horizontal_database(self, dataset_filepath, taxonomy_filepath):
+        dataset = self.build_dataset_from_basket(dataset_filepath)
+        taxonomy = self.parse_taxonomy(taxonomy_filepath)
+        return self.fit_horizontal_database(dataset, {}, taxonomy)
+
+    def parse_horizontal_database(self, dataset_filepath, taxonomy_filepath, csv_format = 'single'):
+        if csv_format=='single':
+            return self.parse_single_file_for_horizontal_database(dataset_filepath, taxonomy_filepath)
+        elif csv_format=='basket':
+            return self.parse_basket_file_for_horizontal_database(dataset_filepath, taxonomy_filepath)
