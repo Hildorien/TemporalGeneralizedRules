@@ -115,8 +115,8 @@ def expand_transaction(a_transaction, taxonomy):
 def prune_candidates_in_same_family(candidate_hashmap, taxonomy):
     for item in taxonomy:
         for ancestor in taxonomy[item]:
-            hashed_itemset_1 = str([item, ancestor])
-            hashed_itemset_2 = str([ancestor, item])
+            hashed_itemset_1 = hash_candidate([item, ancestor])
+            hashed_itemset_2 = hash_candidate([ancestor, item])
             if hashed_itemset_1 in candidate_hashmap:
                 candidate_hashmap.pop(hashed_itemset_1)
             elif hashed_itemset_2 in candidate_hashmap:
@@ -134,7 +134,7 @@ def count_candidates_in_transaction(k, expanded_transaction, support_dictionary,
     """
     all_subets = list(map(list, combinations(expanded_transaction, k)))
     for a_subset_size_k in all_subets:
-        hashed_subset = str(a_subset_size_k)
+        hashed_subset = hash_candidate(a_subset_size_k)
         if hashed_subset in candidate_hashmap:
             support_dictionary[hashed_subset] += 1
 
@@ -178,7 +178,7 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
             if joined_itemset is None:
                 break
             else:
-                candidate_hashmap[str(joined_itemset)] = joined_itemset
+                candidate_hashmap[hash_candidate(joined_itemset)] = joined_itemset
             j += 1
     end = time.time()
     print('Took ' + (str(end - start) + ' seconds to JOIN ' + str(n) + ' candidates of size ' + str(k-1)))
@@ -194,7 +194,7 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
             subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(candidates_size_k[i], k - 1)  # candidates_size_k[i] is a list
             for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
                 if not (a_subset_of_size_k_minus_1 in frequent_dictionary[k - 1]):
-                    candidate_hashmap.pop(str(candidates_size_k[i]), None)  # Prunes the entire candidate
+                    candidate_hashmap.pop(hash_candidate(candidates_size_k[i]), None)  # Prunes the entire candidate
                     break
             end_loop = time.time()
             sum_time_cost += end_loop-start_loop
