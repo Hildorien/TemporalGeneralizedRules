@@ -26,6 +26,7 @@ def findOrderedIntersection(arr1, arr2):
 
     return result_array
 
+
 def getValidJoin(ordered_list_1, ordered_list_2):
     """
     :param ordered_list_1/2: An ORDERED set/list of itemsets of same length k-1 (both list should also be lexicographicly ordered: l1 < l2)
@@ -39,35 +40,55 @@ def getValidJoin(ordered_list_1, ordered_list_2):
     else:
         k = len(ordered_list_1)
         for i in range(k):
-            if i != k-1 and ordered_list_1[i] != ordered_list_2[i]:
+            if i != k - 1 and ordered_list_1[i] != ordered_list_2[i]:
                 return None
-            elif i == k-1 and ordered_list_1[i] == ordered_list_2[i]:
-                return None #This may never happen since both lists must be exactly the same
+            elif i == k - 1 and ordered_list_1[i] == ordered_list_2[i]:
+                return None  # This may never happen since both lists must be exactly the same
         allItemsButLast = ordered_list_1.copy()
         allItemsButLast.append(ordered_list_2[k - 1])
         return allItemsButLast
 
+
 def allSubsetofSizeKMinus1(a_candidate_of_size_k, k):
     return list(map(list, combinations(a_candidate_of_size_k, k)))
+
 
 def joinlistOfInts(list):
     return ','.join(str(x) for x in list)
 
+
 def flatten(t):
     return [item for sublist in t for item in sublist]
 
-def getFortnight(day,month):
+
+def getFortnight(day, month):
     firstHalf = day < 16
-    fortnight = month*2
-    if(firstHalf):
+    fortnight = month * 2
+    if (firstHalf):
         return fortnight - 1
     else:
         return fortnight
 
+
 def getPeriodStampFromTimestamp(timestamp):
-    #Hierarchy of Time Granules is represented by an array of numbers, where each column represents the l-level and the number the max. amount of periods within each level.
-    #For the purpose of this thesis, HTG will be [24,12,4] which stands for 24 possible fortnights, 12 months and 4 quarters.
-    #Notice how the dates 25/3/95 and 25/3/15 will have the same periodStamp, since the year is omitted.
+    # Hierarchy of Time Granules is represented by an array of numbers, where each column represents the l-level and
+    # the number the max. amount of periods within each level. For the purpose of this thesis, HTG will be [24,12,
+    # 4] which stands for 24 possible fortnights, 12 months and 4 quarters. Notice how the dates 25/3/95 and 25/3/15
+    # will have the same periodStamp, since the year is omitted.
 
     dt = datetime.fromtimestamp(timestamp)
-    return [getFortnight(dt.day, dt.month), dt.month, ((dt.month//4)+1)]
+    return [getFortnight(dt.day, dt.month), dt.month, ((dt.month // 4) + 1)]
+
+
+# This method gets the maximal time period between all HTG with their respective l-length
+def getMTPFromHTGArrays(faps):
+    l_length = 3  # Hardcoded HTG length
+    res = []
+    for i in range(l_length):
+        lth_level_values = map(lambda fap: fap[i], faps)
+        max_period = max(lth_level_values)
+        res.append(max_period)
+    return res
+
+#TODO: After LAP is implemented
+#def getMTPFromFAPandLAP
