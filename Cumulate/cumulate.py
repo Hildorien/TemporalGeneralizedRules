@@ -1,5 +1,7 @@
 import time
 from itertools import combinations
+
+from DataStructures.AssociationRule import AssociationRule
 from utility import flatten, allSubsetofSizeKMinus1, getValidJoin
 
 
@@ -18,6 +20,7 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     transaction_count = horizontal_database.transaction_count
     taxonomy = horizontal_database.taxonomy #Cumulate Optimization 2 in original paper
     all_items = sorted(list(horizontal_database.items_dic.keys()))
+    frequent_support = {} #Auxiliary structure for rule-generation
     while (k == 1 or frequent_dictionary[k - 1] != []):
         # Candidate Generation
         print('Iteration ' + str(k))
@@ -55,11 +58,14 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
             support = support_dictionary[hashed_itemset] / transaction_count
             if support >= min_supp:
                 frequent_dictionary[k].append(candidate_hashmap[hashed_itemset])
+                frequent_support[hashed_itemset] = support
         end = time.time()
         print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(frequent_dictionary[k])) + ' frequents of size ' + str(k)))
         print('--------------------------------------------------------------------------------')
         k += 1
-    return frequent_dictionary
+    #Generate Rules
+    rules = rule_generation(frequent_dictionary, frequent_support, min_conf)
+    return rules
 
 
 def calculate_Ck(frequent_dictionary, k):
@@ -74,7 +80,7 @@ def calculate_Ck(frequent_dictionary, k):
 def calculate_C2(frequent_dictionary, k):
     candidate_hashmap = {}
     start = time.time()
-    [hash_candidate(list(x), candidate_hashmap) for x in combinations(flatten(frequent_dictionary[1]), 2)]
+    [add_candidate_to_hashmap(list(x), candidate_hashmap) for x in combinations(flatten(frequent_dictionary[1]), 2)]
     end = time.time()
     print('Took ' + (str(end - start) + ' seconds to generate ' + str(
         len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using combinations'))
@@ -84,7 +90,7 @@ def calculate_C2(frequent_dictionary, k):
 def calculate_C1(all_items, k):
     candidate_hashmap = {}
     start = time.time()
-    [hash_candidate(list(x), candidate_hashmap) for x in list(map(lambda x: [x], all_items))]
+    [add_candidate_to_hashmap(list(x), candidate_hashmap) for x in list(map(lambda x: [x], all_items))]
     end = time.time()
     print('Took ' + (str(end - start) + ' seconds to generate ' + str(
         len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k)))
@@ -203,5 +209,33 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
     return candidate_hashmap
 
 
-def hash_candidate(lst, candidate_hashmap):
-    candidate_hashmap[str(lst)] = lst
+def add_candidate_to_hashmap(lst, candidate_hashmap):
+    candidate_hashmap[hash_candidate(lst)] = lst
+
+def hash_candidate(candidate):
+    """
+    Gets a unique string based on candidate list
+    :param candidate: a list of ints
+    :return:
+    """
+    return str(candidate)
+
+def rule_generation(frequent_dictionary, support_dictionary, min_confidence):
+    rules = []
+    for key in frequent_dictionary:
+        if key != 1:
+            frequent_itemset_k = frequent_dictionary[key]
+            for a_itemset_k in frequent_itemset_k:
+                for idx, item in enumerate(a_itemset_k):
+
+                    frequent_itemset_copy = a_itemset_k.copy()
+                    consequent = [frequent_itemset_copy.pop(idx)]
+                    antecedent = frequent_itemset_copy
+                    support_antecedent = support_dictionary[hash_candidate(antecedent)]
+                    support_all_items = support_dictionary[hash_candidate(a_itemset_k)]
+                    confidence = support_all_items / support_antecedent
+
+                    if confidence >= min_confidence:
+                        association_rule = AssociationRule(antecedent, consequent, support_all_items, confidence)
+                        rules.append(association_rule)
+    return rules
