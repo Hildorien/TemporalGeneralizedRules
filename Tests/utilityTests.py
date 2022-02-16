@@ -48,11 +48,6 @@ class utilityTests(unittest.TestCase):
         self.assertEqual('Milk' in dic, True, 'Milk in dataset')
         self.assertEqual(dic['Milk']['tids'], [0, 2, 3], 'Milk in transactions 0,2 and 3')
 
-    def test_parse_taxonomy(self):
-        parser = Parser()
-        taxonomy = parser.parse_taxonomy('Taxonomies/salesfact_taxonomy.csv')
-        # Assert that taxonomy builds with all items in database
-        self.assertEqual(len(list(taxonomy.keys())), 1560, 'Taxonomy has ' + str(1560) + ' items in database')
 
     def test_get_period_stamp_from_timestamp(self):
         self.assertEqual(getPeriodStampFromTimestamp(self.t1), [1, 1, 1], 'Periodstamp 1')
