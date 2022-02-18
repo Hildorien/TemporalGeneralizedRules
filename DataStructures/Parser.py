@@ -1,6 +1,7 @@
 import pandas as pd
 from DataStructures.Database import Database
 from DataStructures.HorizontalDatabase import HorizontalDatabase
+from DataStructures.PTT import PTT
 from DataStructures.Transaction import Transaction
 from utility import getPeriodStampFromTimestamp
 
@@ -54,11 +55,11 @@ class Parser:
                             len(dataset), taxonomy)
 
         elif usingTimestamps:
-            matrix_dictionary = self.fit(dataset).create_matrix_dictionary_using_timestamps(dataset, timestamps)
-            return Database(matrix_dictionary, timestamps, self.item_name_by_index,
-                            len(dataset), {})
+            matrix_dictionary_and_ptt = self.fit(dataset).create_matrix_dictionary_using_timestamps(dataset, timestamps)
+            return Database(matrix_dictionary_and_ptt["md"], timestamps, self.item_name_by_index,
+                            len(dataset), {}, matrix_dictionary_and_ptt["ptt"])
         else:
-            matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)
+            matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)["md"]
             return Database(matrix_dictionary, timestamps, self.item_name_by_index,
                             len(dataset), {})
 
@@ -88,9 +89,12 @@ class Parser:
 
     def create_matrix_dictionary_using_timestamps(self, dataset, timestamps):
         matrix_dictionary = {}
+        ptt = PTT()
         for tid, transaction in enumerate(dataset):
+            transactionHTG = getPeriodStampFromTimestamp(timestamps[tid])
+
+            ptt.addItemPeriodToPtt(transactionHTG)
             for item in set(transaction):
-                transactionHTG = getPeriodStampFromTimestamp(timestamps[tid])
                 if item in matrix_dictionary:
                     matrix_dictionary[item]['tids'].append(tid)
                 else:
@@ -98,7 +102,7 @@ class Parser:
                     matrix_dictionary[item]['tids'] = [tid]
                     matrix_dictionary[item]['fap'] = transactionHTG
 
-        return matrix_dictionary
+        return {"md": matrix_dictionary, "ptt": ptt}
 
     def fit(self, dataset):
         self.item_name_by_index = {}

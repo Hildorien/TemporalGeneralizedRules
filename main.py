@@ -38,42 +38,42 @@ print(len(rules))
 #print(dict)
 
 # RunTests
-#suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
-#unittest.main()
+suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
+unittest.main()
 
 
-def main():
-    parser = Parser()
-    datasets = ["Datasets/data.csv",
-                "Datasets/data2.csv",
-                "Datasets/data3.csv",
-                "Datasets/data4.csv",
-                "Datasets/data5.csv",
-                "Datasets/data6.csv",
-                "Datasets/data7.csv"]
-    print('Parsing dataset...')
-    start = time.time()
-    #database = parser.parse(datasets[6], 'basket')
-
-    #Vanilla
-    database = parser.parse("Datasets/sales_formatted.csv", 'single')
-
-    #HTG
-    #database = parser.parse("Datasets/sales_formatted.csv", 'single', None, True)
-
-    #Taxonomy
-    #database = parser.parse("Datasets/sales_formatted.csv", 'single', 'Taxonomies/salesfact_taxonomy.csv')
-    end = time.time()
-    print('Took ' + (str(end - start) + ' seconds'))
-    # Prints to get info of algorithm
-    print('Database size: ' + str(database.row_count))
-    print('Total items: ' + str((len(database.items_dic.keys()))))
-    rules = apriori_mapreduce(database, 0.002, 0.4)
-    print(len(rules))
-
-
-if __name__=="__main__":
-    freeze_support()
-    main()
+# def main():
+#     parser = Parser()
+#     datasets = ["Datasets/data.csv",
+#                 "Datasets/data2.csv",
+#                 "Datasets/data3.csv",
+#                 "Datasets/data4.csv",
+#                 "Datasets/data5.csv",
+#                 "Datasets/data6.csv",
+#                 "Datasets/data7.csv"]
+#     print('Parsing dataset...')
+#     start = time.time()
+#     #database = parser.parse(datasets[6], 'basket')
+#
+#     #Vanilla
+#     database = parser.parse("Datasets/sales_formatted.csv", 'single')
+#
+#     #HTG
+#     #database = parser.parse("Datasets/sales_formatted.csv", 'single', None, True)
+#
+#     #Taxonomy
+#     #database = parser.parse("Datasets/sales_formatted.csv", 'single', 'Taxonomies/salesfact_taxonomy.csv')
+#     end = time.time()
+#     print('Took ' + (str(end - start) + ' seconds'))
+#     # Prints to get info of algorithm
+#     print('Database size: ' + str(database.row_count))
+#     print('Total items: ' + str((len(database.items_dic.keys()))))
+#     rules = apriori_mapreduce(database, 0.002, 0.4)
+#     print(len(rules))
+#
+#
+# if __name__=="__main__":
+#     freeze_support()
+#     main()
 
 

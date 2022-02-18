@@ -72,6 +72,27 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(ptt.getPTTValueFromLlevelAndPeriod(1, 18), 3, 'PTT value 4')
         self.assertEqual(ptt.getPTTValueFromLlevelAndPeriod(3, 3), 3, 'PTT value 5')
 
+    def test_support_with_time_period(self):
+        # T1 = ([A,B], [23,12,4])
+        # T2 = ([C,D,A.F], [12,6,2])
+        # T3 = ([A,J,K,C],  [18,9,3])
+        # T4 = ([A], [18,9,3])
+        # T5 = ([C,E,G,K], [8,4,2])
+        # T6 = ([D,F,G], [8,4,2])
+        # ItemsDic = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K'}
+        parser = Parser()
+        database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
+        self.assertEqual(database.supportOf([0]), 4/6, 'SupportTestVanilla1')
+        self.assertEqual(database.supportOf([0,2]), 2/6, 'SupportTestVanilla2')
+        self.assertEqual(database.supportOf([0], 1, 18), 1, 'SupportTestWithTimePeriod1')
+        self.assertEqual(database.supportOf([3], 1, 8), 1/2, 'SupportTestWithTimePeriod2')
+        self.assertEqual(database.supportOf([3], 1, 8), 1/2, 'SupportTestWithTimePeriod3')
+        self.assertEqual(database.supportOf([0], 3, 2), 1/3, 'SupportTestWithTimePeriod4')
+        self.assertEqual(database.supportOf([3,5], 3, 2), 2/3, 'SupportTestWithTimePeriod5')
+        self.assertEqual(database.supportOf([3,5,6], 2, 4), 1/2, 'SupportTestWithTimePeriod6')
+
+
+
 
 
 
