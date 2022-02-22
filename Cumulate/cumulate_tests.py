@@ -15,7 +15,7 @@ class CumulateTests(unittest.TestCase):
             '../Datasets/cumulate_test_data_basket.csv',
             '../Taxonomies/cumulate_test_taxonomy.csv', 'basket')
 
-    def test_cumulate_idempotency_on_database_type(self):
+    def test_cumulate_is_agnostic_wrt_database_representation(self):
         rules_from_single = cumulate(self.retail_horizontal_db, 0.3, 0.6, 0)
         rules_from_basket = cumulate(self.retail_basket_horizontal_db, 0.3, 0.6, 0)
-        self.assertEqual(rules_from_single, rules_from_basket, 'Rules are the same')
+        self.assertEqual(rules_from_single, rules_from_basket, 'Output of cumulate is the same independently of the database representation')
