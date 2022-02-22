@@ -1,3 +1,4 @@
+import math
 import time
 from itertools import combinations
 
@@ -20,7 +21,7 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     transaction_count = horizontal_database.transaction_count
     taxonomy = horizontal_database.taxonomy  # Cumulate Optimization 2 in original paper
     all_items = sorted(list(horizontal_database.items_dic.keys()))
-    frequent_support = {}  # Auxiliary structure for rule-generation
+    support_dictionary = {}  # Auxiliary structure for rule-generation
     while (k == 1 or frequent_dictionary[k - 1] != []):
         # Candidate Generation
         print('Iteration ' + str(k))
@@ -42,25 +43,25 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
         taxonomy_pruned = prune_ancestors(candidates_size_k, taxonomy)  # Cumulate Optimization 1 in original paper
         end = time.time()
         print('Took ' + (str(end - start) + ' seconds to prune taxonomy'))
-        support_dictionary = dict.fromkeys(candidate_hashmap.keys(),
-                                           0)  # Auxiliary structure for counting supports of size k
+        candidate_support_dictionary = dict.fromkeys(candidate_hashmap.keys(),
+                                                     0)  # Auxiliary structure for counting supports of size k
         # Count Candidates of size k in transactions
         print('Counting candidates step. Passing over ' + str(len(transactions)) + ' transactions.')
         start = time.time()
         for a_transaction in transactions:
             expanded_transaction = expand_transaction(a_transaction, taxonomy_pruned)
-            count_candidates_in_transaction(k, expanded_transaction, support_dictionary, candidate_hashmap)
+            count_candidates_in_transaction(k, expanded_transaction, candidate_support_dictionary, candidate_hashmap)
 
         end = time.time()
         print('Took ' + (str(end - start) + ' seconds to count candidates of size ' + str(k) + ' in transactions'))
         print('Frequent generation step...')
         start = time.time()
         # Frequent itemset generation of size k
-        for hashed_itemset in support_dictionary:
-            support = support_dictionary[hashed_itemset] / transaction_count
+        for hashed_itemset in candidate_support_dictionary:
+            support = candidate_support_dictionary[hashed_itemset] / transaction_count
+            support_dictionary[hashed_itemset] = support
             if support >= min_supp:
                 frequent_dictionary[k].append(candidate_hashmap[hashed_itemset])
-                frequent_support[hashed_itemset] = support
         end = time.time()
         print('Took ' + (str(end - start) + ' seconds to generate ' + str(
             len(frequent_dictionary[k])) + ' frequents of size ' + str(k)))
@@ -69,7 +70,7 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     # Generate Rules
     start = time.time()
     print('Generating rules...')
-    rules = rule_generation(frequent_dictionary, frequent_support, min_conf, min_r)
+    rules = rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_conf, min_r, transactions)
     end = time.time()
     print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(rules)) + ' rules'))
     return rules
@@ -137,13 +138,13 @@ def count_candidates_in_transaction(k, expanded_transaction, support_dictionary,
     :param candidate_hashmap: { 'hashed_candidate': candidate }
     :return:
     """
-    if k < 3: #If k is small candidate size is large
+    if k < 3:  # If k is small candidate size is large
         all_subets = list(map(list, combinations(expanded_transaction, k)))
         for a_subset_size_k in all_subets:
             hashed_subset = hash_candidate(a_subset_size_k)
             if hashed_subset in candidate_hashmap:
                 support_dictionary[hashed_subset] += 1
-    else: #If k is large candidates size is smaller
+    else:  # If k is large candidates size is smaller
         for hashed_candidate in candidate_hashmap:
             candidate = candidate_hashmap[hashed_candidate]
             if set(candidate).issubset(set(expanded_transaction)):
@@ -225,7 +226,7 @@ def hash_candidate(candidate):
     return str(candidate)
 
 
-def rule_generation(frequent_dictionary, support_dictionary, min_confidence, min_r):
+def rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_confidence, min_r, transactions):
     rules = []
     for key in frequent_dictionary:
         if key != 1:
@@ -240,7 +241,83 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence, min
                     support_all_items = support_dictionary[hash_candidate(a_itemset_k)]
                     confidence = support_all_items / support_antecedent
 
-                    if confidence >= min_confidence:
+                    if confidence >= min_confidence and \
+                            support_all_items > min_r * expected_value(a_itemset_k, support_dictionary, taxonomy,
+                                                                       transactions):
                         association_rule = AssociationRule(antecedent, consequent, support_all_items, confidence)
                         rules.append(association_rule)
     return rules
+
+
+def close_ancestor(item, taxonomy):
+    """
+    :param item:
+    :param taxonomy:
+    :return: Given an item returns the first ancestor i.e the closest in the family
+    """
+    if is_eldest(item, taxonomy):
+        return item
+    else:
+        return taxonomy[item][0]
+
+
+def is_eldest(item, taxonomy):
+    return taxonomy[item] == []
+
+
+def expected_value(itemset, support_dictionary, taxonomy, transactions):
+    """
+    :param itemset: And itemset Z = XUY that represents the rule X=>Y
+    :param support_dictionary: Auxiliary structure to obtain the supports of individual items in the itemset
+    :param taxonomy: Auxiliary structure to get the close ancestor of items
+    :param transactions: [Transaction] to count the support of Z'
+    :return: The expected value of itemset Z based on Z' where Z' is an ancestor of Z
+    """
+    itemset_ancestor = calculate_itemset_ancestor(itemset, taxonomy)  # This is Z'
+    product_list = []  # This is P(z_1) / P(z'_1) * ...
+    for item in itemset:
+        item_ancestor = close_ancestor(item, taxonomy)
+        numerator = support_dictionary[hash_candidate([item])]  # P(z_j). frequent_support_dictionary has all supports 1-itemsets
+        denominator = support_dictionary[hash_candidate([item_ancestor])]  # P(z'_j)
+        if denominator != 0:
+            fraction = numerator / denominator
+        elif numerator == 0 and denominator == 0:
+            fraction = 0
+        else:
+            raise Exception("Division by zero in expected_value function")
+        product_list.append(fraction)
+    hashed_ancestor = hash_candidate(itemset_ancestor)
+    if hashed_ancestor in support_dictionary:
+        product_list.append(support_dictionary[hashed_ancestor])
+    else:
+        product_list.append(calculate_support(itemset_ancestor, taxonomy, transactions))  # P(Z') needs to be calculated
+    return math.prod(product_list)
+
+
+def calculate_itemset_ancestor(itemset, taxonomy):
+    """
+    :param itemset: List of ints representing items
+    :param taxonomy: Dictionary of <int, [int]> representing taxonomy of items
+    :return: We call Z' an ancestor of Z if we can get Z' from Z by replacing one or more items in Z
+    with their ancestors and Z and Z have the same number of items.
+
+    E.g.: itemset = {x, y}
+    x' is a close ancestor of x
+    y' is a close ancestor of y
+    {x',y'} is a close ancestor of {x, y}
+    """
+    itemset_ancestor = []
+    for item in itemset:
+        ancestor = close_ancestor(item, taxonomy)  # returns same item if item has no ancestor
+        itemset_ancestor.append(ancestor)
+    return sorted(itemset_ancestor)
+
+
+def calculate_support(itemset, taxonomy, transactions):
+    count = 0
+    taxonomy_pruned = prune_ancestors([itemset], taxonomy)
+    for a_transaction in transactions:
+        expanded_transaction = expand_transaction(a_transaction, taxonomy_pruned)
+        if set(itemset).issubset(set(expanded_transaction)):
+            count += 1
+    return count / len(transactions)
