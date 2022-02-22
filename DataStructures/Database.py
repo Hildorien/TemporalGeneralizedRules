@@ -67,6 +67,9 @@ class Database:
         else:
             return len(final_intersection) / self.row_count
 
+    def getItemsByDepthAndPeriod(self, l_level, period):
+        return self.ptt.getPTTValueFromLlevelAndPeriod(l_level, period)['itemsSet']
+
 
 
     def confidenceOf(self, lhs, rhs):
