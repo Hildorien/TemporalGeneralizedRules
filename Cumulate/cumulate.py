@@ -8,10 +8,10 @@ from utility import flatten, allSubsetofSizeKMinus1, getValidJoin
 
 def cumulate(horizontal_database, min_supp, min_conf, min_r):
     """
-    :param horizontal_database: A horizontal database
+    :param horizontal_database: An HorizontalDatabase instance
     :param min_supp: User-defined minimum support
     :param min_conf: User-defined minimum confidence
-    :param min_r: User-defined minimum R insteresting measure
+    :param min_r: User-defined minimum R interesting measure
     :return: Set of association rules
     """
     # Instantiate local variables
@@ -24,8 +24,8 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     support_dictionary = {}  # Auxiliary structure for rule-generation
     while (k == 1 or frequent_dictionary[k - 1] != []):
         # Candidate Generation
-        print('Iteration ' + str(k))
-        print('Candidate generation step...')
+        #print('Iteration ' + str(k))
+        #print('Candidate generation step...')
         if k == 1:
             candidate_hashmap = calculate_C1(all_items, k)
         elif k == 2:
@@ -38,23 +38,23 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
         frequent_dictionary[k] = []
         if len(candidates_size_k) == 0:
             break
-        print('Pruning taxonomy...')
+        #print('Pruning taxonomy...')
         start = time.time()
-        taxonomy_pruned = prune_ancestors(candidates_size_k, taxonomy)  # Cumulate Optimization 1 in original paper
+        taxonomy_pruned = horizontal_database.prune_ancestors(candidates_size_k)  # Cumulate Optimization 1 in original paper
         end = time.time()
-        print('Took ' + (str(end - start) + ' seconds to prune taxonomy'))
+        #print('Took ' + (str(end - start) + ' seconds to prune taxonomy'))
         candidate_support_dictionary = dict.fromkeys(candidate_hashmap.keys(),
                                                      0)  # Auxiliary structure for counting supports of size k
         # Count Candidates of size k in transactions
-        print('Counting candidates step. Passing over ' + str(len(transactions)) + ' transactions.')
+        #print('Counting candidates step. Passing over ' + str(len(transactions)) + ' transactions.')
         start = time.time()
         for a_transaction in transactions:
-            expanded_transaction = expand_transaction(a_transaction, taxonomy_pruned)
+            expanded_transaction = horizontal_database.expand_transaction(a_transaction, taxonomy_pruned)
             count_candidates_in_transaction(k, expanded_transaction, candidate_support_dictionary, candidate_hashmap)
 
         end = time.time()
-        print('Took ' + (str(end - start) + ' seconds to count candidates of size ' + str(k) + ' in transactions'))
-        print('Frequent generation step...')
+        #print('Took ' + (str(end - start) + ' seconds to count candidates of size ' + str(k) + ' in transactions'))
+        #print('Frequent generation step...')
         start = time.time()
         # Frequent itemset generation of size k
         for hashed_itemset in candidate_support_dictionary:
@@ -63,25 +63,71 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
             if support >= min_supp:
                 frequent_dictionary[k].append(candidate_hashmap[hashed_itemset])
         end = time.time()
-        print('Took ' + (str(end - start) + ' seconds to generate ' + str(
-            len(frequent_dictionary[k])) + ' frequents of size ' + str(k)))
-        print('--------------------------------------------------------------------------------')
+        #print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(frequent_dictionary[k])) + ' frequents of size ' + str(k)))
+        #print('--------------------------------------------------------------------------------')
         k += 1
     # Generate Rules
     start = time.time()
-    print('Generating rules...')
-    rules = rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_conf, min_r, transactions)
+    #print('Generating rules...')
+    rules = rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_conf, min_r, horizontal_database)
     end = time.time()
-    print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(rules)) + ' rules'))
+    #print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(rules)) + ' rules'))
     return rules
+
+
+def vertical_cumulate(vertical_database, min_supp, min_conf, min_r):
+    """
+    :param vertical_database: A Database instance
+    :param min_supp: User-defined minimum support
+    :param min_conf: User-defined minimum confidence
+    :param min_r: User-defined minimum R interesting measure
+    :return: Set of association rules
+    """
+    # Instantiate local variables
+    frequent_dictionary = {}
+    support_dictionary = {}
+    k = 1
+    taxonomy = vertical_database.taxonomy  # Cumulate Optimization 2 in original paper
+    all_items = sorted(list(vertical_database.items_dic.keys()))
+    while k == 1 or frequent_dictionary[k - 1] != []:
+        # Candidate Generation
+        #print('Iteration ' + str(k))
+        #print('Candidate generation step...')
+        if k == 1:
+            candidate_hashmap = calculate_C1(all_items, k)
+        elif k == 2:
+            candidate_hashmap = calculate_C2(frequent_dictionary, k)
+        else:
+            candidate_hashmap = calculate_Ck(frequent_dictionary, k)
+        if k == 2:
+            prune_candidates_in_same_family(candidate_hashmap, taxonomy)  # Cumulate Optimization 3 in original paper
+        candidates_size_k = list(candidate_hashmap.values())
+        frequent_dictionary[k] = []
+        if len(candidates_size_k) == 0:
+            break
+        #print('Calculating support of each candidate of size ' + str(k))
+        start = time.time()
+        for a_candidate_size_k in candidates_size_k:
+            support = vertical_database.supportOf(a_candidate_size_k)
+            if support >= min_supp:
+                frequent_dictionary[k].append(a_candidate_size_k)
+                support_dictionary[hash_candidate(a_candidate_size_k)] = support
+        end = time.time()
+        #print('Took ' + (str(end - start) + ' seconds'))
+        k += 1
+    # Generate Rules
+    start = time.time()
+    #print('Generating rules...')
+    rules = rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_conf, min_r, vertical_database)
+    end = time.time()
+    #print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(rules)) + ' rules'))
 
 
 def calculate_Ck(frequent_dictionary, k):
     start = time.time()
     candidate_hashmap = apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
     end = time.time()
-    print('Took ' + (str(end - start) + ' seconds to generate ' + str(
-        len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using apriori-gen'))
+    #print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using apriori-gen'))
     return candidate_hashmap
 
 
@@ -90,8 +136,7 @@ def calculate_C2(frequent_dictionary, k):
     start = time.time()
     [add_candidate_to_hashmap(list(x), candidate_hashmap) for x in combinations(flatten(frequent_dictionary[1]), 2)]
     end = time.time()
-    print('Took ' + (str(end - start) + ' seconds to generate ' + str(
-        len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using combinations'))
+    #print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using combinations'))
     return candidate_hashmap
 
 
@@ -100,22 +145,8 @@ def calculate_C1(all_items, k):
     start = time.time()
     [add_candidate_to_hashmap(list(x), candidate_hashmap) for x in list(map(lambda x: [x], all_items))]
     end = time.time()
-    print('Took ' + (str(end - start) + ' seconds to generate ' + str(
-        len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k)))
+    #print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k)))
     return candidate_hashmap
-
-
-def expand_transaction(a_transaction, taxonomy):
-    expanded_transaction = []
-    for an_item in a_transaction.items:
-        expanded_transaction.append(an_item)
-        # Append ancestors of item to expanded_transaction
-        if an_item in taxonomy:
-            ancestors = taxonomy[an_item]
-            for ancestor in ancestors:
-                if ancestor not in expanded_transaction:
-                    expanded_transaction.append(ancestor)
-    return sorted(expanded_transaction)
 
 
 def prune_candidates_in_same_family(candidate_hashmap, taxonomy):
@@ -151,26 +182,6 @@ def count_candidates_in_transaction(k, expanded_transaction, support_dictionary,
                 support_dictionary[hashed_candidate] += 1
 
 
-def prune_ancestors(candidates_size_k, taxonomy):
-    """
-    Delete any ancestors in taxonomy that are not present in any of the candidates in candidates_size_k
-    :param candidates_size_k:
-    :param taxonomy:
-    :return:
-    """
-    taxonomy_pruned = taxonomy.copy()
-    checked = set()
-    for item in taxonomy_pruned:
-        ancestors = taxonomy_pruned[item]
-        for an_ancestor in ancestors:
-            if an_ancestor not in checked:
-                checked.add(an_ancestor)
-                contained_in_a_candidate = an_ancestor in (item for sublist in candidates_size_k for item in sublist)
-                if not contained_in_a_candidate:
-                    ancestors.remove(an_ancestor)
-    return taxonomy_pruned
-
-
 def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
     """
     :param frequent_itemset_of_size_k_minus_1: An ORDERED set/list of itemsets in which each itemset is also ordered
@@ -181,7 +192,7 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
     # STEP 1: JOIN
     candidate_hashmap = {}
     n = len(frequent_itemset_of_size_k_minus_1)
-    print('Joining ' + str(n) + ' candidate of size ' + str(k - 1) + ' using apriori_gen')
+    #print('Joining ' + str(n) + ' candidate of size ' + str(k - 1) + ' using apriori_gen')
     start = time.time()
     for i in range(n):
         j = i + 1
@@ -193,12 +204,12 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
                 candidate_hashmap[hash_candidate(joined_itemset)] = joined_itemset
             j += 1
     end = time.time()
-    print('Took ' + (str(end - start) + ' seconds to JOIN ' + str(n) + ' candidates of size ' + str(k - 1)))
+    #print('Took ' + (str(end - start) + ' seconds to JOIN ' + str(n) + ' candidates of size ' + str(k - 1)))
     # STEP 2: PRUNE -> For each itemset in L_k check if all subsets are frequent
     if k > 2:
         candidates_size_k = list(candidate_hashmap.values()).copy()
         n = len(candidates_size_k)
-        print('Pruning ' + str(n) + ' candidates of size ' + str(k) + ' using apriori_gen')
+        #print('Pruning ' + str(n) + ' candidates of size ' + str(k) + ' using apriori_gen')
         start = time.time()
         for i in range(n):
             subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(candidates_size_k[i],
@@ -208,8 +219,8 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
                     candidate_hashmap.pop(hash_candidate(candidates_size_k[i]), None)  # Prunes the entire candidate
                     break
         end = time.time()
-        print('Took ' + (str(end - start) + ' seconds to PRUNE ' + str(n) + ' candidates of size ' + str(k)))
-        print('Left with ' + str(len(list(candidate_hashmap.keys()))) + ' candidates')
+        #print('Took ' + (str(end - start) + ' seconds to PRUNE ' + str(n) + ' candidates of size ' + str(k)))
+        #print('Left with ' + str(len(list(candidate_hashmap.keys()))) + ' candidates')
     return candidate_hashmap
 
 
@@ -226,7 +237,7 @@ def hash_candidate(candidate):
     return str(candidate)
 
 
-def rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_confidence, min_r, transactions):
+def rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_confidence, min_r, database):
     rules = []
     for key in frequent_dictionary:
         if key != 1:
@@ -242,8 +253,8 @@ def rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_confi
                     confidence = support_all_items / support_antecedent
 
                     if confidence >= min_confidence and \
-                            support_all_items > min_r * expected_value(a_itemset_k, support_dictionary, taxonomy,
-                                                                       transactions):
+                            support_all_items >= min_r * expected_value(a_itemset_k, support_dictionary, taxonomy,
+                                                                        database):
                         association_rule = AssociationRule(antecedent, consequent, support_all_items, confidence)
                         rules.append(association_rule)
     return rules
@@ -265,19 +276,20 @@ def is_eldest(item, taxonomy):
     return taxonomy[item] == []
 
 
-def expected_value(itemset, support_dictionary, taxonomy, transactions):
+def expected_value(itemset, support_dictionary, taxonomy, database):
     """
     :param itemset: And itemset Z = XUY that represents the rule X=>Y
     :param support_dictionary: Auxiliary structure to obtain the supports of individual items in the itemset
     :param taxonomy: Auxiliary structure to get the close ancestor of items
-    :param transactions: [Transaction] to count the support of Z'
+    :param database: Database (horizontal or vertical) to count the support of Z'
     :return: The expected value of itemset Z based on Z' where Z' is an ancestor of Z
     """
     itemset_ancestor = calculate_itemset_ancestor(itemset, taxonomy)  # This is Z'
     product_list = []  # This is P(z_1) / P(z'_1) * ...
     for item in itemset:
         item_ancestor = close_ancestor(item, taxonomy)
-        numerator = support_dictionary[hash_candidate([item])]  # P(z_j). frequent_support_dictionary has all supports 1-itemsets
+        numerator = support_dictionary[
+            hash_candidate([item])]  # P(z_j). frequent_support_dictionary has all supports 1-itemsets
         denominator = support_dictionary[hash_candidate([item_ancestor])]  # P(z'_j)
         if denominator != 0:
             fraction = numerator / denominator
@@ -290,7 +302,7 @@ def expected_value(itemset, support_dictionary, taxonomy, transactions):
     if hashed_ancestor in support_dictionary:
         product_list.append(support_dictionary[hashed_ancestor])
     else:
-        product_list.append(calculate_support(itemset_ancestor, taxonomy, transactions))  # P(Z') needs to be calculated
+        product_list.append(database.supportOf(itemset_ancestor))  # P(Z') needs to be calculated
     return math.prod(product_list)
 
 
@@ -311,13 +323,3 @@ def calculate_itemset_ancestor(itemset, taxonomy):
         ancestor = close_ancestor(item, taxonomy)  # returns same item if item has no ancestor
         itemset_ancestor.append(ancestor)
     return sorted(itemset_ancestor)
-
-
-def calculate_support(itemset, taxonomy, transactions):
-    count = 0
-    taxonomy_pruned = prune_ancestors([itemset], taxonomy)
-    for a_transaction in transactions:
-        expanded_transaction = expand_transaction(a_transaction, taxonomy_pruned)
-        if set(itemset).issubset(set(expanded_transaction)):
-            count += 1
-    return count / len(transactions)
