@@ -61,27 +61,26 @@ class utilityTests(unittest.TestCase):
                                                                          'Taxonomies/salesfact_taxonomy.csv')
         self.assertEqual(len(horizontal_db.transactions), 54537, 'Transactions in horizontal DB')
 
-    def test_ptt(self):
-        customPtt = PTT()
-        periodsTimestamp = [self.t1, self.t2, self.t3, self.t4, self.t4, self.t4]
-        periods = list(map(getPeriodStampFromTimestamp, periodsTimestamp))
-        customPtt.addMultiplePeriods(periods)
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 1)['totalTransactions'], 1, 'PTT value 1')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 2)['totalTransactions'], 0, 'PTT value 2')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(1, 12)['totalTransactions'], 1, 'PTT value 3')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 18)['totalTransactions'], 3, 'PTT value 4')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(2, 3)['totalTransactions'], 3, 'PTT value 5')
+    # def test_ptt(self):
+    #     customPtt = PTT()
+    #     periodsTimestamp = [self.t1, self.t2, self.t3, self.t4, self.t4, self.t4]
+    #     periods = list(map(getPeriodStampFromTimestamp, periodsTimestamp))
+    #     customPtt.addMultiplePeriods(periods)
+    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 1)['totalTransactions'], 1, 'PTT value 1')
+    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 2)['totalTransactions'], 0, 'PTT value 2')
+    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(1, 12)['totalTransactions'], 1, 'PTT value 3')
+    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 18)['totalTransactions'], 3, 'PTT value 4')
+    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(2, 3)['totalTransactions'], 3, 'PTT value 5')
 
     def test_support_with_time_period(self):
         # T1 = ([A,B], [23,12,4])
-        # T2 = ([C,D,A.F], [12,6,2])
+        # T2 = ([C,D,A,F], [12,6,2])
         # T3 = ([A,J,K,C],  [18,9,3])
         # T4 = ([A], [18,9,3])
         # T5 = ([C,E,G,K], [8,4,2])
         # T6 = ([D,F,G], [8,4,2])
         # ItemsDic = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K'}
         parser = Parser()
-        print("====================================================================================")
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         self.assertEqual(database.supportOf([0]), 4/6, 'SupportTestVanilla1')
         self.assertEqual(database.supportOf([0,2]), 2/6, 'SupportTestVanilla2')
@@ -91,7 +90,19 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(database.supportOf([0], 2, 2), 1/3, 'SupportTestWithTimePeriod4')
         self.assertEqual(database.supportOf([3,5], 2, 2), 2/3, 'SupportTestWithTimePeriod5')
         self.assertEqual(database.supportOf([3,5,6], 1, 4), 1/2, 'SupportTestWithTimePeriod6')
-        self.assertEqual(database.supportOf([8], 0, 1), 0, 'SupportTestWithTimePeriod4')
+        self.assertEqual(database.supportOf([8], 0, 1), 0, 'SupportTestWithTimePeriod7')
+
+        #Now assert items =============================================================
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(0,1)), 0, 'Items_in_time_period_test_1')
+        items_in_0_8 = database.getItemsByDepthAndPeriod(0,8)
+        self.assertEqual(len(items_in_0_8), 6, 'Items_in_time_period_test_2a')
+        self.assertEqual('F' in items_in_0_8, True, 'Items_in_time_period_test_2b')
+        self.assertEqual('J' in items_in_0_8, False, 'Items_in_time_period_test_2c')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(2,2)), 7, 'Items_in_time_period_test_3')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(1,2)), 0, 'Items_in_time_period_test_3')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(1,6)), 4, 'Items_in_time_period_test_3')
+
+
 
 
 

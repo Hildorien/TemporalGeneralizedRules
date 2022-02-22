@@ -7,17 +7,18 @@ class PTT:  # Periodical Total Transaction
         self.ptt = [[], [], []]
         for lLevel, maxPi in enumerate(hardcoded_htg):
             for x in range(maxPi):
-                self.ptt[lLevel].append({'itemsSet': {}, 'totalTransactions': 0})
+                self.ptt[lLevel].append({'itemsSet': set(), 'totalTransactions': 0})
 
     def addMultiplePeriods(self, periods):
         for period in periods:
             self.addItemPeriodToPtt(period)
 
-    def addItemPeriodToPtt(self, period):
+    def addItemPeriodToPtt(self, period, items = set()):
         # periods is an array of numbers, where each column is the l-level and the number is the pi in it. (eg. [1,
         # 30,10])
         for l_level, pi in enumerate(period):
             if self.checkIfLlevelAndPeriodAreValid(l_level, pi):
+                self.ptt[l_level][pi - 1]['itemsSet'].update(items)
                 self.ptt[l_level][pi - 1]['totalTransactions'] += 1
             else:
                 print('ERROR AL AGREGAR ELEMENTO AL PTT. PERIODOS NO COMPATIBLE CON HTG')
