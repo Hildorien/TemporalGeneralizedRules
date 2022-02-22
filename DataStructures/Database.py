@@ -53,14 +53,17 @@ class Database:
             filtered_by_period_tids = 0
             for tid in final_intersection:
                 transactionHTG = getPeriodStampFromTimestamp(self.timestamp_mapping[tid])
-                if transactionHTG[l_level - 1] == period:
+                if transactionHTG[l_level] == period:
                     period_reach_phase = 2
                     filtered_by_period_tids += 1
                 elif period_reach_phase == 2:
                     break
-            ptt_j = self.ptt.getPTTValueFromLlevelAndPeriod(l_level, period)
+            ptt_j = self.ptt.getPTTValueFromLlevelAndPeriod(l_level, period)['totalTransactions']
 
-            return filtered_by_period_tids/ptt_j
+            if ptt_j == 0:
+                return 0
+            else:
+                return filtered_by_period_tids/ptt_j
         else:
             return len(final_intersection) / self.row_count
 

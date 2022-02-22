@@ -62,15 +62,15 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(len(horizontal_db.transactions), 54537, 'Transactions in horizontal DB')
 
     def test_ptt(self):
-        ptt = PTT()
+        customPtt = PTT()
         periodsTimestamp = [self.t1, self.t2, self.t3, self.t4, self.t4, self.t4]
         periods = list(map(getPeriodStampFromTimestamp, periodsTimestamp))
-        ptt.addMultiplePeriods(periods)
-        self.assertEqual(ptt.getPTTValueFromLlevelAndPeriod(1, 1), 1, 'PTT value 1')
-        self.assertEqual(ptt.getPTTValueFromLlevelAndPeriod(1, 2), 0, 'PTT value 2')
-        self.assertEqual(ptt.getPTTValueFromLlevelAndPeriod(2, 12), 1, 'PTT value 3')
-        self.assertEqual(ptt.getPTTValueFromLlevelAndPeriod(1, 18), 3, 'PTT value 4')
-        self.assertEqual(ptt.getPTTValueFromLlevelAndPeriod(3, 3), 3, 'PTT value 5')
+        customPtt.addMultiplePeriods(periods)
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 1)['totalTransactions'], 1, 'PTT value 1')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 2)['totalTransactions'], 0, 'PTT value 2')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(1, 12)['totalTransactions'], 1, 'PTT value 3')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 18)['totalTransactions'], 3, 'PTT value 4')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(2, 3)['totalTransactions'], 3, 'PTT value 5')
 
     def test_support_with_time_period(self):
         # T1 = ([A,B], [23,12,4])
@@ -81,15 +81,17 @@ class utilityTests(unittest.TestCase):
         # T6 = ([D,F,G], [8,4,2])
         # ItemsDic = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K'}
         parser = Parser()
+        print("====================================================================================")
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         self.assertEqual(database.supportOf([0]), 4/6, 'SupportTestVanilla1')
         self.assertEqual(database.supportOf([0,2]), 2/6, 'SupportTestVanilla2')
-        self.assertEqual(database.supportOf([0], 1, 18), 1, 'SupportTestWithTimePeriod1')
-        self.assertEqual(database.supportOf([3], 1, 8), 1/2, 'SupportTestWithTimePeriod2')
-        self.assertEqual(database.supportOf([3], 1, 8), 1/2, 'SupportTestWithTimePeriod3')
-        self.assertEqual(database.supportOf([0], 3, 2), 1/3, 'SupportTestWithTimePeriod4')
-        self.assertEqual(database.supportOf([3,5], 3, 2), 2/3, 'SupportTestWithTimePeriod5')
-        self.assertEqual(database.supportOf([3,5,6], 2, 4), 1/2, 'SupportTestWithTimePeriod6')
+        self.assertEqual(database.supportOf([0], 0, 18), 1, 'SupportTestWithTimePeriod1')
+        self.assertEqual(database.supportOf([3], 0, 8), 1/2, 'SupportTestWithTimePeriod2')
+        self.assertEqual(database.supportOf([3], 0, 8), 1/2, 'SupportTestWithTimePeriod3')
+        self.assertEqual(database.supportOf([0], 2, 2), 1/3, 'SupportTestWithTimePeriod4')
+        self.assertEqual(database.supportOf([3,5], 2, 2), 2/3, 'SupportTestWithTimePeriod5')
+        self.assertEqual(database.supportOf([3,5,6], 1, 4), 1/2, 'SupportTestWithTimePeriod6')
+        self.assertEqual(database.supportOf([8], 0, 1), 0, 'SupportTestWithTimePeriod4')
 
 
 

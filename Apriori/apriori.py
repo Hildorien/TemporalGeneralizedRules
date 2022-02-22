@@ -81,14 +81,14 @@ def apriori(database, min_support, min_confidence):
             candidates_size_k = apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
         #print('Candidates of size ' + str(k) + ' is ' + str(len(candidates_size_k)))
         #print('Calculating support of each candidate of size ' + str(k))
-        start = time.time()
+        #start = time.time()
         frequent_dictionary[k] = []
         for a_candidate_size_k in candidates_size_k:
             support = database.supportOf(a_candidate_size_k)
             if support >= min_support:
                 frequent_dictionary[k].append(a_candidate_size_k)
                 support_dictionary[joinlistOfInts(a_candidate_size_k)] = support
-        end = time.time()
+        #end = time.time()
         #print('Took ' + (str(end - start) + ' seconds'))
         k += 1
     #STEP 2: Rule Generation
