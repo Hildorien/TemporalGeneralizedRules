@@ -1,5 +1,5 @@
 from DataStructures.PTT import PTT
-from utility import findOrderedIntersection, getPeriodStampFromTimestamp
+from utility import findOrderedIntersection, getPeriodStampFromTimestamp, allSubsetofSizeKMinus1
 
 
 class Database:
@@ -70,6 +70,24 @@ class Database:
     def getItemsByDepthAndPeriod(self, l_level, period):
         return self.ptt.getPTTValueFromLlevelAndPeriod(l_level, period)['itemsSet']
 
+    # WIP
+    # def findIndividualTFI(self, l_level, pj, lam):
+    #     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
+    #     ptt_entry = self.ptt.getPTTValueFromLlevelAndPeriod(l_level, pj)
+    #     TFI_j = set()
+    #     totalTransactions = ptt_entry['totalTransactions']
+    #     r = 1
+    #     C_j = list(ptt_entry['itemsSet'])
+    #     C_j.sort()
+    #     TFI_r = set()
+    #     while TFI_r > 0 or r == 1:
+    #         for k_itemset in C_j:
+    #             if self.supportOf(k_itemset, l_level, pj) > lam:
+    #                 TFI_r.add(k_itemset)
+    #         TFI_j.add(TFI_r)
+    #        # C_j = allSubsetofSizeKMinus1(a_candidate_of_size_k, k - 1)  # a_candidate_of_size_k is a list
+    #
+    #     return TFI_j
 
 
     def confidenceOf(self, lhs, rhs):
