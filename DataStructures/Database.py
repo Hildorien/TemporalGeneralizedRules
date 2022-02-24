@@ -14,7 +14,7 @@ class Database:
     # fap: First Appereance Periods from the transaction where the item i was first discovered
     matrix_data_by_item = {}
 
-    # { 'product_name' : [ancestor] }
+    # { item_id : [ancestor_id] }
     taxonomy = {}
 
     def __init__(self, matrix_data_by_item,

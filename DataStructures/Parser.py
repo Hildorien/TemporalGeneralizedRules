@@ -8,7 +8,7 @@ from utility import getPeriodStampFromTimestamp
 
 class Parser:
 
-    def parse(self, filepath, csv_format='single', taxonomy_filepath= None, usingTimestamp = False):
+    def parse(self, filepath, csv_format='single', taxonomy_filepath=None, usingTimestamp=False):
         if csv_format == 'basket' and taxonomy_filepath is None:
             return self.parse_basket_file(filepath)
         elif csv_format == 'single' and taxonomy_filepath is None:
@@ -18,7 +18,7 @@ class Parser:
         elif csv_format == 'single' and taxonomy_filepath is not None:
             return self.parse_single_with_taxonomy(filepath, taxonomy_filepath)
 
-    def parse_single_file(self, filepath, usingTimestamp = False):
+    def parse_single_file(self, filepath, usingTimestamp=False):
         dataset, timestamps = self.build_dataset_timestamp_from_file(filepath)
         return self.fit_database(dataset, timestamps.to_dict(), None, usingTimestamp)
 
@@ -51,8 +51,9 @@ class Parser:
             matrix_dictionary_with_tax = self.fit_with_taxonomy(dataset,
                                                                 taxonomy).create_matrix_dictionary_with_taxonomy(
                 dataset, taxonomy)
+            indexed_taxonomy = self.create_indexed_taxonomy(self.item_index_by_name, taxonomy)
             return Database(matrix_dictionary_with_tax, timestamps, self.item_name_by_index,
-                            len(dataset), taxonomy)
+                            len(dataset), indexed_taxonomy)
 
         elif usingTimestamps:
             matrix_dictionary_and_ptt = self.fit(dataset).create_matrix_dictionary_using_timestamps(dataset, timestamps)
@@ -63,17 +64,16 @@ class Parser:
             return Database(matrix_dictionary, timestamps, self.item_name_by_index,
                             len(dataset), {})
 
-
     def parse_taxonomy(self, taxonomy_filepath):
         taxonomy = {}
         with open(taxonomy_filepath) as file:
-            lines = file.readlines()[1:] #skips header
+            lines = file.readlines()[1:]  # skips header
         for line in lines:
             products = line.rstrip().split(",")
             for i, a_product in enumerate(products):
                 if a_product not in taxonomy:
                     taxonomy[a_product] = []
-                    taxonomy[a_product].extend(products[i+1:len(products)])
+                    taxonomy[a_product].extend(products[i + 1:len(products)])
         return taxonomy
 
     def create_matrix_dictionary(self, dataset):
@@ -116,7 +116,6 @@ class Parser:
             self.item_name_by_index[col_idx] = item
         return self
 
-
     def fit_with_timestamps(self, dataset):
         self.item_name_by_index = {}
         unique_items = set()
@@ -141,7 +140,7 @@ class Parser:
         for transaction in dataset:
             for item in transaction:
                 unique_items.add(item)
-        #Add ancestors to unique items
+        # Add ancestors to unique items
         for key in taxonomy:
             for ancestor in taxonomy[key]:
                 unique_items.add(ancestor)
@@ -151,6 +150,7 @@ class Parser:
         for col_idx, item in enumerate(self.item_names):
             self.item_index_by_name[item] = col_idx
             self.item_name_by_index[col_idx] = item
+
         return self
 
     def create_matrix_dictionary_with_taxonomy(self, dataset, taxonomy):
@@ -161,16 +161,16 @@ class Parser:
         """
         matrix_dictionary = {}
         for tid, transaction in enumerate(dataset):
-            #Expand transaction
+            # Expand transaction
             expanded_transaction = []
             for item in transaction:
                 expanded_transaction.append(item)
-                #Append ancestors of item to expanded_transaction
+                # Append ancestors of item to expanded_transaction
                 ancestors = taxonomy[item]
                 for ancestor in ancestors:
                     if ancestor not in expanded_transaction:
                         expanded_transaction.append(ancestor)
-            #Work with expanded_transaction
+            # Work with expanded_transaction
             for item in set(expanded_transaction):
                 if item in matrix_dictionary:
                     matrix_dictionary[item]['tids'].append(tid)
@@ -198,7 +198,7 @@ class Parser:
         for a_transaction in dataset:
             for item in a_transaction:
                 unique_items.add(item)
-        #Add ancestors to unique items
+        # Add ancestors to unique items
         for key in taxonomy:
             for ancestor in taxonomy[key]:
                 unique_items.add(ancestor)
@@ -213,6 +213,11 @@ class Parser:
                 indexed_transaction.append(index_items_dic[an_item])
             transactions.append(Transaction(tid, timestamps.get(tid, 0), sorted(indexed_transaction)))
 
+        indexed_taxonomy = self.create_indexed_taxonomy(index_items_dic, taxonomy)
+
+        return HorizontalDatabase(transactions, indexed_taxonomy, items_dic, index_items_dic)
+
+    def create_indexed_taxonomy(self, index_items_dic, taxonomy):
         indexed_taxonomy = {}
         for an_item in taxonomy:
             ancestors = taxonomy[an_item]
@@ -220,8 +225,7 @@ class Parser:
                 indexed_taxonomy[index_items_dic[an_item]] = []
                 for an_ancestor in ancestors:
                     indexed_taxonomy[index_items_dic[an_item]].append(index_items_dic[an_ancestor])
-
-        return HorizontalDatabase(transactions, indexed_taxonomy, items_dic, index_items_dic)
+        return indexed_taxonomy
 
     def parse_single_file_for_horizontal_database(self, dataset_filepath, taxonomy_filepath):
         dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
@@ -233,8 +237,8 @@ class Parser:
         taxonomy = self.parse_taxonomy(taxonomy_filepath)
         return self.fit_horizontal_database(dataset, {}, taxonomy)
 
-    def parse_horizontal_database(self, dataset_filepath, taxonomy_filepath, csv_format = 'single'):
-        if csv_format=='single':
+    def parse_horizontal_database(self, dataset_filepath, taxonomy_filepath, csv_format='single'):
+        if csv_format == 'single':
             return self.parse_single_file_for_horizontal_database(dataset_filepath, taxonomy_filepath)
-        elif csv_format=='basket':
+        elif csv_format == 'basket':
             return self.parse_basket_file_for_horizontal_database(dataset_filepath, taxonomy_filepath)

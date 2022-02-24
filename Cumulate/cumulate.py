@@ -121,6 +121,7 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r):
     rules = rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_conf, min_r, vertical_database)
     end = time.time()
     #print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(rules)) + ' rules'))
+    return rules
 
 
 def calculate_Ck(frequent_dictionary, k):
