@@ -85,7 +85,7 @@ class Parser:
                 else:
                     matrix_dictionary[item] = {}
                     matrix_dictionary[item]['tids'] = [tid]
-        return matrix_dictionary
+        return {"md": matrix_dictionary}
 
     def create_matrix_dictionary_using_timestamps(self, dataset, timestamps):
         matrix_dictionary = {}

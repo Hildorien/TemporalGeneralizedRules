@@ -60,6 +60,43 @@ def joinlistOfInts(list):
 def flatten(t):
     return [item for sublist in t for item in sublist]
 
+def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
+    """
+    :param frequent_itemset: An ORDERED set/list of itemsets in which each itemset is also ordered
+    :param frequent_dictionary: Auxiliary structure for fast lookup of frequents of size k-1
+    :return:
+    """
+    k = len(frequent_itemset_of_size_k_minus_1[0]) + 1
+    # STEP 1: JOIN
+    candidates_of_size_k = []
+    n = len(frequent_itemset_of_size_k_minus_1)
+    for i in range(n):
+        j = i + 1
+        while j < n:
+            joined_itemset = getValidJoin(frequent_itemset_of_size_k_minus_1[i], frequent_itemset_of_size_k_minus_1[j])
+            if joined_itemset is None:
+                break
+            else:
+                candidates_of_size_k.append(joined_itemset)
+            j += 1
+    # STEP 2: PRUNE -> For each itemset in L_k check if all subsets are frequent
+    for a_candidate_of_size_k in candidates_of_size_k:  # Iterating over a lists of lists
+        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k, k - 1)  # a_candidate_of_size_k is a list
+        for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
+            if not (a_subset_of_size_k_minus_1 in frequent_dictionary[k - 1]):
+                candidates_of_size_k.remove(a_candidate_of_size_k)  # Prunes the entire candidate
+                break
+
+    return candidates_of_size_k
+
+def generateCanidadtesOfSizeK(k, all_items, frequent_dictionary):
+    if k == 1:
+        return list(map(lambda x: [x], all_items))
+    elif k == 2:
+       return list(
+            map(list, combinations(flatten(frequent_dictionary[1]), 2)))  # Treat k = 2 as a special case
+    else:
+        return apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
 
 def getFortnight(day, month):
     firstHalf = day < 16

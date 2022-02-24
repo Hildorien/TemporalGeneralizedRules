@@ -1,10 +1,10 @@
 import unittest
 
+#from Apriori.apriori import findIndividualTFI
 from DataStructures.PTT import PTT
-from utility import findOrderedIntersection
+from utility import findOrderedIntersection, apriori_gen
 from utility import getValidJoin
 from utility import getPeriodStampFromTimestamp
-from Apriori.apriori import apriori_gen
 from DataStructures.Parser import Parser
 
 
@@ -44,7 +44,7 @@ class utilityTests(unittest.TestCase):
                    ['Milk', 'Unicorn', 'Corn', 'Kidney Beans', 'Yogurt'],
                    ['Corn', 'Onion', 'Onion', 'Kidney Beans', 'Ice cream', 'Eggs']]
         parser = Parser()
-        dic = parser.create_matrix_dictionary(dataset)
+        dic = parser.create_matrix_dictionary(dataset)["md"]
         self.assertEqual('Milk' in dic, True, 'Milk in dataset')
         self.assertEqual(dic['Milk']['tids'], [0, 2, 3], 'Milk in transactions 0,2 and 3')
 
@@ -61,16 +61,16 @@ class utilityTests(unittest.TestCase):
                                                                          'Taxonomies/salesfact_taxonomy.csv')
         self.assertEqual(len(horizontal_db.transactions), 54537, 'Transactions in horizontal DB')
 
-    # def test_ptt(self):
-    #     customPtt = PTT()
-    #     periodsTimestamp = [self.t1, self.t2, self.t3, self.t4, self.t4, self.t4]
-    #     periods = list(map(getPeriodStampFromTimestamp, periodsTimestamp))
-    #     customPtt.addMultiplePeriods(periods)
-    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 1)['totalTransactions'], 1, 'PTT value 1')
-    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 2)['totalTransactions'], 0, 'PTT value 2')
-    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(1, 12)['totalTransactions'], 1, 'PTT value 3')
-    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 18)['totalTransactions'], 3, 'PTT value 4')
-    #     self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(2, 3)['totalTransactions'], 3, 'PTT value 5')
+    def test_ptt(self):
+        customPtt = PTT()
+        periodsTimestamp = [self.t1, self.t2, self.t3, self.t4, self.t4, self.t4]
+        periods = list(map(getPeriodStampFromTimestamp, periodsTimestamp))
+        customPtt.addMultiplePeriods(periods)
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 1)['totalTransactions'], 1, 'PTT value 1')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 2)['totalTransactions'], 0, 'PTT value 2')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(1, 12)['totalTransactions'], 1, 'PTT value 3')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 18)['totalTransactions'], 3, 'PTT value 4')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(2, 3)['totalTransactions'], 3, 'PTT value 5')
 
     def test_support_with_time_period(self):
         # T1 = ([A,B], [23,12,4])
@@ -101,6 +101,13 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(len(database.getItemsByDepthAndPeriod(2,2)), 7, 'Items_in_time_period_test_3')
         self.assertEqual(len(database.getItemsByDepthAndPeriod(1,2)), 0, 'Items_in_time_period_test_3')
         self.assertEqual(len(database.getItemsByDepthAndPeriod(1,6)), 4, 'Items_in_time_period_test_3')
+
+    # def test_TFI(self):
+    #     parser = Parser()
+    #     database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
+    #     tfi = findIndividualTFI(database,0, 8, 0.002)
+    #     print(tfi)
+    #     self.assertEqual(len([]), 0, 'ASD')
 
 
 
