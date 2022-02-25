@@ -92,7 +92,8 @@ class Parser:
         ptt = PTT()
         for tid, transaction in enumerate(dataset):
             transactionHTG = getPeriodStampFromTimestamp(timestamps[tid])
-            ptt.addItemPeriodToPtt(transactionHTG, set(transaction))
+            itemsToAddToPTT = set(map(lambda x: self.item_index_by_name[x], set(transaction)))
+            ptt.addItemPeriodToPtt(transactionHTG, itemsToAddToPTT)
             for item in set(transaction):
                 if item in matrix_dictionary:
                     matrix_dictionary[item]['tids'].append(tid)

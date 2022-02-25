@@ -76,14 +76,7 @@ def apriori_mapreduce(database, min_support, min_confidence):
     frequent_dictionary = {}
     while (k == 1 or frequent_dictionary[k - 1] != []) and k < len(all_items):
         candidates_size_k = []
-        if k == 1:
-            candidates_size_k = list(map(lambda x: [x], all_items))
-        elif k == 2:
-            candidates_size_k = list(
-                map(list, combinations(flatten(frequent_dictionary[1]), 2)))  # Treat k = 2 as a special case
-        else:
-            candidates_size_k = apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
-        print('Candidates of size ' + str(k) + ' is ' + str(len(candidates_size_k)))
+        candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
         # print('Calculating support of each candidate of size ' + str(k))
         frequent_dictionary[k] = []
         start = time.time()
@@ -111,24 +104,26 @@ def calculateSupport(a_candidate, database):
     return (a_candidate, database.supportOf(a_candidate))
 
 #WIP
-# def findIndividualTFI(database, l_level, pj, lam):
-#     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
-#     ptt_entry = database.getPTTValueFromLlevelAndPeriod(l_level, pj)
-#     TFI_j = set()
-#     totalTransactions = ptt_entry['totalTransactions']
-#     r = 1
-#     allItems = list(ptt_entry['itemsSet'])
-#     C_j = allItems
-#     C_j.sort()
-#     TFI_r = set()
-#     frequent_dictionary = {}
-#     while (len(C_j) > 0 or r == 1) and r < len(allItems):
-#         for k_itemset in C_j:
-#             if database.supportOf(k_itemset, l_level, pj) > lam:
-#                 TFI_r.add(k_itemset)
-#                 frequent_dictionary[r].append(k_itemset)
-#
-#         TFI_j.add(TFI_r)
-#         C_j = generateCanidadtesOfSizeK(r, allItems, frequent_dictionary)
-#         r+=1
-#     return TFI_j
+def findIndividualTFI(database, l_level, pj, lam):
+    # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
+    ptt_entry = database.getPTTValueFromLlevelAndPeriod(l_level, pj)
+    TFI_j = {}
+    totalTransactions = ptt_entry['totalTransactions']
+    r = 1
+    allItems = list(ptt_entry['itemsSet'])
+    C_j = allItems
+    C_j.sort()
+    TFI_r = list()
+    frequent_dictionary = {}
+    while (len(C_j) > 0 or r == 1) and r < len(allItems):
+        frequent_dictionary[r] = []
+        C_j = generateCanidadtesOfSizeK(r, C_j, frequent_dictionary)
+        for k_itemset in C_j:
+            if database.supportOf(k_itemset, l_level, pj) > lam:
+                TFI_r.append(k_itemset)
+                frequent_dictionary[r].append(k_itemset)
+        if len(TFI_r) > 0 :
+            TFI_j[r] = TFI_r
+        TFI_r = list()
+        r+=1
+    return TFI_j

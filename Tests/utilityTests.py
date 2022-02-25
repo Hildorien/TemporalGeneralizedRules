@@ -1,6 +1,6 @@
 import unittest
 
-#from Apriori.apriori import findIndividualTFI
+from Apriori.apriori import findIndividualTFI
 from DataStructures.PTT import PTT
 from utility import findOrderedIntersection, apriori_gen
 from utility import getValidJoin
@@ -89,25 +89,32 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(database.supportOf([3], 0, 8), 1/2, 'SupportTestWithTimePeriod3')
         self.assertEqual(database.supportOf([0], 2, 2), 1/3, 'SupportTestWithTimePeriod4')
         self.assertEqual(database.supportOf([3,5], 2, 2), 2/3, 'SupportTestWithTimePeriod5')
-        self.assertEqual(database.supportOf([3,5,6], 1, 4), 1/2, 'SupportTestWithTimePeriod6')
+        self.assertEqual(database.supportOf([3, 5, 6], 1, 4), 1/2, 'SupportTestWithTimePeriod6')
         self.assertEqual(database.supportOf([8], 0, 1), 0, 'SupportTestWithTimePeriod7')
 
         #Now assert items =============================================================
         self.assertEqual(len(database.getItemsByDepthAndPeriod(0,1)), 0, 'Items_in_time_period_test_1')
         items_in_0_8 = database.getItemsByDepthAndPeriod(0,8)
         self.assertEqual(len(items_in_0_8), 6, 'Items_in_time_period_test_2a')
-        self.assertEqual('F' in items_in_0_8, True, 'Items_in_time_period_test_2b')
-        self.assertEqual('J' in items_in_0_8, False, 'Items_in_time_period_test_2c')
-        self.assertEqual(len(database.getItemsByDepthAndPeriod(2,2)), 7, 'Items_in_time_period_test_3')
-        self.assertEqual(len(database.getItemsByDepthAndPeriod(1,2)), 0, 'Items_in_time_period_test_3')
-        self.assertEqual(len(database.getItemsByDepthAndPeriod(1,6)), 4, 'Items_in_time_period_test_3')
+        self.assertEqual(5 in items_in_0_8, True, 'Items_in_time_period_test_2b')
+        self.assertEqual(7 in items_in_0_8, False, 'Items_in_time_period_test_2c')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(2, 2)), 7, 'Items_in_time_period_test_3')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(1, 2)), 0, 'Items_in_time_period_test_3')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(1, 6)), 4, 'Items_in_time_period_test_3')
 
-    # def test_TFI(self):
-    #     parser = Parser()
-    #     database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-    #     tfi = findIndividualTFI(database,0, 8, 0.002)
-    #     print(tfi)
-    #     self.assertEqual(len([]), 0, 'ASD')
+    def test_TFI(self):
+        parser = Parser()
+        database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
+        tfi_0_8 = findIndividualTFI(database, 0, 8, 0.5)
+        tfi_2_2 = findIndividualTFI(database, 2, 2, 0.49)
+        tfi_0_5 = findIndividualTFI(database, 0, 5, 0.02)
+
+        self.assertEqual(tfi_0_8[1], [[6]], 'TFI-1')
+        self.assertEqual(len(tfi_0_8.keys()), 1, 'TFI-1B')
+        self.assertEqual([5] in tfi_2_2[1], True, 'TFI-2')
+        self.assertEqual([3, 5] in tfi_2_2[2], True, 'TFI-2B')
+        self.assertEqual(len(tfi_0_5.keys()), 0, 'TFI-3')
+
 
 
 
