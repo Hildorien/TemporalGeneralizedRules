@@ -108,11 +108,10 @@ class utilityTests(unittest.TestCase):
         tfi_0_8 = findIndividualTFI(database, 0, 8, 0.5)
         tfi_2_2 = findIndividualTFI(database, 2, 2, 0.49)
         tfi_0_5 = findIndividualTFI(database, 0, 5, 0.02)
-
-        self.assertEqual(tfi_0_8[1], [[6]], 'TFI-1')
+        self.assertEqual(tfi_0_8[1], {(6,)}, 'TFI-1')
         self.assertEqual(len(tfi_0_8.keys()), 1, 'TFI-1B')
-        self.assertEqual([5] in tfi_2_2[1], True, 'TFI-2')
-        self.assertEqual([3, 5] in tfi_2_2[2], True, 'TFI-2B')
+        self.assertEqual((5,) in tfi_2_2[1], True, 'TFI-2')
+        self.assertEqual((3, 5) in tfi_2_2[2], True, 'TFI-2B')
         self.assertEqual(len(tfi_0_5.keys()), 0, 'TFI-3')
 
 

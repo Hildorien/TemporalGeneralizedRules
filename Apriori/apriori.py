@@ -103,7 +103,7 @@ def apriori_mapreduce(database, min_support, min_confidence):
 def calculateSupport(a_candidate, database):
     return (a_candidate, database.supportOf(a_candidate))
 
-#WIP
+
 def findIndividualTFI(database, l_level, pj, lam):
     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
     ptt_entry = database.getPTTValueFromLlevelAndPeriod(l_level, pj)
@@ -118,12 +118,35 @@ def findIndividualTFI(database, l_level, pj, lam):
     while (len(C_j) > 0 or r == 1) and r < len(allItems):
         frequent_dictionary[r] = []
         C_j = generateCanidadtesOfSizeK(r, C_j, frequent_dictionary)
-        for k_itemset in C_j:
-            if database.supportOf(k_itemset, l_level, pj) > lam:
-                TFI_r.append(k_itemset)
-                frequent_dictionary[r].append(k_itemset)
-        if len(TFI_r) > 0 :
-            TFI_j[r] = TFI_r
+        for k_size_itemset in C_j:
+            if database.supportOf(k_size_itemset, l_level, pj) > lam:
+                TFI_r.append(tuple(k_size_itemset))
+                frequent_dictionary[r].append(k_size_itemset)
+        if len(TFI_r) > 0:
+            TFI_j[r] = set(TFI_r)
         TFI_r = list()
         r+=1
     return TFI_j
+
+#WIP
+# def HTAR(database, min_rsup, min_rconf, lam, HTG =[24, 12, 4]):
+#     """
+#     :param database:
+#     :param min_support:
+#     :param min_confidence:
+#     :return: a set of AssociationRules
+#     """
+#     #PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0)
+#
+#     TFI_by_period_in_l_0 = {}
+#     for pi in range(HTG[0]):
+#         TFI_by_period_in_l_0[pi+1] = findIndividualTFI(database, 0, pi+1, lam)
+#
+#     #PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
+#
+#     HTFI = {}
+#     for l_length in range(len(HTG)):
+#         if l_length != 0:
+#
+#
+#     #PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOSCIATION RULES
