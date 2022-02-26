@@ -250,11 +250,11 @@ def add_candidate_to_hashmap(lst, candidate_hashmap):
 
 def hash_candidate(candidate):
     """
-    Gets a unique string based on candidate list
+    Gets the tuple of the list of ints for hashing in dictionaries/sets
     :param candidate: a list of ints
     :return:
     """
-    return str(candidate)
+    return tuple(candidate)
 
 
 def rule_generation(frequent_dictionary, support_dictionary, taxonomy, min_confidence, min_r, database,
