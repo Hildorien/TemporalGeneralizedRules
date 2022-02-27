@@ -2,7 +2,7 @@ import itertools
 from itertools import combinations
 from multiprocessing import freeze_support
 
-from utility import getValidJoin, generateCanidadtesOfSizeK
+from utility import getValidJoin, generateCanidadtesOfSizeK, getPeriodsIncluded, getTFIUnion
 from utility import allSubsetofSizeKMinus1
 from utility import joinlistOfInts
 from utility import flatten
@@ -108,7 +108,6 @@ def findIndividualTFI(database, l_level, pj, lam):
     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
     ptt_entry = database.getPTTValueFromLlevelAndPeriod(l_level, pj)
     TFI_j = {}
-    totalTransactions = ptt_entry['totalTransactions']
     r = 1
     allItems = list(ptt_entry['itemsSet'])
     C_j = allItems
@@ -147,6 +146,12 @@ def findIndividualTFI(database, l_level, pj, lam):
 #     HTFI = {}
 #     for l_length in range(len(HTG)):
 #         if l_length != 0:
+#             for period in range(HTG[l_length]):
+#                 level_0_periods_included = getPeriodsIncluded(l_length, period)
+#
+#                 #Get a single merged TFI of 0-level periods involved
+#                 merged_level_0_periods_included_tfi = getTFIUnion(TFI_by_period_in_l_0, level_0_periods_included)
+#
 #
 #
 #     #PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOSCIATION RULES

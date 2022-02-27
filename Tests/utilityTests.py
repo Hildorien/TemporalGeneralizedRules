@@ -2,7 +2,7 @@ import unittest
 
 from Apriori.apriori import findIndividualTFI
 from DataStructures.PTT import PTT
-from utility import findOrderedIntersection, apriori_gen
+from utility import findOrderedIntersection, apriori_gen, getTFIUnion, getPeriodsIncluded
 from utility import getValidJoin
 from utility import getPeriodStampFromTimestamp
 from DataStructures.Parser import Parser
@@ -18,6 +18,7 @@ class utilityTests(unittest.TestCase):
         self.t2 = 503276584  # 12/12/1985
         self.t3 = 1118962984  # 16/6/2005
         self.t4 = 1442876584  # 21/9/2015
+        self.t5 = 1117811573  # 3/6/2005
 
     def test_find_ordered_itersection(self):
         result = findOrderedIntersection(self.arr1, self.arr2)
@@ -74,21 +75,22 @@ class utilityTests(unittest.TestCase):
 
     def test_support_with_time_period(self):
         # T1 = ([A,B], [23,12,4])
-        # T2 = ([C,D,A,F], [12,6,2])
-        # T3 = ([A,J,K,C],  [18,9,3])
-        # T4 = ([A], [18,9,3])
-        # T5 = ([C,E,G,K], [8,4,2])
-        # T6 = ([D,F,G], [8,4,2])
-        # ItemsDic = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K'}
+        # T2 = ([L,F,G,D], [11,6,2])
+        # T3 = ([C,D,A,F], [12,6,2])
+        # T4 = ([A,J,K,C],  [18,9,3])
+        # T5 = ([A], [18,9,3])
+        # T6 = ([C,E,G,K], [8,4,2])
+        # T7 = ([D,F,G], [8,4,2])
+        # ItemsDic = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K', 9:'L'}
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-        self.assertEqual(database.supportOf([0]), 4/6, 'SupportTestVanilla1')
-        self.assertEqual(database.supportOf([0,2]), 2/6, 'SupportTestVanilla2')
+        self.assertEqual(database.supportOf([0]), 4/7, 'SupportTestVanilla1')
+        self.assertEqual(database.supportOf([0,2]), 2/7, 'SupportTestVanilla2')
         self.assertEqual(database.supportOf([0], 0, 18), 1, 'SupportTestWithTimePeriod1')
         self.assertEqual(database.supportOf([3], 0, 8), 1/2, 'SupportTestWithTimePeriod2')
         self.assertEqual(database.supportOf([3], 0, 8), 1/2, 'SupportTestWithTimePeriod3')
-        self.assertEqual(database.supportOf([0], 2, 2), 1/3, 'SupportTestWithTimePeriod4')
-        self.assertEqual(database.supportOf([3,5], 2, 2), 2/3, 'SupportTestWithTimePeriod5')
+        self.assertEqual(database.supportOf([0], 2, 2), 1/4, 'SupportTestWithTimePeriod4')
+        self.assertEqual(database.supportOf([3,5], 2, 2), 3/4, 'SupportTestWithTimePeriod5')
         self.assertEqual(database.supportOf([3, 5, 6], 1, 4), 1/2, 'SupportTestWithTimePeriod6')
         self.assertEqual(database.supportOf([8], 0, 1), 0, 'SupportTestWithTimePeriod7')
 
@@ -98,14 +100,16 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(len(items_in_0_8), 6, 'Items_in_time_period_test_2a')
         self.assertEqual(5 in items_in_0_8, True, 'Items_in_time_period_test_2b')
         self.assertEqual(7 in items_in_0_8, False, 'Items_in_time_period_test_2c')
-        self.assertEqual(len(database.getItemsByDepthAndPeriod(2, 2)), 7, 'Items_in_time_period_test_3')
-        self.assertEqual(len(database.getItemsByDepthAndPeriod(1, 2)), 0, 'Items_in_time_period_test_3')
-        self.assertEqual(len(database.getItemsByDepthAndPeriod(1, 6)), 4, 'Items_in_time_period_test_3')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(2, 2)), 8, 'Items_in_time_period_test_3')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(1, 2)), 0, 'Items_in_time_period_test_3b')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(1, 6)), 6, 'Items_in_time_period_test_3c')
 
     def test_TFI(self):
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         tfi_0_8 = findIndividualTFI(database, 0, 8, 0.5)
+        tfi_0_8_lower_lamda = findIndividualTFI(database, 0, 8, 0.02)
+
         tfi_2_2 = findIndividualTFI(database, 2, 2, 0.49)
         tfi_0_5 = findIndividualTFI(database, 0, 5, 0.02)
         self.assertEqual(tfi_0_8[1], {(6,)}, 'TFI-1')
@@ -114,9 +118,22 @@ class utilityTests(unittest.TestCase):
         self.assertEqual((3, 5) in tfi_2_2[2], True, 'TFI-2B')
         self.assertEqual(len(tfi_0_5.keys()), 0, 'TFI-3')
 
+        tfi_0_11 = findIndividualTFI(database, 0, 11, 0.02)
+        tfi_0_12 = findIndividualTFI(database, 0, 12, 0.02)
+        TFI_by_period = {11: tfi_0_11, 12: tfi_0_12, 8:tfi_0_8_lower_lamda}
 
+        mergedTFIUnion_1 = getTFIUnion(TFI_by_period, [11,12])
+        self.assertEqual(len(mergedTFIUnion_1[1]), 6, 'TFI-MERGE-1a')
+        self.assertEqual(len(mergedTFIUnion_1[2]), 11, 'TFI-MERGE-1b')
 
+        mergedTFIUnion_2 = getTFIUnion(TFI_by_period, [7, 12])
+        self.assertEqual(len(mergedTFIUnion_2[1]), 8, 'TFI-MERGE-2a')
+        self.assertEqual(len(mergedTFIUnion_2[3]), 12, 'TFI-MERGE-2b')
+        self.assertEqual(len(mergedTFIUnion_2[4]), 1, 'TFI-MERGE-2c')
 
+    def test_periods_included(self):
+        self.assertEqual(getPeriodsIncluded(1, 4), [7, 8], 'Periods_bounderies_included')
+        self.assertEqual(getPeriodsIncluded(2, 3), [13, 18], 'Periods_bounderies_included-2')
 
 
 

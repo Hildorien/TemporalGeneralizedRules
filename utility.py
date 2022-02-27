@@ -106,6 +106,40 @@ def getFortnight(day, month):
     else:
         return fortnight
 
+def getPeriodsIncluded(l_length, period):
+    # Note: This method does only works for any period in level above 0 with hardcoded HTG = [24,12,4]
+    if l_length == 1:
+        later_fortnight = period * 2
+        return [later_fortnight-1, later_fortnight]
+    elif l_length == 2:
+        later_fortnight = period*6
+        return[later_fortnight - 5, later_fortnight]
+    else:
+        print("ERROR: L_LENGTH NOT AVAILABLE FOR DEFAULT HTG")
+
+def getTFIUnion(TFI_by_period, bounderies):
+    """
+    :param TFI_by_period: A dictionary of TFI's indexed by period
+    :param bounderies: the lower and upper boundery of periods involved in the final merge.
+    :return:
+    """
+    finalTFI = {}
+    new_items_found = True
+    k = 1
+    while new_items_found:
+        new_items_found = False
+        finalTFI_k = set()
+        for p_i in range(bounderies[0], bounderies[1]+1):
+            if p_i in TFI_by_period and k in TFI_by_period[p_i]:
+                finalTFI_k = set.union(finalTFI_k, TFI_by_period[p_i][k])
+
+        if len(finalTFI_k) > 0:
+            finalTFI[k] = finalTFI_k
+            new_items_found = True
+        k+=1
+
+    return finalTFI
+
 
 def getPeriodStampFromTimestamp(timestamp):
     # Hierarchy of Time Granules is represented by an array of numbers, where each column represents the l-level and

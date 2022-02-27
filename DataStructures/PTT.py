@@ -16,6 +16,8 @@ class PTT:  # Periodical Total Transaction
     def addItemPeriodToPtt(self, period, items = set()):
         # periods is an array of numbers, where each column is the l-level and the number is the pi in it. (eg. [1,
         # 30,10])
+
+        #TODO: Refactor so only bottom level 0 is saved in PTT.
         for l_level, pi in enumerate(period):
             if self.checkIfLlevelAndPeriodAreValid(l_level, pi):
                 self.ptt[l_level][pi - 1]['itemsSet'].update(items)
