@@ -60,6 +60,7 @@ def joinlistOfInts(list):
 def flatten(t):
     return [item for sublist in t for item in sublist]
 
+
 def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
     """
     :param frequent_itemset: An ORDERED set/list of itemsets in which each itemset is also ordered
@@ -81,7 +82,8 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
             j += 1
     # STEP 2: PRUNE -> For each itemset in L_k check if all subsets are frequent
     for a_candidate_of_size_k in candidates_of_size_k:  # Iterating over a lists of lists
-        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k, k - 1)  # a_candidate_of_size_k is a list
+        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k,
+                                                           k - 1)  # a_candidate_of_size_k is a list
         for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
             if not (a_subset_of_size_k_minus_1 in frequent_dictionary[k - 1]):
                 candidates_of_size_k.remove(a_candidate_of_size_k)  # Prunes the entire candidate
@@ -89,33 +91,37 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
 
     return candidates_of_size_k
 
+
 def generateCanidadtesOfSizeK(k, all_items, frequent_dictionary):
     if k == 1:
         return list(map(lambda x: [x], all_items))
     elif k == 2:
-       return list(
+        return list(
             map(list, combinations(flatten(frequent_dictionary[1]), 2)))  # Treat k = 2 as a special case
     else:
         return apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
 
+
 def getFortnight(day, month):
     firstHalf = day < 16
     fortnight = month * 2
-    if (firstHalf):
+    if firstHalf:
         return fortnight - 1
     else:
         return fortnight
+
 
 def getPeriodsIncluded(l_length, period):
     # Note: This method does only works for any period in level above 0 with hardcoded HTG = [24,12,4]
     if l_length == 1:
         later_fortnight = period * 2
-        return [later_fortnight-1, later_fortnight]
+        return [later_fortnight - 1, later_fortnight]
     elif l_length == 2:
-        later_fortnight = period*6
-        return[later_fortnight - 5, later_fortnight]
+        later_fortnight = period * 6
+        return [later_fortnight - 5, later_fortnight]
     else:
         print("ERROR: L_LENGTH NOT AVAILABLE FOR DEFAULT HTG")
+
 
 def getTFIUnion(TFI_by_period, bounderies):
     """
@@ -129,14 +135,14 @@ def getTFIUnion(TFI_by_period, bounderies):
     while new_items_found:
         new_items_found = False
         finalTFI_k = set()
-        for p_i in range(bounderies[0], bounderies[1]+1):
+        for p_i in range(bounderies[0], bounderies[1] + 1):
             if p_i in TFI_by_period and k in TFI_by_period[p_i]:
                 finalTFI_k = set.union(finalTFI_k, TFI_by_period[p_i][k])
 
         if len(finalTFI_k) > 0:
             finalTFI[k] = finalTFI_k
             new_items_found = True
-        k+=1
+        k += 1
 
     return finalTFI
 
@@ -151,6 +157,17 @@ def getPeriodStampFromTimestamp(timestamp):
     return [getFortnight(dt.day, dt.month), dt.month, ((dt.month // 4) + 1)]
 
 
+def getMCPOfItemsetBetweenBoundaries(faps_period_of_level_0, boundaries):
+    maximum_period_available = max(faps_period_of_level_0)
+    lower_boundary = max(maximum_period_available, boundaries[0])
+    upper_boundary = boundaries[1] #TODO: REFACTOR THIS UPPER BOUNDARY IF LAP IS IMPLEMENTED
+    if maximum_period_available > upper_boundary:
+        # If maximum common appearance occurs after the upper_boundary, MCP bounded is NONE.
+        return None
+    else:
+        return [lower_boundary, upper_boundary]
+
+
 # This method gets the maximal time period between all HTG with their respective l-length
 def getMTPFromHTGArrays(faps):
     l_length = 3  # Hardcoded HTG length
@@ -161,5 +178,5 @@ def getMTPFromHTGArrays(faps):
         res.append(max_period)
     return res
 
-#TODO: After LAP is implemented
-#def getMTPFromFAPandLAP
+# TODO: After LAP is implemented
+# def getMTPFromFAPandLAP

@@ -2,7 +2,8 @@ import unittest
 
 from Apriori.apriori import findIndividualTFI
 from DataStructures.PTT import PTT
-from utility import findOrderedIntersection, apriori_gen, getTFIUnion, getPeriodsIncluded
+from utility import findOrderedIntersection, apriori_gen, getTFIUnion, getPeriodsIncluded, \
+    getMCPOfItemsetBetweenBoundaries
 from utility import getValidJoin
 from utility import getPeriodStampFromTimestamp
 from DataStructures.Parser import Parser
@@ -14,11 +15,11 @@ class utilityTests(unittest.TestCase):
     def setUp(self):
         self.arr1 = [0, 2, 50, 721]
         self.arr2 = [2, 3, 13, 23, 50]
-        self.t1 = 631234984  # 1/1/1990
-        self.t2 = 503276584  # 12/12/1985
-        self.t3 = 1118962984  # 16/6/2005
-        self.t4 = 1442876584  # 21/9/2015
-        self.t5 = 1117811573  # 3/6/2005
+        self.t1 = 631234984  # 1/1/1990 - [1,1,1]
+        self.t2 = 503276584  # 12/12/1985 - [23,12,4]
+        self.t3 = 1118962984  # 16/6/2005 - [12, 6, 2]
+        self.t4 = 1442876584  # 21/9/2015 - [18, 9, 3]
+        self.t5 = 1117811573  # 3/6/2005 - [11, 6, 2]
 
     def test_find_ordered_itersection(self):
         result = findOrderedIntersection(self.arr1, self.arr2)
@@ -71,7 +72,12 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 2)['totalTransactions'], 0, 'PTT value 2')
         self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(1, 12)['totalTransactions'], 1, 'PTT value 3')
         self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 18)['totalTransactions'], 3, 'PTT value 4')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(2, 3)['totalTransactions'], 3, 'PTT value 5')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 12)['totalTransactions'], 1, 'PTT value 5')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 23)['totalTransactions'], 1, 'PTT value 6')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(2, 3)['totalTransactions'], 3, 'PTT value 7')
+
+        self.assertEqual(customPtt.getTotalPTTSumWithinPeriodsInLevel0([1, 2]), 1, 'PTT SUM 1')
+        self.assertEqual(customPtt.getTotalPTTSumWithinPeriodsInLevel0([1, 18]), 5, 'PTT SUM 2')
 
     def test_support_with_time_period(self):
         # T1 = ([A,B], [23,12,4])
@@ -120,7 +126,7 @@ class utilityTests(unittest.TestCase):
 
         tfi_0_11 = findIndividualTFI(database, 0, 11, 0.02)
         tfi_0_12 = findIndividualTFI(database, 0, 12, 0.02)
-        TFI_by_period = {11: tfi_0_11, 12: tfi_0_12, 8:tfi_0_8_lower_lamda}
+        TFI_by_period = {11: tfi_0_11, 12: tfi_0_12, 8: tfi_0_8_lower_lamda}
 
         mergedTFIUnion_1 = getTFIUnion(TFI_by_period, [11,12])
         self.assertEqual(len(mergedTFIUnion_1[1]), 6, 'TFI-MERGE-1a')
@@ -132,9 +138,19 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(len(mergedTFIUnion_2[4]), 1, 'TFI-MERGE-2c')
 
     def test_periods_included(self):
-        self.assertEqual(getPeriodsIncluded(1, 4), [7, 8], 'Periods_bounderies_included')
-        self.assertEqual(getPeriodsIncluded(2, 3), [13, 18], 'Periods_bounderies_included-2')
+        self.assertEqual(getPeriodsIncluded(1, 4), [7, 8], 'Periods_boundaries_included')
+        self.assertEqual(getPeriodsIncluded(2, 3), [13, 18], 'Periods_boundaries_included-2')
 
+
+    def test_get_MCP_Between_Boundaries(self):
+        faps = [2, 4, 7, 9, 12]
+        faps2 = [2, 5, 6]
+        self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps, [13, 18]), [13, 18], 'MCP_between_boundaries')
+        self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps, [11, 18]), [12, 18], 'MCP_between_boundaries_2')
+        self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 5]), None, 'MCP_between_boundaries_3')
+        self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 8]), [6, 8], 'MCP_between_boundaries_4')
+
+    #TODO: TESTS getItemsetRelativeSupportLowerBound AND HTAR(HTFI)
 
 
 

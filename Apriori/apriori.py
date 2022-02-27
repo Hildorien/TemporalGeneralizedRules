@@ -128,30 +128,44 @@ def findIndividualTFI(database, l_level, pj, lam):
     return TFI_j
 
 #WIP
-# def HTAR(database, min_rsup, min_rconf, lam, HTG =[24, 12, 4]):
-#     """
-#     :param database:
-#     :param min_support:
-#     :param min_confidence:
-#     :return: a set of AssociationRules
-#     """
-#     #PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0)
-#
-#     TFI_by_period_in_l_0 = {}
-#     for pi in range(HTG[0]):
-#         TFI_by_period_in_l_0[pi+1] = findIndividualTFI(database, 0, pi+1, lam)
-#
-#     #PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
-#
-#     HTFI = {}
-#     for l_length in range(len(HTG)):
-#         if l_length != 0:
-#             for period in range(HTG[l_length]):
-#                 level_0_periods_included = getPeriodsIncluded(l_length, period)
-#
-#                 #Get a single merged TFI of 0-level periods involved
-#                 merged_level_0_periods_included_tfi = getTFIUnion(TFI_by_period_in_l_0, level_0_periods_included)
-#
-#
-#
-#     #PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOSCIATION RULES
+def HTAR(database, min_rsup, min_rconf, lam, HTG = [24, 12, 4]):
+    """
+    :param database:
+    :param min_support:
+    :param min_confidence:
+    :return: a set of AssociationRules
+    """
+    #PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0)
+
+    TFI_by_period_in_l_0 = {}
+    for pi in range(HTG[0]):
+        TFI_by_period_in_l_0[pi+1] = findIndividualTFI(database, 0, pi+1, lam)
+
+    #PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
+
+    HTFI = {}
+    for l_length in range(len(HTG)):
+        if l_length != 0:
+            for period in range(HTG[l_length]):
+                level_0_periods_included = getPeriodsIncluded(l_length, period)
+
+                #Get a single merged TFI of 0-level periods involved
+                possible_itemsets_in_pg = getTFIUnion(TFI_by_period_in_l_0, level_0_periods_included)
+
+                #rsub(pg;X) should be implemented here
+
+                #rslb(pg;X)
+                for k in possible_itemsets_in_pg:
+                    itemsets_length_k = possible_itemsets_in_pg[k]
+                    frequent_itemsets_length_k = set()
+                    for itemset in itemsets_length_k:
+                        itemsetSupports = database.getItemsetRelativeSupportLowerBound(itemset, level_0_periods_included)
+                        if itemsetSupports["rslb"] > min_rsup or itemsetSupports["rsup"] > min_rsup:
+                            frequent_itemsets_length_k.add(itemset)
+
+                    if len(frequent_itemsets_length_k) > 0:
+                        HTFI[k] = frequent_itemsets_length_k
+
+    #STILL WIP. RETURN FOR DEBUGGING
+    return HTFI
+    #PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOSCIATION RULES

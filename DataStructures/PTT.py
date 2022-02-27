@@ -13,6 +13,9 @@ class PTT:  # Periodical Total Transaction
         for period in periods:
             self.addItemPeriodToPtt(period)
 
+    def getTotalPTTSumWithinPeriodsInLevel0(self, boundaries):
+        return sum(list(map(lambda pi: self.getPTTValueFromLlevelAndPeriod(0, pi)['totalTransactions'], range(boundaries[0], boundaries[1] + 1))))
+
     def addItemPeriodToPtt(self, period, items = set()):
         # periods is an array of numbers, where each column is the l-level and the number is the pi in it. (eg. [1,
         # 30,10])
