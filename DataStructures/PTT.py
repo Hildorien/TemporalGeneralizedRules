@@ -3,8 +3,8 @@ class PTT:  # Periodical Total Transaction
     # They are initialized in 0. So if your HTG is [4,2,5] the ptt created will be [[0,0,0,0], [0,0], [0,0,0,0,0]]
 
     def __init__(self):
-        hardcoded_htg = [24, 12, 4]
-        self.ptt = [[], [], []]
+        hardcoded_htg = [24, 12, 4, 1]
+        self.ptt = [[], [], [], []]
         for lLevel, maxPi in enumerate(hardcoded_htg):
             for x in range(maxPi):
                 self.ptt[lLevel].append({'itemsSet': set(), 'totalTransactions': 0})

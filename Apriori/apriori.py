@@ -2,7 +2,7 @@ import itertools
 from itertools import combinations
 from multiprocessing import freeze_support
 
-from utility import getValidJoin, generateCanidadtesOfSizeK, getPeriodsIncluded, getTFIUnion
+from utility import getValidJoin, generateCanidadtesOfSizeK, getPeriodsIncluded, getTFIUnion, stringifyPg
 from utility import allSubsetofSizeKMinus1
 from utility import joinlistOfInts
 from utility import flatten
@@ -10,13 +10,16 @@ import time
 from DataStructures.AssociationRule import AssociationRule
 import multiprocessing
 
-def rule_generation(frequent_dictionary, support_dictionary, min_confidence, database):
+def rule_generation(frequent_dictionary, support_dictionary, min_confidence):
     rules = []
     for key in frequent_dictionary:
         if key != 1:
             frequent_itemset_k = frequent_dictionary[key]
             for a_itemset_k in frequent_itemset_k:
                 for idx, item in enumerate(a_itemset_k):
+
+                    if type(a_itemset_k) == tuple:
+                        a_itemset_k = list(a_itemset_k)
 
                     frequent_itemset_copy = a_itemset_k.copy()
                     consequent = [frequent_itemset_copy.pop(idx)]
@@ -58,7 +61,7 @@ def apriori(database, min_support, min_confidence):
         #print('Took ' + (str(end - start) + ' seconds'))
         k += 1
     #STEP 2: Rule Generation
-    rules = rule_generation(frequent_dictionary, support_dictionary, min_confidence, database)
+    rules = rule_generation(frequent_dictionary, support_dictionary, min_confidence)
     return rules
 
 
@@ -97,7 +100,7 @@ def apriori_mapreduce(database, min_support, min_confidence):
         print('Iteration ' + str(k) + ' took ' + (str(end - start) + ' seconds'))
         k += 1
     # STEP 2: Rule Generation
-    rules = rule_generation(frequent_dictionary, support_dictionary, min_confidence, database)
+    rules = rule_generation(frequent_dictionary, support_dictionary, min_confidence)
     return rules
 
 def calculateSupport(a_candidate, database):
@@ -114,21 +117,24 @@ def findIndividualTFI(database, l_level, pj, lam):
     C_j.sort()
     TFI_r = list()
     frequent_dictionary = {}
-    while (len(C_j) > 0 or r == 1) and r < len(allItems):
+    support_dictionary = {}
+    while (r == 1 or frequent_dictionary[r - 1] != []) and r < len(allItems):
         frequent_dictionary[r] = []
         C_j = generateCanidadtesOfSizeK(r, C_j, frequent_dictionary)
         for k_size_itemset in C_j:
-            if database.supportOf(k_size_itemset, l_level, pj) > lam:
+            support = database.supportOf(k_size_itemset, l_level, pj)
+            if support > lam:
                 TFI_r.append(tuple(k_size_itemset))
+                support_dictionary[joinlistOfInts(k_size_itemset)] = support
                 frequent_dictionary[r].append(k_size_itemset)
         if len(TFI_r) > 0:
             TFI_j[r] = set(TFI_r)
         TFI_r = list()
-        r+=1
-    return TFI_j
+        r += 1
+    return {"TFI": TFI_j, "supportDict": support_dictionary}
 
-#WIP
-def HTAR(database, min_rsup, min_rconf, lam, HTG = [24, 12, 4]):
+
+def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG = [24, 12, 4, 1]):
     """
     :param database:
     :param min_support:
@@ -138,34 +144,55 @@ def HTAR(database, min_rsup, min_rconf, lam, HTG = [24, 12, 4]):
     #PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0)
 
     TFI_by_period_in_l_0 = {}
+    support_dictionary_by_pg = {}
+    HTFI_by_pg = {}
+
+
     for pi in range(HTG[0]):
-        TFI_by_period_in_l_0[pi+1] = findIndividualTFI(database, 0, pi+1, lam)
+        individualTFI = findIndividualTFI(database, 0, pi+1, lam)
+        if len(individualTFI["TFI"]) > 0:
+            TFI_by_period_in_l_0[pi+1] = individualTFI["TFI"]
+            pgStringKey = stringifyPg(0, pi+1)
+            support_dictionary_by_pg[pgStringKey] = individualTFI["supportDict"]
+            HTFI_by_pg[pgStringKey] = TFI_by_period_in_l_0[pi+1]
 
     #PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
 
     HTFI = {}
-    for l_length in range(len(HTG)):
-        if l_length != 0:
-            for period in range(HTG[l_length]):
-                level_0_periods_included = getPeriodsIncluded(l_length, period)
+    for l_level in range(len(HTG)):
+        if l_level != 0:
+            for period in range(HTG[l_level]):
+                pgStringKey = stringifyPg(l_level, period+1)
+                support_dictionary_by_pg[pgStringKey] = {}
+                level_0_periods_included = getPeriodsIncluded(l_level, period+1)
 
                 #Get a single merged TFI of 0-level periods involved
                 possible_itemsets_in_pg = getTFIUnion(TFI_by_period_in_l_0, level_0_periods_included)
 
-                #rsub(pg;X) should be implemented here
-
-                #rslb(pg;X)
                 for k in possible_itemsets_in_pg:
                     itemsets_length_k = possible_itemsets_in_pg[k]
                     frequent_itemsets_length_k = set()
                     for itemset in itemsets_length_k:
                         itemsetSupports = database.getItemsetRelativeSupportLowerBound(itemset, level_0_periods_included)
-                        if itemsetSupports["rslb"] > min_rsup or itemsetSupports["rsup"] > min_rsup:
+                        if itemsetSupports is not None and (itemsetSupports["rslb"] > min_rsup or itemsetSupports["rsup"] > min_rsup):
                             frequent_itemsets_length_k.add(itemset)
+                            support_dictionary_by_pg[pgStringKey][joinlistOfInts(itemset)] = max(itemsetSupports["rslb"], itemsetSupports["rsup"])
 
                     if len(frequent_itemsets_length_k) > 0:
                         HTFI[k] = frequent_itemsets_length_k
 
-    #STILL WIP. RETURN FOR DEBUGGING
-    return HTFI
-    #PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOSCIATION RULES
+                if len(HTFI) > 0:
+                    HTFI_by_pg[pgStringKey] = HTFI
+                else:
+                    del support_dictionary_by_pg[pgStringKey]
+                HTFI = {}
+
+    # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
+
+    HTFS_by_pg = {}
+    for pg in HTFI_by_pg.keys():
+        pg_rules = rule_generation(HTFI_by_pg[pg], support_dictionary_by_pg[pg], min_rconf)
+        if len(pg_rules) > 0:
+            HTFS_by_pg[pg] = pg_rules
+
+    return HTFS_by_pg

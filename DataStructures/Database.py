@@ -86,13 +86,13 @@ class Database:
         :param itemset: set/list of integers
         :param level_0_periods_included_in_pg: Two-item list which refer to the range of periods of level 0.
         [lowerBoundary, upperBoundary]
-        :return: float
+        :return: {"rslb": float, "rsup": float} or None
         """
 
         faps_period_of_level_0 = list(map(lambda x: self.matrix_data_by_item[self.items_dic[x]]['fap'][0], itemset))
         maximum_common_period_with_boundaries = getMCPOfItemsetBetweenBoundaries(faps_period_of_level_0, level_0_periods_included_in_pg)
         if maximum_common_period_with_boundaries is None:
-            return 0
+            return None
         else:
             C_total_X_actual = 0
             transaction_id_intersection = self.transaction_ids_intersection(itemset)

@@ -56,6 +56,9 @@ def allSubsetofSizeKMinus1(a_candidate_of_size_k, k):
 def joinlistOfInts(list):
     return ','.join(str(x) for x in list)
 
+def stringifyPg(l_level, period):
+    return str(l_level)+'-'+str(period)
+
 
 def flatten(t):
     return [item for sublist in t for item in sublist]
@@ -112,13 +115,15 @@ def getFortnight(day, month):
 
 
 def getPeriodsIncluded(l_length, period):
-    # Note: This method does only works for any period in level above 0 with hardcoded HTG = [24,12,4]
+    # Note: This method does only works for any period in level above 0 with hardcoded HTG = [24,12,4, 1]
     if l_length == 1:
         later_fortnight = period * 2
         return [later_fortnight - 1, later_fortnight]
     elif l_length == 2:
         later_fortnight = period * 6
         return [later_fortnight - 5, later_fortnight]
+    elif l_length == 3:
+        return [1, 24]
     else:
         print("ERROR: L_LENGTH NOT AVAILABLE FOR DEFAULT HTG")
 
@@ -151,10 +156,10 @@ def getPeriodStampFromTimestamp(timestamp):
     # Hierarchy of Time Granules is represented by an array of numbers, where each column represents the l-level and
     # the number the max. amount of periods within each level. For the purpose of this thesis, HTG will be [24,12,
     # 4] which stands for 24 possible fortnights, 12 months and 4 quarters. Notice how the dates 25/3/95 and 25/3/15
-    # will have the same periodStamp, since the year is omitted.
+    # will have the same periodStamp, since the year is omitted. Last "1" represents the entire HTG.
 
     dt = datetime.fromtimestamp(timestamp)
-    return [getFortnight(dt.day, dt.month), dt.month, ((dt.month // 4) + 1)]
+    return [getFortnight(dt.day, dt.month), dt.month, ((dt.month // 4) + 1), 1]
 
 
 def getMCPOfItemsetBetweenBoundaries(faps_period_of_level_0, boundaries):

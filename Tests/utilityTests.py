@@ -1,6 +1,6 @@
 import unittest
 
-from Apriori.apriori import findIndividualTFI
+from Apriori.apriori import findIndividualTFI, HTAR_BY_PG
 from DataStructures.PTT import PTT
 from utility import findOrderedIntersection, apriori_gen, getTFIUnion, getPeriodsIncluded, \
     getMCPOfItemsetBetweenBoundaries
@@ -52,10 +52,10 @@ class utilityTests(unittest.TestCase):
 
 
     def test_get_period_stamp_from_timestamp(self):
-        self.assertEqual(getPeriodStampFromTimestamp(self.t1), [1, 1, 1], 'Periodstamp 1')
-        self.assertEqual(getPeriodStampFromTimestamp(self.t2), [23, 12, 4], 'Periodstamp 2')
-        self.assertEqual(getPeriodStampFromTimestamp(self.t3), [12, 6, 2], 'Periodstamp 3')
-        self.assertEqual(getPeriodStampFromTimestamp(self.t4), [18, 9, 3], 'Periodstamp 4')
+        self.assertEqual(getPeriodStampFromTimestamp(self.t1), [1, 1, 1, 1], 'Periodstamp 1')
+        self.assertEqual(getPeriodStampFromTimestamp(self.t2), [23, 12, 4, 1], 'Periodstamp 2')
+        self.assertEqual(getPeriodStampFromTimestamp(self.t3), [12, 6, 2, 1], 'Periodstamp 3')
+        self.assertEqual(getPeriodStampFromTimestamp(self.t4), [18, 9, 3, 1], 'Periodstamp 4')
 
     def test_parse_horizontal_database(self):
         parser = Parser()
@@ -75,6 +75,7 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 12)['totalTransactions'], 1, 'PTT value 5')
         self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 23)['totalTransactions'], 1, 'PTT value 6')
         self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(2, 3)['totalTransactions'], 3, 'PTT value 7')
+        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(3, 1)['totalTransactions'], 6, 'PTT value 7')
 
         self.assertEqual(customPtt.getTotalPTTSumWithinPeriodsInLevel0([1, 2]), 1, 'PTT SUM 1')
         self.assertEqual(customPtt.getTotalPTTSumWithinPeriodsInLevel0([1, 18]), 5, 'PTT SUM 2')
@@ -95,9 +96,9 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(database.supportOf([0], 0, 18), 1, 'SupportTestWithTimePeriod1')
         self.assertEqual(database.supportOf([3], 0, 8), 1/2, 'SupportTestWithTimePeriod2')
         self.assertEqual(database.supportOf([3], 0, 8), 1/2, 'SupportTestWithTimePeriod3')
-        self.assertEqual(database.supportOf([0], 2, 2), 1/4, 'SupportTestWithTimePeriod4')
-        self.assertEqual(database.supportOf([3,5], 2, 2), 3/4, 'SupportTestWithTimePeriod5')
-        self.assertEqual(database.supportOf([3, 5, 6], 1, 4), 1/2, 'SupportTestWithTimePeriod6')
+        self.assertEqual(database.supportOf([0], 2, 2), 1 / 4, 'SupportTestWithTimePeriod4')
+        self.assertEqual(database.supportOf([3, 5], 2, 2), 3 / 4, 'SupportTestWithTimePeriod5')
+        self.assertEqual(database.supportOf([3, 5, 6], 1, 4), 1 / 2, 'SupportTestWithTimePeriod6')
         self.assertEqual(database.supportOf([8], 0, 1), 0, 'SupportTestWithTimePeriod7')
 
         #Now assert items =============================================================
@@ -113,19 +114,19 @@ class utilityTests(unittest.TestCase):
     def test_TFI(self):
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-        tfi_0_8 = findIndividualTFI(database, 0, 8, 0.5)
-        tfi_0_8_lower_lamda = findIndividualTFI(database, 0, 8, 0.02)
+        tfi_0_8 = findIndividualTFI(database, 0, 8, 0.5)["TFI"]
+        tfi_0_8_lower_lamda = findIndividualTFI(database, 0, 8, 0.02)["TFI"]
 
-        tfi_2_2 = findIndividualTFI(database, 2, 2, 0.49)
-        tfi_0_5 = findIndividualTFI(database, 0, 5, 0.02)
+        tfi_2_2 = findIndividualTFI(database, 2, 2, 0.49)["TFI"]
+        tfi_0_5 = findIndividualTFI(database, 0, 5, 0.02)["TFI"]
         self.assertEqual(tfi_0_8[1], {(6,)}, 'TFI-1')
         self.assertEqual(len(tfi_0_8.keys()), 1, 'TFI-1B')
         self.assertEqual((5,) in tfi_2_2[1], True, 'TFI-2')
         self.assertEqual((3, 5) in tfi_2_2[2], True, 'TFI-2B')
         self.assertEqual(len(tfi_0_5.keys()), 0, 'TFI-3')
 
-        tfi_0_11 = findIndividualTFI(database, 0, 11, 0.02)
-        tfi_0_12 = findIndividualTFI(database, 0, 12, 0.02)
+        tfi_0_11 = findIndividualTFI(database, 0, 11, 0.02)["TFI"]
+        tfi_0_12 = findIndividualTFI(database, 0, 12, 0.02)["TFI"]
         TFI_by_period = {11: tfi_0_11, 12: tfi_0_12, 8: tfi_0_8_lower_lamda}
 
         mergedTFIUnion_1 = getTFIUnion(TFI_by_period, [11,12])
@@ -140,6 +141,9 @@ class utilityTests(unittest.TestCase):
     def test_periods_included(self):
         self.assertEqual(getPeriodsIncluded(1, 4), [7, 8], 'Periods_boundaries_included')
         self.assertEqual(getPeriodsIncluded(2, 3), [13, 18], 'Periods_boundaries_included-2')
+        self.assertEqual(getPeriodsIncluded(2, 4), [19, 24], 'Periods_boundaries_included-3')
+        self.assertEqual(getPeriodsIncluded(3, 1), [1, 24], 'Periods_boundaries_included-4')
+
 
 
     def test_get_MCP_Between_Boundaries(self):
@@ -150,8 +154,22 @@ class utilityTests(unittest.TestCase):
         self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 5]), None, 'MCP_between_boundaries_3')
         self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 8]), [6, 8], 'MCP_between_boundaries_4')
 
-    #TODO: TESTS getItemsetRelativeSupportLowerBound AND HTAR(HTFI)
+    #TODO: TESTS getItemsetRelativeSupportLowerBound
 
+    def test_HTFI(self):
+        parser = Parser()
+        database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
+        rules_by_pg = HTAR_BY_PG(database, 0.4, 0.6, 0.4)
+        # for pg in rules_by_pg.keys():
+        #     print(pg + ": " + str(len(rules_by_pg[pg])) +" rules found")
+        self.assertEqual(len(rules_by_pg.keys()), 8, 'HTFI-succeed-1')
 
+    #WIP: HTFI with real data
+    # def test_HTFI_with_real_data(self):
+    #     parser = Parser()
+    #     database = parser.parse("Datasets/sales_formatted.csv", 'single', None, True)
+    #     rules_by_pg = HTAR_BY_PG(database, 0.002, 0.4, 0.002)
+    #     for pg in rules_by_pg.keys():
+    #         print(pg + ": " + str(len(rules_by_pg[pg])) +" rules found")
 
 
