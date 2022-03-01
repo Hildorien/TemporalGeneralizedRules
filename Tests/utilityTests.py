@@ -156,13 +156,20 @@ class utilityTests(unittest.TestCase):
 
     #TODO: TESTS getItemsetRelativeSupportLowerBound
 
-    def test_HTFI(self):
+    def test_HTAR(self):
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         rules_by_pg = HTAR_BY_PG(database, 0.4, 0.6, 0.4)
         # for pg in rules_by_pg.keys():
         #     print(pg + ": " + str(len(rules_by_pg[pg])) +" rules found")
         self.assertEqual(len(rules_by_pg.keys()), 8, 'HTFI-succeed-1')
+
+    # def test_HTAR_example_from_paper(self):
+    #     parser = Parser()
+    #     database = parser.parse("Datasets/sales_example_from_HTAR_paper.csv", 'single', None, True)
+    #     rules_by_pg = HTAR_BY_PG(database, 0.4, 0.6, 0.4)
+    #     for pg in rules_by_pg.keys():
+    #         print(pg + ": " + str(len(rules_by_pg[pg])) +" rules found")
 
     #WIP: HTFI with real data
     # def test_HTFI_with_real_data(self):
