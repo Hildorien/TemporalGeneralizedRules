@@ -1,5 +1,5 @@
 import unittest
-from Cumulate.cumulate_tests import CumulateTests
+from Tests.cumulate_tests import CumulateTests
 
 # RunTests
 

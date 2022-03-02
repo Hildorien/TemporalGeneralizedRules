@@ -11,7 +11,7 @@ from DataStructures.Parser import Parser
 
 # Testing guide: https://docs.python.org/2/library/unittest.html#organizing-test-code
 
-class utilityTests(unittest.TestCase):
+class UtilityTests(unittest.TestCase):
     def setUp(self):
         self.arr1 = [0, 2, 50, 721]
         self.arr2 = [2, 3, 13, 23, 50]

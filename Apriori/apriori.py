@@ -65,7 +65,7 @@ def apriori(database, min_support, min_confidence):
     return rules
 
 
-def apriori_mapreduce(database, min_support, min_confidence):
+def apriori_parallel_count(database, min_support, min_confidence):
     """
         :param database:
         :param min_support:
@@ -97,7 +97,7 @@ def apriori_mapreduce(database, min_support, min_confidence):
                 support_dictionary[joinlistOfInts(a_candidate_size_k)] = support
         """
         end = time.time()
-        print('Iteration ' + str(k) + ' took ' + (str(end - start) + ' seconds'))
+        #print('Iteration ' + str(k) + ' took ' + (str(end - start) + ' seconds'))
         k += 1
     # STEP 2: Rule Generation
     rules = rule_generation(frequent_dictionary, support_dictionary, min_confidence)

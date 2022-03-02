@@ -4,9 +4,9 @@ import unittest
 from multiprocessing import freeze_support
 import pandas as pd
 from DataStructures.Parser import Parser
-from Tests.utilityTests import utilityTests
+from Tests.utility_tests import UtilityTests
 from Apriori.apriori import apriori
-from Apriori.apriori import apriori_mapreduce
+from Apriori.apriori import apriori_parallel_count
 
 # Parse dataset in transaction format
 """
@@ -38,13 +38,13 @@ print(len(rules))
 #print(dict)
 
 # RunTests
-suite = unittest.TestLoader().loadTestsFromTestCase(utilityTests)
-unittest.main()
+#suite = unittest.TestLoader().loadTestsFromTestCase(UtilityTests)
+#unittest.main()
 
 
-# def main():
-#     parser = Parser()
-#     datasets = ["Datasets/data.csv",
+#def main():
+#    parser = Parser()
+#    datasets = ["Datasets/data.csv",
 #                 "Datasets/data2.csv",
 #                 "Datasets/data3.csv",
 #                 "Datasets/data4.csv",
@@ -68,12 +68,12 @@ unittest.main()
 #     # Prints to get info of algorithm
 #     print('Database size: ' + str(database.row_count))
 #     print('Total items: ' + str((len(database.items_dic.keys()))))
-#     rules = apriori_mapreduce(database, 0.002, 0.4)
+#     rules = apriori(database, 0.0001, 0.6)
 #     print(len(rules))
 #
 #
-# if __name__=="__main__":
-#     freeze_support()
-#     main()
+#   if __name__=="__main__":
+#       freeze_support()
+#       main()
 
 
