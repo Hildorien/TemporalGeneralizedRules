@@ -7,8 +7,8 @@ from DataStructures.Parser import Parser
 class CumulateTests(unittest.TestCase):
     def setUp(self):
         self.foodmart_horizontal_db = Parser().parse_single_file_for_horizontal_database(
-            'Datasets/sales_formatted.csv', 'Taxonomies/salesfact_taxonomy.csv')
-        self.foodmart_vertical_db = Parser().parse("Datasets/sales_formatted.csv", 'single', 'Taxonomies/salesfact_taxonomy.csv')
+            'Datasets/sales_formatted_1997.csv', 'Taxonomies/salesfact_taxonomy.csv')
+        self.foodmart_vertical_db = Parser().parse("Datasets/sales_formatted_1997.csv", 'single', 'Taxonomies/salesfact_taxonomy.csv')
 
         self.retail_horizontal_db = Parser().parse_horizontal_database('Datasets/cumulate_test_data.csv',
                                                                        'Taxonomies/cumulate_test_taxonomy.csv',
