@@ -1,5 +1,5 @@
 import unittest
-from Apriori.apriori import apriori, apriori_parallel_count
+from Apriori.apriori import apriori
 from DataStructures.Parser import Parser
 
 
@@ -34,15 +34,28 @@ class AprioriTests(unittest.TestCase):
         self.assertEqual(len(rules_database_6), 33, 'apriori(0.01, 0.4) with Database 6 has 33 rules')
         self.assertEqual(len(rules_database_7), 17, 'apriori(0.09, 0.6) with Database 7 has 17 rules')
 
-    def test_apriori_parallel_count_correctness(self):
+    def test_apriori_parallel_candidate_count_correctness(self):
         # All outputs where checked against apriori from arules package in R with the same parameters
         # Only testing with one dataset in map_reduce to reduce the time to run all tests
-        rules_database_6 = apriori_parallel_count(self.databases[5], 0.01, 0.4)
+        rules_database_6 = apriori(self.databases[5], 0.01, 0.4, True)
 
         # Assert Quantity
-        self.assertEqual(len(rules_database_6), 33, 'apriori_mapreduce(0.09, 0.6) with Database 6 has 33 rules')
+        self.assertEqual(len(rules_database_6), 33, 'apriori(0.09, 0.6) with Database 6 has 33 rules')
 
-    def test_apriori_vs_apriori_parallel_count_output_is_equal(self):
+    def test_apriori_vs_apriori_parallel_candidate_count_output_is_equal(self):
         apriori_rules = apriori(self.databases[5], 0.01, 0.4)
-        apriori_map_reduce_rules = apriori_parallel_count(self.databases[5], 0.01, 0.4)
-        self.assertEqual(apriori_rules, apriori_map_reduce_rules, 'Output is the same in spite of paralellization')
+        apriori_parallel_candidate_count = apriori(self.databases[5], 0.01, 0.4, True)
+        self.assertEqual(apriori_rules, apriori_parallel_candidate_count, 'Output is the same in spite of paralellization')
+
+    def test_apriori_parallel_rule_gen_correctness(self):
+        # All outputs where checked against apriori from arules package in R with the same parameters
+        # Only testing with one dataset in map_reduce to reduce the time to run all tests
+        rules_database_1 = apriori(self.databases[0], 0.2, 0.6, False, True)
+
+        # Assert Quantity
+        self.assertEqual(len(rules_database_1), 3097, 'apriori(0.2, 0.6) with Database 1 has 3097 rules')
+
+    def test_apriori_vs_apriori_parallel_rule_gen_output_is_equal(self):
+        rules_database_1 = apriori(self.databases[0], 0.2, 0.6)
+        parallel_rules_database_1 = apriori(self.databases[0], 0.2, 0.6, False, True)
+        self.assertEqual(rules_database_1, parallel_rules_database_1, 'Output is the same in spite of paralellization')

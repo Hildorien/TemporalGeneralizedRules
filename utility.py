@@ -53,9 +53,6 @@ def allSubsetofSizeKMinus1(a_candidate_of_size_k, k):
     return list(map(list, combinations(a_candidate_of_size_k, k)))
 
 
-def joinlistOfInts(list):
-    return ','.join(str(x) for x in list)
-
 def stringifyPg(l_level, period):
     return str(l_level)+'-'+str(period)
 
@@ -185,3 +182,11 @@ def getMTPFromHTGArrays(faps):
 
 # TODO: After LAP is implemented
 # def getMTPFromFAPandLAP
+
+def hash_candidate(candidate):
+    """
+    Gets the tuple of the list of ints for hashing in dictionaries/sets
+    :param candidate: a list of ints
+    :return:
+    """
+    return tuple(candidate)
