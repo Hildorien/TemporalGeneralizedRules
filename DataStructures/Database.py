@@ -1,6 +1,5 @@
 from DataStructures.PTT import PTT
-from utility import findOrderedIntersection, getPeriodStampFromTimestamp, allSubsetofSizeKMinus1, \
-    getMCPOfItemsetBetweenBoundaries
+from utility import findOrderedIntersection, getPeriodStampFromTimestamp, allSubsetofSizeKMinus1
 
 
 class Database:
@@ -26,6 +25,15 @@ class Database:
         self.row_count = row_count
         self.taxonomy = taxonomy_dict
         self.ptt = ptt
+
+    #Methods for debugging purposes
+    def getItemDic(self):
+        return self.items_dic
+
+    def getItemTids(self, item_number):
+        return self.matrix_data_by_item[self.items_dic[item_number]]['tids']
+
+    # Methods for debugging purposes
 
     def transaction_ids_intersection(self, itemset):
         final_intersection = []
@@ -81,33 +89,53 @@ class Database:
     def getTotalPTTSumWithinPeriodsInLevel0(self, boundaries):
         return self.ptt.getTotalPTTSumWithinPeriodsInLevel0(boundaries)
 
-    def getItemsetRelativeSupportLowerBound(self, itemset, level_0_periods_included_in_pg):
+    # def getItemsetRelativeSupports(self, itemset, level_0_periods_included_in_pg):
+    #     """
+    #     :param itemset: set/list of integers
+    #     :param level_0_periods_included_in_pg: Two-item list which refer to the range of periods of level 0.
+    #     [lowerBoundary, upperBoundary]
+    #     :return: {"rslb": float, "rsup": float} or None
+    #     """
+    #
+    #     faps_period_of_level_0 = list(map(lambda x: self.matrix_data_by_item[self.items_dic[x]]['fap'][0], itemset))
+    #     maximum_common_period_with_boundaries = getMCPOfItemsetBetweenBoundaries(faps_period_of_level_0, level_0_periods_included_in_pg)
+    #     if maximum_common_period_with_boundaries is None:
+    #         return None
+    #     else:
+    #         C_total_X_actual = 0
+    #         transaction_id_intersection = self.transaction_ids_intersection(itemset)
+    #         for tid in transaction_id_intersection:
+    #             transaction_period_in_level_0 = getPeriodStampFromTimestamp(self.timestamp_mapping[tid])[0]
+    #             if maximum_common_period_with_boundaries[0] <= transaction_period_in_level_0 <= maximum_common_period_with_boundaries[1]:
+    #                 C_total_X_actual += 1
+    #
+    #         PTT_total_sum_with_boundaries_and_MCP = self.getTotalPTTSumWithinPeriodsInLevel0(maximum_common_period_with_boundaries)
+    #         PTT_total_sum_with_boundaries = self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
+    #
+    #         relative_support_lower_bound = C_total_X_actual/PTT_total_sum_with_boundaries_and_MCP
+    #         relative_support = C_total_X_actual/PTT_total_sum_with_boundaries
+    #
+    #         return {"rslb": relative_support_lower_bound, "rsup": relative_support}
+
+
+    def getItemsetRelativeSupport(self, itemset, level_0_periods_included_in_pg):
         """
         :param itemset: set/list of integers
         :param level_0_periods_included_in_pg: Two-item list which refer to the range of periods of level 0.
-        [lowerBoundary, upperBoundary]
-        :return: {"rslb": float, "rsup": float} or None
+        :return: float
         """
+        C_total_X_actual = 0
+        transaction_id_intersection = self.transaction_ids_intersection(itemset)
+        for tid in transaction_id_intersection:
+            transaction_period_in_level_0 = getPeriodStampFromTimestamp(self.timestamp_mapping[tid])[0]
+            if level_0_periods_included_in_pg[0] <= transaction_period_in_level_0 <= level_0_periods_included_in_pg[1]:
+               C_total_X_actual += 1
 
-        faps_period_of_level_0 = list(map(lambda x: self.matrix_data_by_item[self.items_dic[x]]['fap'][0], itemset))
-        maximum_common_period_with_boundaries = getMCPOfItemsetBetweenBoundaries(faps_period_of_level_0, level_0_periods_included_in_pg)
-        if maximum_common_period_with_boundaries is None:
-            return None
-        else:
-            C_total_X_actual = 0
-            transaction_id_intersection = self.transaction_ids_intersection(itemset)
-            for tid in transaction_id_intersection:
-                transaction_period_in_level_0 = getPeriodStampFromTimestamp(self.timestamp_mapping[tid])[0]
-                if maximum_common_period_with_boundaries[0] <= transaction_period_in_level_0 <= maximum_common_period_with_boundaries[1]:
-                    C_total_X_actual += 1
+        PTT_total_sum_with_boundaries = self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
 
-            PTT_total_sum_with_boundaries_and_MCP = self.getTotalPTTSumWithinPeriodsInLevel0(maximum_common_period_with_boundaries)
-            PTT_total_sum_with_boundaries = self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
+        relative_support = C_total_X_actual/PTT_total_sum_with_boundaries
 
-            relative_support_lower_bound = C_total_X_actual/PTT_total_sum_with_boundaries_and_MCP
-            relative_support = C_total_X_actual/PTT_total_sum_with_boundaries
-
-            return {"rslb": relative_support_lower_bound, "rsup": relative_support}
+        return relative_support
 
     def confidenceOf(self, lhs, rhs):
         """

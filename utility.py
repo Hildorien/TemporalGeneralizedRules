@@ -159,29 +159,29 @@ def getPeriodStampFromTimestamp(timestamp):
     return [getFortnight(dt.day, dt.month), dt.month, ((dt.month // 4) + 1), 1]
 
 
-def getMCPOfItemsetBetweenBoundaries(faps_period_of_level_0, boundaries):
-    maximum_period_available = max(faps_period_of_level_0)
-    lower_boundary = max(maximum_period_available, boundaries[0])
-    upper_boundary = boundaries[1] #TODO: REFACTOR THIS UPPER BOUNDARY IF LAP IS IMPLEMENTED
-    if maximum_period_available > upper_boundary:
-        # If maximum common appearance occurs after the upper_boundary, MCP bounded is NONE.
-        return None
-    else:
-        return [lower_boundary, upper_boundary]
+# Depracated. MCP won't be used
+# def getMCPOfItemsetBetweenBoundaries(faps_period_of_level_0, boundaries):
+#     maximum_period_available = max(faps_period_of_level_0)
+#     lower_boundary = max(maximum_period_available, boundaries[0])
+#     upper_boundary = boundaries[1] #TODO: REFACTOR THIS UPPER BOUNDARY IF LAP IS IMPLEMENTED
+#     if maximum_period_available > upper_boundary:
+#         # If maximum common appearance occurs after the upper_boundary, MCP bounded is NONE.
+#         return None
+#     else:
+#         return [lower_boundary, upper_boundary]
 
 
 # This method gets the maximal time period between all HTG with their respective l-length
-def getMTPFromHTGArrays(faps):
-    l_length = 3  # Hardcoded HTG length
-    res = []
-    for i in range(l_length):
-        lth_level_values = map(lambda fap: fap[i], faps)
-        max_period = max(lth_level_values)
-        res.append(max_period)
-    return res
+# def getMTPFromHTGArrays(faps):
+#     l_length = 3  # Hardcoded HTG length
+#     res = []
+#     for i in range(l_length):
+#         lth_level_values = map(lambda fap: fap[i], faps)
+#         max_period = max(lth_level_values)
+#         res.append(max_period)
+#     return res
 
-# TODO: After LAP is implemented
-# def getMTPFromFAPandLAP
+
 
 def hash_candidate(candidate):
     """

@@ -1,9 +1,8 @@
 import unittest
 
-from Apriori.apriori import findIndividualTFI, HTAR_BY_PG
+from Apriori.apriori import findIndividualTFI, HTAR_BY_PG, apriori
 from DataStructures.PTT import PTT
-from utility import findOrderedIntersection, apriori_gen, getTFIUnion, getPeriodsIncluded, \
-    getMCPOfItemsetBetweenBoundaries
+from utility import findOrderedIntersection, apriori_gen, getTFIUnion, getPeriodsIncluded
 from utility import getValidJoin
 from utility import getPeriodStampFromTimestamp
 from DataStructures.Parser import Parser
@@ -145,38 +144,37 @@ class UtilityTests(unittest.TestCase):
         self.assertEqual(getPeriodsIncluded(3, 1), [1, 24], 'Periods_boundaries_included-4')
 
 
+    # Deprecated since MCP won't be used
+    # def test_get_MCP_Between_Boundaries(self):
+    #     faps = [2, 4, 7, 9, 12]
+    #     faps2 = [2, 5, 6]
+    #     self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps, [13, 18]), [13, 18], 'MCP_between_boundaries')
+    #     self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps, [11, 18]), [12, 18], 'MCP_between_boundaries_2')
+    #     self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 5]), None, 'MCP_between_boundaries_3')
+    #     self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 8]), [6, 8], 'MCP_between_boundaries_4')
 
-    def test_get_MCP_Between_Boundaries(self):
-        faps = [2, 4, 7, 9, 12]
-        faps2 = [2, 5, 6]
-        self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps, [13, 18]), [13, 18], 'MCP_between_boundaries')
-        self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps, [11, 18]), [12, 18], 'MCP_between_boundaries_2')
-        self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 5]), None, 'MCP_between_boundaries_3')
-        self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 8]), [6, 8], 'MCP_between_boundaries_4')
 
-    #TODO: TESTS getItemsetRelativeSupportLowerBound
+    def test_TID_and_faps_sales_for_Test(self):
+        # {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K', 9: 'L'}
+        database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
+        self.assertEqual(database.getItemTids(0), [3, 4, 5, 6], 'test_TID_A')
+        self.assertEqual(database.getItemTids(1), [6], 'test_TID_B')
+        self.assertEqual(database.getItemTids(2), [0, 3, 4], 'test_TID_C')
+        self.assertEqual(database.getItemTids(3), [1, 2, 3], 'test_TID_D')
+        self.assertEqual(database.getItemTids(4), [0], 'test_TID_E')
+        self.assertEqual(database.getItemTids(5), [1, 2, 3], 'test_TID_F')
+        self.assertEqual(database.getItemTids(6), [0, 1, 2], 'test_TID_G')
+        self.assertEqual(database.getItemTids(7), [4], 'test_TID_J')
+        self.assertEqual(database.getItemTids(8), [0, 4], 'test_TID_K')
+        self.assertEqual(database.getItemTids(9), [2], 'test_TID_L')
 
-    def test_HTAR(self):
-        parser = Parser()
-        database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
+
+
+    def test_HTAR_generic_data(self):
+        database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         rules_by_pg = HTAR_BY_PG(database, 0.4, 0.6, 0.4)
-        # for pg in rules_by_pg.keys():
-        #     print(pg + ": " + str(len(rules_by_pg[pg])) +" rules found")
-        self.assertEqual(len(rules_by_pg.keys()), 8, 'HTFI-succeed-1')
+        # {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K', 9: 'L'}
+        self.assertEqual(len(rules_by_pg['3-1']), 2, 'HTFI-succeed-1')
 
-    # def test_HTAR_example_from_paper(self):
-    #     parser = Parser()
-    #     database = parser.parse("Datasets/sales_example_from_HTAR_paper.csv", 'single', None, True)
-    #     rules_by_pg = HTAR_BY_PG(database, 0.4, 0.6, 0.4)
-    #     for pg in rules_by_pg.keys():
-    #         print(pg + ": " + str(len(rules_by_pg[pg])) +" rules found")
-
-    #WIP: HTFI with real data
-    # def test_HTFI_with_real_data(self):
-    #     parser = Parser()
-    #     database = parser.parse("Datasets/sales_formatted.csv", 'single', None, True)
-    #     rules_by_pg = HTAR_BY_PG(database, 0.002, 0.4, 0.002)
-    #     for pg in rules_by_pg.keys():
-    #         print(pg + ": " + str(len(rules_by_pg[pg])) +" rules found")
 
 

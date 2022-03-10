@@ -100,7 +100,6 @@ class Parser:
                 else:
                     matrix_dictionary[item] = {}
                     matrix_dictionary[item]['tids'] = [tid]
-                    matrix_dictionary[item]['fap'] = transactionHTG
 
         return {"md": matrix_dictionary, "ptt": ptt}
 

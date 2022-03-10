@@ -45,7 +45,7 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
 
 
 def calculateSupport(a_candidate, database):
-    return (a_candidate, database.supportOf(a_candidate))
+    return a_candidate, database.supportOf(a_candidate)
 
 
 def findIndividualTFI(database, l_level, pj, lam):
@@ -113,13 +113,10 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1]):
                     itemsets_length_k = possible_itemsets_in_pg[k]
                     frequent_itemsets_length_k = set()
                     for itemset in itemsets_length_k:
-                        itemsetSupports = database.getItemsetRelativeSupportLowerBound(itemset,
-                                                                                       level_0_periods_included)
-                        if itemsetSupports is not None and (
-                                itemsetSupports["rslb"] > min_rsup or itemsetSupports["rsup"] > min_rsup):
+                        itemsetSupport = database.getItemsetRelativeSupport(itemset, level_0_periods_included)
+                        if itemsetSupport is not None and itemsetSupport >= min_rsup:
                             frequent_itemsets_length_k.add(itemset)
-                            support_dictionary_by_pg[pgStringKey][hash_candidate(itemset)] = max(
-                                itemsetSupports["rslb"], itemsetSupports["rsup"])
+                            support_dictionary_by_pg[pgStringKey][hash_candidate(itemset)] = itemsetSupport
 
                     if len(frequent_itemsets_length_k) > 0:
                         HTFI[k] = frequent_itemsets_length_k
@@ -131,7 +128,6 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1]):
                 HTFI = {}
 
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
-
     HTFS_by_pg = {}
     for pg in HTFI_by_pg.keys():
         pg_rules = rule_generation(HTFI_by_pg[pg], support_dictionary_by_pg[pg], min_rconf)
