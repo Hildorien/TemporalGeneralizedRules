@@ -17,7 +17,7 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
     k = 1
     support_dictionary = {}
     frequent_dictionary = {}
-    while (k == 1 or frequent_dictionary[k - 1] != []) and k < len(all_items):
+    while (k == 1 or frequent_dictionary[k - 1] != []) and k <= len(all_items):
         candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
         # print('Candidates of size ' + str(k) + ' is ' + str(len(candidates_size_k)))
         # print('Calculating support of each candidate of size ' + str(k))
@@ -59,7 +59,7 @@ def findIndividualTFI(database, l_level, pj, lam):
     TFI_r = list()
     frequent_dictionary = {}
     support_dictionary = {}
-    while (r == 1 or frequent_dictionary[r - 1] != []) and r < len(allItems):
+    while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
         frequent_dictionary[r] = []
         C_j = generateCanidadtesOfSizeK(r, C_j, frequent_dictionary)
         for k_size_itemset in C_j:

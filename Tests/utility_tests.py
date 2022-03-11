@@ -1,3 +1,4 @@
+import time
 import unittest
 
 from Apriori.apriori import findIndividualTFI, HTAR_BY_PG, apriori
@@ -19,6 +20,56 @@ class UtilityTests(unittest.TestCase):
         self.t3 = 1118962984  # 16/6/2005 - [12, 6, 2]
         self.t4 = 1442876584  # 21/9/2015 - [18, 9, 3]
         self.t5 = 1117811573  # 3/6/2005 - [11, 6, 2]
+        self.t6 = 486655073 # 3/6/1985 - [11, 6 , 2]
+
+        def printRulesDebugging(database, rules_by_pg, apriori_rules):
+            print("/////////////////////////////////////////")
+            print("PG-RULES")
+            print("/////////////////////////////////////////")
+
+            for pg in rules_by_pg:
+                print(pg)
+                print("-----------")
+                for r in rules_by_pg[pg]:
+                    print(database.printAssociationRule(r))
+            print("/////////////////////////////////////////")
+            print("APRIORI RULES")
+            print("/////////////////////////////////////////")
+            for r in apriori_rules:
+                print(database.printAssociationRule(r))
+
+        self.printRulesDebugging = printRulesDebugging
+
+
+        def testCorrectnessAndCompletness(rules_by_pg, apriori_rules):
+            leafRulesHashes = set()
+            upperLevelRules = set()
+            aprioriRulesHashes = set()
+            for pg in rules_by_pg:
+                level = pg.split('-')[0]
+                if level == '0':
+                    leafRulesHashes = set.union(leafRulesHashes,
+                                                set(map(lambda rule: rule.identifyRuleOnlyByLhsAndRhs(),
+                                                        rules_by_pg[pg])))
+                elif pg == '3-1':
+                    upperLevelRules = set.union(upperLevelRules,
+                                                set(map(lambda rule: rule.identifyRuleOnlyByLhsAndRhs(),
+                                                        rules_by_pg[pg])))
+
+            for apriori_rule in apriori_rules:
+                ruleHash = apriori_rule.identifyRuleOnlyByLhsAndRhs()
+                aprioriRulesHashes.add(ruleHash)
+
+            if not apriori_rules:
+                self.assertEqual(('3-1' not in rules_by_pg) or (rules_by_pg['3-1'] == apriori_rules), True, 'HTFI-complete-upper-level')
+            else:
+                self.assertEqual(len(rules_by_pg['3-1']), len(apriori_rules), 'HTFI-complete-upper-level')
+                self.assertEqual(upperLevelRules, aprioriRulesHashes, 'HTFI-complete-upper-level')
+                self.assertEqual(aprioriRulesHashes.issubset(leafRulesHashes), True,
+                                 'Apriori-rules-contained-in-HTFI-leafRules')
+
+        self.testCorrectnessAndCompletness = testCorrectnessAndCompletness
+
 
     def test_find_ordered_itersection(self):
         result = findOrderedIntersection(self.arr1, self.arr2)
@@ -80,14 +131,26 @@ class UtilityTests(unittest.TestCase):
         self.assertEqual(customPtt.getTotalPTTSumWithinPeriodsInLevel0([1, 18]), 5, 'PTT SUM 2')
 
     def test_support_with_time_period(self):
-        # T1 = ([A,B], [23,12,4])
-        # T2 = ([L,F,G,D], [11,6,2])
-        # T3 = ([C,D,A,F], [12,6,2])
-        # T4 = ([A,J,K,C],  [18,9,3])
-        # T5 = ([A], [18,9,3])
-        # T6 = ([C,E,G,K], [8,4,2])
-        # T7 = ([D,F,G], [8,4,2])
-        # ItemsDic = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K', 9:'L'}
+        # T1 = ([C,E,G,K], [8,4,2])
+        # T2 = ([D,F,G], [8,4,2])
+        # T3 = ([L,F,G,D], [11,6,2])
+        # T4 = ([C,D,A,F], [12,6,2])
+        # T5 = ([A,J,K,C],  [18,9,3])
+        # T6 = ([A], [18,9,3])
+        # T7 = ([A,B], [23,12,4])
+
+        # ItemsDic = {
+        # 0: 'A',
+        # 1: 'B',
+        # 2: 'C',
+        # 3: 'D',
+        # 4: 'E',
+        # 5: 'F',
+        # 6: 'G',
+        # 7: 'J',
+        # 8: 'K',
+        # 9:'L'
+        # }
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         self.assertEqual(database.supportOf([0]), 4/7, 'SupportTestVanilla1')
@@ -135,7 +198,7 @@ class UtilityTests(unittest.TestCase):
         mergedTFIUnion_2 = getTFIUnion(TFI_by_period, [7, 12])
         self.assertEqual(len(mergedTFIUnion_2[1]), 8, 'TFI-MERGE-2a')
         self.assertEqual(len(mergedTFIUnion_2[3]), 12, 'TFI-MERGE-2b')
-        self.assertEqual(len(mergedTFIUnion_2[4]), 1, 'TFI-MERGE-2c')
+        self.assertEqual(len(mergedTFIUnion_2[4]), 3, 'TFI-MERGE-2c')
 
     def test_periods_included(self):
         self.assertEqual(getPeriodsIncluded(1, 4), [7, 8], 'Periods_boundaries_included')
@@ -168,13 +231,46 @@ class UtilityTests(unittest.TestCase):
         self.assertEqual(database.getItemTids(8), [0, 4], 'test_TID_K')
         self.assertEqual(database.getItemTids(9), [2], 'test_TID_L')
 
-
-
-    def test_HTAR_generic_data(self):
+    def test_HTAR_generic_data_correctness_and_completeness(self):
         database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-        rules_by_pg = HTAR_BY_PG(database, 0.4, 0.6, 0.4)
-        # {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K', 9: 'L'}
-        self.assertEqual(len(rules_by_pg['3-1']), 2, 'HTFI-succeed-1')
+        #3 levels of complexity
+        sups = [0.4, 0.05, 0.002]
+        confs= [0.6, 0.5, 0,4]
+
+        for i in range(0, 3):
+            rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i])
+            apriori_rules = apriori(database, sups[i], confs[i])
+            self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
+
+
+
+    # def test_HTAR_foodmart_data_1997_correctness_and_completness(self):
+    #     database = Parser().parse("Datasets/sales_formatted_1997.csv", 'single', None, True)
+    #     print('---')
+    #     start = time.time()
+    #     apriori_rules = apriori(database, 0.0002, 0.5)
+    #     end = time.time()
+    #     print('Apriori Took ' + (str(end - start) + ' seconds'))
+    #
+    #     start = time.time()
+    #     rules_by_pg = HTAR_BY_PG(database, 0.0002, 0.5, 0.0003)
+    #     end = time.time()
+    #     print('HTAR Took ' + (str(end - start) + ' seconds'))
+    #
+    #     print(len(rules_by_pg))
+    #     print(len(apriori_rules))
+    #     self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
+
+    # def test_HTAR_foodmart_data_1998_correctness_and_completness(self):
+    #     database = Parser().parse("Datasets/sales_formatted_1997.csv", 'single', None, True)
+    #     rules_by_pg = HTAR_BY_PG(database, 0.006, 0.01, 0.006)
+    #     apriori_rules = apriori(database,0.006, 0.01)
+    #     print(len(rules_by_pg))
+    #     print(len(apriori_rules))
+    #     self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
+
+
+
 
 
 
