@@ -1,4 +1,5 @@
 import itertools
+import time
 
 from rule_generator import rule_generation
 from utility import generateCanidadtesOfSizeK, getPeriodsIncluded, getTFIUnion, stringifyPg, hash_candidate
@@ -47,8 +48,10 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
 def calculateSupport(a_candidate, database):
     return a_candidate, database.supportOf(a_candidate)
 
+def calculateSupportInPJ(a_candidate, database, l_level, pj):
+    return a_candidate, database.supportOf(a_candidate, l_level, pj)
 
-def findIndividualTFI(database, l_level, pj, lam):
+def findIndividualTFI(database, l_level, pj, lam,  parallel_count=False):
     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
     ptt_entry = database.getPTTValueFromLlevelAndPeriod(l_level, pj)
     TFI_j = {}
@@ -62,12 +65,25 @@ def findIndividualTFI(database, l_level, pj, lam):
     while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
         frequent_dictionary[r] = []
         C_j = generateCanidadtesOfSizeK(r, C_j, frequent_dictionary)
-        for k_size_itemset in C_j:
-            support = database.supportOf(k_size_itemset, l_level, pj)
-            if support > lam:
-                TFI_r.append(tuple(k_size_itemset))
-                support_dictionary[hash_candidate(k_size_itemset)] = support
-                frequent_dictionary[r].append(k_size_itemset)
+        # print("NUEVO R")
+        # print(str(r))
+        # print(str(len(C_j)))
+        # print("/////////////////")
+        if parallel_count:
+            pool = multiprocessing.Pool(multiprocessing.cpu_count())
+            results = pool.starmap(calculateSupportInPJ, zip(C_j, itertools.repeat(database), itertools.repeat(l_level), itertools.repeat(pj)))
+            for a_result in results:
+                if a_result[1] >= lam:
+                    TFI_r.append(tuple(a_result[0]))
+                    support_dictionary[hash_candidate(a_result[0])] = a_result[1]
+                    frequent_dictionary[r].append(a_result[0])
+        else:
+            for k_size_itemset in C_j:
+                support = database.supportOf(k_size_itemset, l_level, pj)
+                if support >= lam:
+                    TFI_r.append(tuple(k_size_itemset))
+                    support_dictionary[hash_candidate(k_size_itemset)] = support
+                    frequent_dictionary[r].append(k_size_itemset)
         if len(TFI_r) > 0:
             TFI_j[r] = set(TFI_r)
         TFI_r = list()
@@ -89,19 +105,29 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1]):
     HTFI_by_pg = {}
 
     for pi in range(HTG[0]):
+        #start = time.time()
         individualTFI = findIndividualTFI(database, 0, pi + 1, lam)
+
         if len(individualTFI["TFI"]) > 0:
             TFI_by_period_in_l_0[pi + 1] = individualTFI["TFI"]
             pgStringKey = stringifyPg(0, pi + 1)
             support_dictionary_by_pg[pgStringKey] = individualTFI["supportDict"]
             HTFI_by_pg[pgStringKey] = TFI_by_period_in_l_0[pi + 1]
+        #end = time.time()
+        # print(str(pi) + ' leaf-TFI took ' + (str(end - start) + ' seconds'))
+        # print('('+ str(len(individualTFI["TFI"])) + ' frecuent itemsets )')
+        # print('-------------')
 
     # PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
 
     HTFI = {}
+    #print('--------------------------LEAF TFI COMPLETED------------------------------')
+
     for l_level in range(len(HTG)):
         if l_level != 0:
             for period in range(HTG[l_level]):
+                #start = time.time()
+
                 pgStringKey = stringifyPg(l_level, period + 1)
                 support_dictionary_by_pg[pgStringKey] = {}
                 level_0_periods_included = getPeriodsIncluded(l_level, period + 1)
@@ -126,6 +152,14 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1]):
                 else:
                     del support_dictionary_by_pg[pgStringKey]
                 HTFI = {}
+
+                # end = time.time()
+                # print(pgStringKey + 'took ' + (str(end - start) + ' seconds'))
+                # if pgStringKey in HTFI_by_pg:
+                #     print('(' +  str(len(HTFI_by_pg[pgStringKey])) + ' frecuent itemsets)')
+                # else:
+                #     print('(no frecuent itemsets)')
+
 
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
     HTFS_by_pg = {}
