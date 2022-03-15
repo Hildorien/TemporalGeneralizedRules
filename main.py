@@ -3,10 +3,11 @@ import time
 import unittest
 from multiprocessing import freeze_support
 import pandas as pd
+
+from Cumulate.cumulate import vertical_cumulate
 from DataStructures.Parser import Parser
 from Tests.utility_tests import UtilityTests
 from Apriori.apriori import apriori
-from Apriori.apriori import apriori_parallel_count
 
 # Parse dataset in transaction format
 """
@@ -32,17 +33,17 @@ print('Total items: ' + str((len(database.items_dic.keys()))))
 rules = apriori(database, 0.1, 0.5)
 print(len(rules))
 """
-#for rule in rules:
+# for rule in rules:
 #    print(database.printAssociationRule(rule))
-#print('Frequent Itemsets: ')
-#print(dict)
+# print('Frequent Itemsets: ')
+# print(dict)
 
 # RunTests
-#suite = unittest.TestLoader().loadTestsFromTestCase(UtilityTests)
-#unittest.main()
+# suite = unittest.TestLoader().loadTestsFromTestCase(UtilityTests)
+# unittest.main()
 
 
-#def main():
+# def main():
 #    parser = Parser()
 #    datasets = ["Datasets/data.csv",
 #                 "Datasets/data2.csv",
@@ -76,4 +77,23 @@ print(len(rules))
 #       freeze_support()
 #       main()
 
+"""
+df = pd.read_csv('Taxonomies/product_category.csv', delimiter=';',
+                 usecols=['product_name',
+                          'product_category',
+                          'product_subcategory',
+                          'product_family'])
 
+
+dfProductP1 = df[['product_name', 'product_category']]
+dfProductP2 = df[['product_category', 'product_subcategory']].drop_duplicates()
+dfProductP3 = df[['product_subcategory', 'product_family']].drop_duplicates()
+
+dfProductP1 = dfProductP1.rename(columns={'product_name': 'item', 'product_category': 'parent'})
+dfProductP2 = dfProductP2.rename(columns={'product_category': 'item', 'product_subcategory': 'parent'})
+dfProductP3 = dfProductP3.rename(columns={'product_subcategory': 'item', 'product_family': 'parent'})
+
+
+frames = [dfProductP1, dfProductP2, dfProductP3]
+dfSingle = pd.concat(frames).drop_duplicates()
+"""

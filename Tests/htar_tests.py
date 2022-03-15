@@ -73,7 +73,7 @@ class HTARTests(unittest.TestCase):
     def test_parse_horizontal_database(self):
         parser = Parser()
         horizontal_db = parser.parse_single_file_for_horizontal_database('Datasets/sales_formatted.csv',
-                                                                         'Taxonomies/salesfact_taxonomy.csv')
+                                                                         'Taxonomies/salesfact_taxonomy_single.csv')
         self.assertEqual(len(horizontal_db.transactions), 54537, 'Transactions in horizontal DB')
 
     def test_ptt(self):

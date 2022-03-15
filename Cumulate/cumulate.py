@@ -95,6 +95,9 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
     k = 1
     taxonomy = vertical_database.taxonomy  # Cumulate Optimization 2 in original paper
     all_items = sorted(list(vertical_database.items_dic.keys()))
+    pool = None
+    if parallel_count:
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
     while k == 1 or frequent_dictionary[k - 1] != []:
         # Candidate Generation
         # print('Iteration ' + str(k))
@@ -114,7 +117,6 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
         # print('Calculating support of each candidate of size ' + str(k))
         start = time.time()
         if parallel_count:
-            pool = multiprocessing.Pool(multiprocessing.cpu_count())
             results = pool.starmap(calculate_support, zip(candidates_size_k, itertools.repeat(vertical_database)))
             for a_result in results:
                 support_dictionary[hash_candidate(a_result[0])] = a_result[1]

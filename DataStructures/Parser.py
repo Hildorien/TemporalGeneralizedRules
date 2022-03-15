@@ -64,10 +64,10 @@ class Parser:
             return Database(matrix_dictionary, timestamps, self.item_name_by_index,
                             len(dataset), {})
 
-    def parse_taxonomy(self, taxonomy_filepath):
+    def parse_taxonomy_basket(self, taxonomy_filepath):
         taxonomy = {}
         with open(taxonomy_filepath) as file:
-            lines = file.readlines()[1:]  # skips header
+            lines = file.readlines()
         for line in lines:
             products = line.rstrip().split(",")
             for i, a_product in enumerate(products):
@@ -75,6 +75,36 @@ class Parser:
                     taxonomy[a_product] = []
                     taxonomy[a_product].extend(products[i + 1:len(products)])
         return taxonomy
+
+    def parse_taxonomy_single(self, taxonomy_filepath):
+        taxonomy = {}
+        with open(taxonomy_filepath) as file: #Learn all close ancestors of taxonomy
+            lines = file.readlines()
+            for line in lines:
+                products = line.rstrip().split(",")
+                child = products[0]
+                parent = products[1]
+                if parent not in taxonomy:
+                    taxonomy[parent] = []
+                if child not in taxonomy:
+                    taxonomy[child] = []
+                taxonomy[child].append(parent)
+
+        old_lens = [len(x) for x in list(taxonomy.values())]
+        new_lens = []
+        while old_lens != new_lens: #Loop until values don't change
+            for key in taxonomy:
+                ancestors = taxonomy[key]
+                if ancestors != []:
+                    last_ancestor = ancestors[-1]
+                    taxonomy[key].extend(taxonomy[last_ancestor])
+                ancestors_without_dups = list(dict.fromkeys(taxonomy[key]))
+                taxonomy[key] = ancestors_without_dups
+
+            old_lens = new_lens
+            new_lens = [len(x) for x in list(taxonomy.values())]
+        return taxonomy
+
 
     def create_matrix_dictionary(self, dataset):
         matrix_dictionary = {}
@@ -182,12 +212,12 @@ class Parser:
 
     def parse_single_with_taxonomy(self, dataset_filepath, taxonomy_filepath):
         dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
-        taxonomy = self.parse_taxonomy(taxonomy_filepath)
+        taxonomy = self.parse_taxonomy_single(taxonomy_filepath)
         return self.fit_database(dataset, timestamps.to_dict(), taxonomy)
 
     def parse_basket_with_taxonomy(self, dataset_filepath, taxonomy_filepath):
         dataset = self.build_dataset_from_basket(dataset_filepath)
-        taxonomy = self.parse_taxonomy(taxonomy_filepath)
+        taxonomy = self.parse_taxonomy_basket(taxonomy_filepath)
         return self.fit_database(dataset, {}, taxonomy)
 
     def fit_horizontal_database(self, dataset, timestamps, taxonomy):
@@ -229,12 +259,12 @@ class Parser:
 
     def parse_single_file_for_horizontal_database(self, dataset_filepath, taxonomy_filepath):
         dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
-        taxonomy = self.parse_taxonomy(taxonomy_filepath)
+        taxonomy = self.parse_taxonomy_single(taxonomy_filepath)
         return self.fit_horizontal_database(dataset, timestamps.to_dict(), taxonomy)
 
     def parse_basket_file_for_horizontal_database(self, dataset_filepath, taxonomy_filepath):
         dataset = self.build_dataset_from_basket(dataset_filepath)
-        taxonomy = self.parse_taxonomy(taxonomy_filepath)
+        taxonomy = self.parse_taxonomy_basket(taxonomy_filepath)
         return self.fit_horizontal_database(dataset, {}, taxonomy)
 
     def parse_horizontal_database(self, dataset_filepath, taxonomy_filepath, csv_format='single'):
