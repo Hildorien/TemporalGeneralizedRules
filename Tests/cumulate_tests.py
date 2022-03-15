@@ -8,11 +8,11 @@ class CumulateTests(unittest.TestCase):
     def setUp(self):
         self.foodmart_horizontal_db = Parser().parse_horizontal_database(
             'Datasets/sales_formatted_1997.csv',
-            'Taxonomies/salesfact_taxonomy_single.csv',
+            'Taxonomies/salesfact_taxonomy_single_2.csv',
             'single')
         self.foodmart_vertical_db = Parser().parse("Datasets/sales_formatted_1997.csv",
                                                    'single',
-                                                   'Taxonomies/salesfact_taxonomy_single.csv')
+                                                   'Taxonomies/salesfact_taxonomy_single_2.csv')
 
         self.retail_horizontal_db = Parser().parse_horizontal_database('Datasets/cumulate_test_data.csv',
                                                                        'Taxonomies/cumulate_test_taxonomy_single.csv',
@@ -61,9 +61,14 @@ class CumulateTests(unittest.TestCase):
         taxonomy_retail_horizontal_db_basket_format = self.retail_basket_horizontal_db.taxonomy
         taxonomy_retail_vertical_db_single_format = self.retail_vertical_db.taxonomy
         taxonomy_retail_horizontal_db_single_format = self.retail_horizontal_db.taxonomy
+
+        taxonomy_foodmart_horizontal_db_single_format = self.foodmart_horizontal_db.taxonomy
+        taxonomy_foodmart_vertical_db_single_format = self.foodmart_vertical_db.taxonomy
+
         self.assertEqual(taxonomy_retail_vertical_db_basket_format, taxonomy_retail_horizontal_db_basket_format)
         self.assertEqual(taxonomy_retail_vertical_db_basket_format, taxonomy_retail_vertical_db_single_format)
         self.assertEqual(taxonomy_retail_vertical_db_basket_format, taxonomy_retail_horizontal_db_single_format)
         self.assertEqual(taxonomy_retail_horizontal_db_basket_format, taxonomy_retail_vertical_db_single_format)
         self.assertEqual(taxonomy_retail_horizontal_db_basket_format, taxonomy_retail_horizontal_db_single_format)
         self.assertEqual(taxonomy_retail_vertical_db_single_format, taxonomy_retail_horizontal_db_single_format)
+        self.assertEqual(taxonomy_foodmart_horizontal_db_single_format, taxonomy_foodmart_vertical_db_single_format)

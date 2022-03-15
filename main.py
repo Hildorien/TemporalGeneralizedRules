@@ -80,20 +80,25 @@ print(len(rules))
 """
 df = pd.read_csv('Taxonomies/product_category.csv', delimiter=';',
                  usecols=['product_name',
-                          'product_category',
                           'product_subcategory',
+                          'product_category',
+                          'product_department',
                           'product_family'])
 
+dfProductP1 = df[['product_name', 'product_subcategory']]
+dfProductP2 = df[['product_subcategory', 'product_category']].drop_duplicates()
+dfProductP3 = df[['product_category', 'product_department']].drop_duplicates()
+dfProductP4 = df[['product_department', 'product_family']].drop_duplicates()
 
-dfProductP1 = df[['product_name', 'product_category']]
-dfProductP2 = df[['product_category', 'product_subcategory']].drop_duplicates()
-dfProductP3 = df[['product_subcategory', 'product_family']].drop_duplicates()
+dfProductP1 = dfProductP1.rename(columns={'product_name': 'item', 'product_subcategory': 'parent'})
+dfProductP2 = dfProductP2.rename(columns={'product_subcategory': 'item', 'product_category': 'parent'})
+dfProductP3 = dfProductP3.rename(columns={'product_category': 'item', 'product_department': 'parent'})
+dfProductP4 = dfProductP4.rename(columns={'product_department': 'item', 'product_family': 'parent'})
 
-dfProductP1 = dfProductP1.rename(columns={'product_name': 'item', 'product_category': 'parent'})
-dfProductP2 = dfProductP2.rename(columns={'product_category': 'item', 'product_subcategory': 'parent'})
-dfProductP3 = dfProductP3.rename(columns={'product_subcategory': 'item', 'product_family': 'parent'})
+frames = [dfProductP1, dfProductP2, dfProductP3, dfProductP4]
+dfSingle = pd.concat(frames)
+print(dfSingle)
 
 
-frames = [dfProductP1, dfProductP2, dfProductP3]
-dfSingle = pd.concat(frames).drop_duplicates()
+#dfSingle.to_csv('Taxonomies/salesfact_taxonomy_single_2.csv', header=False, sep=',', index=False)
 """

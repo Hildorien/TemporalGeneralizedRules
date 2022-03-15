@@ -84,18 +84,19 @@ class Parser:
                 products = line.rstrip().split(",")
                 child = products[0]
                 parent = products[1]
-                if parent not in taxonomy:
-                    taxonomy[parent] = []
-                if child not in taxonomy:
-                    taxonomy[child] = []
-                taxonomy[child].append(parent)
+                if child != parent:
+                    if parent not in taxonomy:
+                        taxonomy[parent] = []
+                    if child not in taxonomy:
+                        taxonomy[child] = []
+                    taxonomy[child].append(parent)
 
         old_lens = [len(x) for x in list(taxonomy.values())]
         new_lens = []
         while old_lens != new_lens: #Loop until values don't change
             for key in taxonomy:
                 ancestors = taxonomy[key]
-                if ancestors != []:
+                if ancestors:
                     last_ancestor = ancestors[-1]
                     taxonomy[key].extend(taxonomy[last_ancestor])
                 ancestors_without_dups = list(dict.fromkeys(taxonomy[key]))
