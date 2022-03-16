@@ -1,7 +1,7 @@
 import time
 import unittest
 
-from utility import findOrderedIntersection, apriori_gen, getTFIUnion, getPeriodsIncluded
+from utility import findOrderedIntersection, apriori_gen, binary_search_or_first_higher_value
 from utility import getValidJoin
 from DataStructures.Parser import Parser
 
@@ -13,6 +13,10 @@ class UtilityTests(unittest.TestCase):
         self.arr1 = [0, 2, 50, 721]
         self.arr2 = [2, 3, 13, 23, 50]
 
+    def test_binary_search(self):
+        self.assertEqual(binary_search_or_first_higher_value(self.arr1, 50, 0, len(self.arr1)-1), 2, 'binary_search_test_1')
+        self.assertEqual(binary_search_or_first_higher_value(self.arr1, 2, 2, len(self.arr1)-1), 2, 'binary_search_test_2')
+        self.assertEqual(binary_search_or_first_higher_value(self.arr2, 14, 0, len(self.arr2)-1), 3, 'binary_search_test_3')
 
     def test_find_ordered_itersection(self):
         result = findOrderedIntersection(self.arr1, self.arr2)

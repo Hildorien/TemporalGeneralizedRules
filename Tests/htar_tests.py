@@ -96,11 +96,12 @@ class HTARTests(unittest.TestCase):
     def test_support_with_time_period(self):
         # T1 = ([C,E,G,K], [8,4,2])
         # T2 = ([D,F,G], [8,4,2])
-        # T3 = ([L,F,G,D], [11,6,2])
-        # T4 = ([C,D,A,F], [12,6,2])
-        # T5 = ([A,J,K,C],  [18,9,3])
-        # T6 = ([A], [18,9,3])
-        # T7 = ([A,B], [23,12,4])
+        # T3 = ([T,C]), [8,4,2])
+        # T4 = ([L,F,G,D], [11,6,2])
+        # T5 = ([C,D,A,F], [12,6,2])
+        # T6 = ([A,J,K,C],  [18,9,3])
+        # T7 = ([A], [18,9,3])
+        # T8 = ([A,B], [23,12,4])
 
         # ItemsDic = {
         # 0: 'A',
@@ -113,26 +114,27 @@ class HTARTests(unittest.TestCase):
         # 7: 'J',
         # 8: 'K',
         # 9:'L'
+        # 10:'T',
         # }
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-        self.assertEqual(database.supportOf([0]), 4/7, 'SupportTestVanilla1')
-        self.assertEqual(database.supportOf([0,2]), 2/7, 'SupportTestVanilla2')
+        self.assertEqual(database.supportOf([0]), 0.5, 'SupportTestVanilla1')
+        self.assertEqual(database.supportOf([0,2]), 2/8, 'SupportTestVanilla2')
         self.assertEqual(database.supportOf([0], 0, 18), 1, 'SupportTestWithTimePeriod1')
-        self.assertEqual(database.supportOf([3], 0, 8), 1/2, 'SupportTestWithTimePeriod2')
-        self.assertEqual(database.supportOf([3], 0, 8), 1/2, 'SupportTestWithTimePeriod3')
-        self.assertEqual(database.supportOf([0], 2, 2), 1 / 4, 'SupportTestWithTimePeriod4')
-        self.assertEqual(database.supportOf([3, 5], 2, 2), 3 / 4, 'SupportTestWithTimePeriod5')
-        self.assertEqual(database.supportOf([3, 5, 6], 1, 4), 1 / 2, 'SupportTestWithTimePeriod6')
+        self.assertEqual(database.supportOf([3], 0, 8), 1/3, 'SupportTestWithTimePeriod2')
+        self.assertEqual(database.supportOf([3], 0, 8), 1/3, 'SupportTestWithTimePeriod3')
+        self.assertEqual(database.supportOf([0], 2, 2), 1/5, 'SupportTestWithTimePeriod4')
+        self.assertEqual(database.supportOf([3, 5], 2, 2), 3 / 5, 'SupportTestWithTimePeriod5')
+        self.assertEqual(database.supportOf([3, 5, 6], 1, 4), 1 / 3, 'SupportTestWithTimePeriod6')
         self.assertEqual(database.supportOf([8], 0, 1), 0, 'SupportTestWithTimePeriod7')
 
         #Now assert items =============================================================
         self.assertEqual(len(database.getItemsByDepthAndPeriod(0,1)), 0, 'Items_in_time_period_test_1')
         items_in_0_8 = database.getItemsByDepthAndPeriod(0,8)
-        self.assertEqual(len(items_in_0_8), 6, 'Items_in_time_period_test_2a')
+        self.assertEqual(len(items_in_0_8), 7, 'Items_in_time_period_test_2a')
         self.assertEqual(5 in items_in_0_8, True, 'Items_in_time_period_test_2b')
         self.assertEqual(7 in items_in_0_8, False, 'Items_in_time_period_test_2c')
-        self.assertEqual(len(database.getItemsByDepthAndPeriod(2, 2)), 8, 'Items_in_time_period_test_3')
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(2, 2)), 9, 'Items_in_time_period_test_3')
         self.assertEqual(len(database.getItemsByDepthAndPeriod(1, 2)), 0, 'Items_in_time_period_test_3b')
         self.assertEqual(len(database.getItemsByDepthAndPeriod(1, 6)), 6, 'Items_in_time_period_test_3c')
 
@@ -144,7 +146,7 @@ class HTARTests(unittest.TestCase):
 
         tfi_2_2 = findIndividualTFI(database, 2, 2, 0.49)["TFI"]
         tfi_0_5 = findIndividualTFI(database, 0, 5, 0.02)["TFI"]
-        self.assertEqual(tfi_0_8[1], {(6,)}, 'TFI-1')
+        self.assertEqual(tfi_0_8[1], {(6,), (2,)}, 'TFI-1')
         self.assertEqual(len(tfi_0_8.keys()), 1, 'TFI-1B')
         self.assertEqual((5,) in tfi_2_2[1], True, 'TFI-2')
         self.assertEqual((3, 5) in tfi_2_2[2], True, 'TFI-2B')
@@ -159,7 +161,7 @@ class HTARTests(unittest.TestCase):
         self.assertEqual(len(mergedTFIUnion_1[2]), 11, 'TFI-MERGE-1b')
 
         mergedTFIUnion_2 = getTFIUnion(TFI_by_period, [7, 12])
-        self.assertEqual(len(mergedTFIUnion_2[1]), 8, 'TFI-MERGE-2a')
+        self.assertEqual(len(mergedTFIUnion_2[1]), 9, 'TFI-MERGE-2a')
         self.assertEqual(len(mergedTFIUnion_2[3]), 12, 'TFI-MERGE-2b')
         self.assertEqual(len(mergedTFIUnion_2[4]), 3, 'TFI-MERGE-2c')
 
@@ -183,27 +185,32 @@ class HTARTests(unittest.TestCase):
     def test_TID_and_faps_sales_for_Test(self):
         # {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K', 9: 'L'}
         database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-        self.assertEqual(database.getItemTids(0), [3, 4, 5, 6], 'test_TID_A')
-        self.assertEqual(database.getItemTids(1), [6], 'test_TID_B')
-        self.assertEqual(database.getItemTids(2), [0, 3, 4], 'test_TID_C')
-        self.assertEqual(database.getItemTids(3), [1, 2, 3], 'test_TID_D')
+        self.assertEqual(database.getItemTids(0), [4, 5, 6, 7], 'test_TID_A')
+        self.assertEqual(database.getItemTids(1), [7], 'test_TID_B')
+        self.assertEqual(database.getItemTids(2), [0, 2, 4, 5], 'test_TID_C')
+        self.assertEqual(database.getItemTids(3), [1, 3, 4], 'test_TID_D')
         self.assertEqual(database.getItemTids(4), [0], 'test_TID_E')
-        self.assertEqual(database.getItemTids(5), [1, 2, 3], 'test_TID_F')
-        self.assertEqual(database.getItemTids(6), [0, 1, 2], 'test_TID_G')
-        self.assertEqual(database.getItemTids(7), [4], 'test_TID_J')
-        self.assertEqual(database.getItemTids(8), [0, 4], 'test_TID_K')
-        self.assertEqual(database.getItemTids(9), [2], 'test_TID_L')
+        self.assertEqual(database.getItemTids(5), [1, 3, 4], 'test_TID_F')
+        self.assertEqual(database.getItemTids(6), [0, 1, 3], 'test_TID_G')
+        self.assertEqual(database.getItemTids(7), [5], 'test_TID_J')
+        self.assertEqual(database.getItemTids(8), [0, 5], 'test_TID_K')
+        self.assertEqual(database.getItemTids(9), [3], 'test_TID_L')
 
     def test_HTAR_generic_data_correctness_and_completeness(self):
         database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         #3 levels of complexity
-        sups = [0.4, 0.05, 0.002]
-        confs= [0.6, 0.5, 0,4]
+        sups = [0.4, 0.35, 0.002]
+        confs= [0.6, 0.6, 0,4]
 
         for i in range(0, 3):
             rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i])
             apriori_rules = apriori(database, sups[i], confs[i])
             self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
+
+            #if i == 1:
+             #   self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
+             #   self.printRulesDebugging(database, rules_by_pg, apriori_rules)
+             #    print("------------------------------------")
 
 
 

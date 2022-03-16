@@ -2,6 +2,28 @@ from itertools import combinations
 from datetime import datetime
 
 
+def binary_search_or_first_higher_value(list, value, low, high):
+    if low <= high:
+
+        mid = (low + high) // 2
+
+        if list[mid] == value:
+            return mid
+
+        elif list[mid] > value:
+            return binary_search_or_first_higher_value(list, value, low, mid - 1)
+
+        else:
+            return binary_search_or_first_higher_value(list, value, mid + 1, high)
+
+    else:
+        if list[low] > value:
+            return low
+        else:
+            return high
+
+
+
 def findOrderedIntersection(arr1, arr2):
     """
         :param: two ordered int arrays
