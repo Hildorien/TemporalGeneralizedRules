@@ -5,8 +5,8 @@ class AssociationRule:
     confidence = 0
 
     def __init__(self, lhs, rhs, support, confidence):
-        self.lhs = lhs
-        self.rhs = rhs
+        self.lhs = set(lhs)
+        self.rhs = set(rhs)
         self.support = support
         self.confidence = confidence
 

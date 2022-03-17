@@ -37,9 +37,15 @@ class CumulateTests(unittest.TestCase):
                          'Output of vertical_cumulate is the same independently of the database representation')
 
     def test_cumulate_vs_vertical_cumulate_output_is_equal(self):
-        cumulate_rules = cumulate(self.retail_horizontal_db, 0.3, 0.6, 0)
-        vertical_cumulate_rules = vertical_cumulate(self.retail_vertical_db, 0.3, 0.6, 0)
-        self.assertEqual(cumulate_rules, vertical_cumulate_rules, 'Output of vertical_cumulate is the same as cumulate')
+        retail_cumulate_rules = cumulate(self.retail_horizontal_db, 0.3, 0.6, 0)
+        retail_vertical_cumulate_rules = vertical_cumulate(self.retail_vertical_db, 0.3, 0.6, 0)
+
+        foodmart_cumulate_rules = cumulate(self.foodmart_horizontal_db, 0.3, 0.6, 0)
+        foodmart_vertical_cumulate_rules = vertical_cumulate(self.foodmart_vertical_db, 0.3, 0.6, 0)
+
+        self.assertEqual(retail_cumulate_rules, retail_vertical_cumulate_rules, 'Output of vertical_cumulate is the same as cumulate')
+        self.assertEqual(foodmart_cumulate_rules, foodmart_vertical_cumulate_rules, 'Output of vertical_cumulate is the same as cumulate')
+
 
     def test_r_interesting_measure_prunes_rules(self):
         rules_without_pruning = cumulate(self.retail_horizontal_db, 0.3, 0.6, 0)
