@@ -8,6 +8,7 @@ from utility import getPeriodStampFromTimestamp, getTFIUnion, getPeriodsIncluded
 
 
 class HTARTests(unittest.TestCase):
+
     def setUp(self):
         self.t1 = 631234984  # 1/1/1990 - [1,1,1]
         self.t2 = 503276584  # 12/12/1985 - [23,12,4]
