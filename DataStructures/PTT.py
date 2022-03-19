@@ -30,11 +30,13 @@ class PTT:  # Periodical Total Transaction
         return finalItems
 
 
-    def addItemPeriodToPtt(self, pi, items=set()):
+    def addItemPeriodToPtt(self, pi, tid=0, items=set()):
         # pi is the leaf-granule where to add the items
         if self.checkIfLlevelAndPeriodAreValid(pi):
             self.ptt[pi - 1]['itemsSet'].update(items)
             self.ptt[pi - 1]['totalTransactions'] += 1
+            if self.ptt[pi - 1]['firstTID'] is None:
+                self.ptt[pi - 1]['firstTID'] = tid
         else:
             print('ERROR AL AGREGAR ELEMENTO AL PTT. PERIODOS NO COMPATIBLE CON HTG')
 
@@ -47,6 +49,9 @@ class PTT:  # Periodical Total Transaction
     def getPTTValueFromNonLeafLevelGranule(self, level, pi):
         level_0_periods_included = getPeriodsIncluded(level, pi)
         return self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included)
+
+    def getPTTPeriodTIDsStarters(self):
+        return list(map(lambda x: x['firstTID'], self.ptt))
 
 
     def checkIfLlevelAndPeriodAreValid(self, period):

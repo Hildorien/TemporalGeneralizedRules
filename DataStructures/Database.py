@@ -98,6 +98,9 @@ class Database:
     def getTotalPTTSumWithinPeriodsInLevel0(self, boundaries):
         return self.ptt.getTotalPTTSumWithinPeriodsInLevel0(boundaries)
 
+    def getPTTPeriodTIDsStarters(self):
+        return self.ptt.getPTTPeriodTIDsStarters()
+
     # def getItemsetRelativeSupports(self, itemset, level_0_periods_included_in_pg):
     #     """
     #     :param itemset: set/list of integers

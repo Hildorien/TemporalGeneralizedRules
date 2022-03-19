@@ -209,6 +209,14 @@ class HTARTests(unittest.TestCase):
              #   self.printRulesDebugging(database, rules_by_pg, apriori_rules)
              #    print("------------------------------------")
 
+    def test_leaf_tid_starters(self):
+        database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
+        starters_tid = database.getPTTPeriodTIDsStarters()
+        self.assertEqual(starters_tid[7], 0, 'test_starters_tid_1')
+        self.assertEqual(starters_tid[10], 3, 'test_starters_tid_2')
+        self.assertEqual(starters_tid[11], 4, 'test_starters_tid_3')
+        self.assertEqual(starters_tid[17], 5, 'test_starters_tid_4')
+        self.assertEqual(starters_tid[22], 7, 'test_starters_tid_5')
 
 
     # def test_HTAR_foodmart_data_1997_correctness_and_completness(self):

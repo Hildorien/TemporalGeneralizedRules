@@ -124,7 +124,7 @@ class Parser:
         for tid, transaction in enumerate(dataset):
             transactionHTGLeafGranule = getPeriodStampFromTimestamp(timestamps[tid])[0]
             itemsToAddToPTT = set(map(lambda x: self.item_index_by_name[x], set(transaction)))
-            ptt.addItemPeriodToPtt(transactionHTGLeafGranule, itemsToAddToPTT)
+            ptt.addItemPeriodToPtt(transactionHTGLeafGranule, tid, itemsToAddToPTT)
             for item in set(transaction):
                 if item in matrix_dictionary:
                     matrix_dictionary[item]['tids'].append(tid)
