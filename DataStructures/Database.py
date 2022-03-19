@@ -1,5 +1,6 @@
 from DataStructures.PTT import PTT
-from utility import findOrderedIntersection, getPeriodStampFromTimestamp, allSubsetofSizeKMinus1
+from utility import findOrderedIntersection, getPeriodStampFromTimestamp, allSubsetofSizeKMinus1, \
+    findOrderedIntersectionBetweenBoundaries, getPeriodsIncluded
 
 
 class Database:
@@ -32,10 +33,9 @@ class Database:
 
     def getItemTids(self, item_number):
         return self.matrix_data_by_item[self.items_dic[item_number]]['tids']
+    #Methods for debugging purposes
 
-    # Methods for debugging purposes
-
-    def transaction_ids_intersection(self, itemset):
+    def transaction_ids_intersection(self, itemset, lb=None, ub=None):
         final_intersection = None
         for itemColumnIndex in itemset:
             item_valid_indexes = self.matrix_data_by_item[self.items_dic[itemColumnIndex]]['tids']
@@ -44,6 +44,8 @@ class Database:
                 final_intersection = item_valid_indexes
             elif len(final_intersection) == 0:
                 return []
+            elif lb is not None and ub is not None:
+                final_intersection = findOrderedIntersectionBetweenBoundaries(final_intersection, item_valid_indexes, lb, ub)
             else:
                 final_intersection = findOrderedIntersection(final_intersection, item_valid_indexes)
 
@@ -56,38 +58,42 @@ class Database:
         :param period: time-period within the l_level
         :return: float
         """
-        final_intersection = self.transaction_ids_intersection(itemset)
 
         if l_level is not None and period is not None:
-            # Now we have the intersactions in common, we need to filter those who aren't in the selected period and level
+            # # Now we have the intersactions in common, we need to filter those who aren't in the selected period and level
+            #
+            # # Since final_intersection is ordered, essentialy we have 3 phases:
+            # # 1: Look for the first transaction within the time period. Discard all tids until then
+            # # 2: Once found, append every transaction to final array.
+            # # 3: When a new transaction is read and isn't within the period, stop iterating and return what you got until then.
+            # period_reach_phase = 1
+            # filtered_by_period_tids = 0
+            # for tid in final_intersection:
+            #     transactionHTG = getPeriodStampFromTimestamp(self.timestamp_mapping[tid])
+            #     if transactionHTG[l_level] == period:
+            #         period_reach_phase = 2
+            #         filtered_by_period_tids += 1
+            #     elif period_reach_phase == 2:
+            #         break
+            # #ptt_j = self.ptt.getPTTValueFromLeafLevelGranule(l_level, period)['totalTransactions']
+            # ptt_j = self.ptt.getTotalPTTSumWithinPeriodsInLevel0(boundaries)
+            # if ptt_j == 0:
+            #     return 0
+            # else:
+            #     return filtered_by_period_tids / ptt_j
 
-            # Since final_intersection is ordered, essentialy we have 3 phases:
-            # 1: Look for the first transaction within the time period. Discard all tids until then
-            # 2: Once found, append every transaction to final array.
-            # 3: When a new transaction is read and isn't within the period, stop iterating and return what you got until then.
-            period_reach_phase = 1
-            filtered_by_period_tids = 0
-            for tid in final_intersection:
-                transactionHTG = getPeriodStampFromTimestamp(self.timestamp_mapping[tid])
-                if transactionHTG[l_level] == period:
-                    period_reach_phase = 2
-                    filtered_by_period_tids += 1
-                elif period_reach_phase == 2:
-                    break
-            ptt_j = self.ptt.getPTTValueFromLlevelAndPeriod(l_level, period)['totalTransactions']
 
-            if ptt_j == 0:
-                return 0
-            else:
-                return filtered_by_period_tids / ptt_j
+            level_0_periods_included = getPeriodsIncluded(l_level, period)
+            return self.getItemsetRelativeSupport(itemset, level_0_periods_included)
         else:
+            final_intersection = self.transaction_ids_intersection(itemset)
             return len(final_intersection) / self.row_count
 
     def getItemsByDepthAndPeriod(self, l_level, period):
-        return self.ptt.getPTTValueFromLlevelAndPeriod(l_level, period)['itemsSet']
+        return self.ptt.getEveryItemInPTTInPG(l_level, period)
 
-    def getPTTValueFromLlevelAndPeriod(self, l_level, pi):
-        return self.ptt.getPTTValueFromLlevelAndPeriod(l_level, pi)
+    def getPTTValueFromLeafLevelGranule(self, pi):
+        return self.ptt.getPTTValueFromLeafLevelGranule(pi)
 
     def getTotalPTTSumWithinPeriodsInLevel0(self, boundaries):
         return self.ptt.getTotalPTTSumWithinPeriodsInLevel0(boundaries)
@@ -135,10 +141,10 @@ class Database:
                C_total_X_actual += 1
 
         PTT_total_sum_with_boundaries = self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
-
-        relative_support = C_total_X_actual/PTT_total_sum_with_boundaries
-
-        return relative_support
+        if PTT_total_sum_with_boundaries != 0:
+            return C_total_X_actual/PTT_total_sum_with_boundaries
+        else:
+            return 0
 
     def confidenceOf(self, lhs, rhs):
         """

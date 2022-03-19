@@ -122,9 +122,9 @@ class Parser:
         matrix_dictionary = {}
         ptt = PTT()
         for tid, transaction in enumerate(dataset):
-            transactionHTG = getPeriodStampFromTimestamp(timestamps[tid])
+            transactionHTGLeafGranule = getPeriodStampFromTimestamp(timestamps[tid])[0]
             itemsToAddToPTT = set(map(lambda x: self.item_index_by_name[x], set(transaction)))
-            ptt.addItemPeriodToPtt(transactionHTG, itemsToAddToPTT)
+            ptt.addItemPeriodToPtt(transactionHTGLeafGranule, itemsToAddToPTT)
             for item in set(transaction):
                 if item in matrix_dictionary:
                     matrix_dictionary[item]['tids'].append(tid)

@@ -156,7 +156,9 @@ def getFortnight(day, month):
 
 def getPeriodsIncluded(l_length, period):
     # Note: This method does only works for any period in level above 0 with hardcoded HTG = [24,12,4, 1]
-    if l_length == 1:
+    if l_length == 0:
+        return [period, period]
+    elif l_length == 1:
         later_fortnight = period * 2
         return [later_fortnight - 1, later_fortnight]
     elif l_length == 2:

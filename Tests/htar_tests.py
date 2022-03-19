@@ -80,17 +80,16 @@ class HTARTests(unittest.TestCase):
     def test_ptt(self):
         customPtt = PTT()
         periodsTimestamp = [self.t1, self.t2, self.t3, self.t4, self.t4, self.t4]
-        periods = list(map(getPeriodStampFromTimestamp, periodsTimestamp))
+        periods = list(map(lambda x: getPeriodStampFromTimestamp(x)[0], periodsTimestamp))
         customPtt.addMultiplePeriods(periods)
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 1)['totalTransactions'], 1, 'PTT value 1')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 2)['totalTransactions'], 0, 'PTT value 2')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(1, 12)['totalTransactions'], 1, 'PTT value 3')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 18)['totalTransactions'], 3, 'PTT value 4')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 12)['totalTransactions'], 1, 'PTT value 5')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(0, 23)['totalTransactions'], 1, 'PTT value 6')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(2, 3)['totalTransactions'], 3, 'PTT value 7')
-        self.assertEqual(customPtt.getPTTValueFromLlevelAndPeriod(3, 1)['totalTransactions'], 6, 'PTT value 7')
-
+        self.assertEqual(customPtt.getPTTValueFromLeafLevelGranule(1)['totalTransactions'], 1, 'PTT value 1')
+        self.assertEqual(customPtt.getPTTValueFromLeafLevelGranule(2)['totalTransactions'], 0, 'PTT value 2')
+        self.assertEqual(customPtt.getPTTValueFromLeafLevelGranule(18)['totalTransactions'], 3, 'PTT value 3')
+        self.assertEqual(customPtt.getPTTValueFromLeafLevelGranule(12)['totalTransactions'], 1, 'PTT value 4')
+        self.assertEqual(customPtt.getPTTValueFromLeafLevelGranule(23)['totalTransactions'], 1, 'PTT value 5')
+        self.assertEqual(customPtt.getPTTValueFromNonLeafLevelGranule(1, 12), 1, 'PTT value 6')
+        self.assertEqual(customPtt.getPTTValueFromNonLeafLevelGranule(2, 3), 3, 'PTT value 7')
+        self.assertEqual(customPtt.getPTTValueFromNonLeafLevelGranule(3, 1), 6, 'PTT value 8')
         self.assertEqual(customPtt.getTotalPTTSumWithinPeriodsInLevel0([1, 2]), 1, 'PTT SUM 1')
         self.assertEqual(customPtt.getTotalPTTSumWithinPeriodsInLevel0([1, 18]), 5, 'PTT SUM 2')
 
@@ -120,7 +119,7 @@ class HTARTests(unittest.TestCase):
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         self.assertEqual(database.supportOf([0]), 0.5, 'SupportTestVanilla1')
-        self.assertEqual(database.supportOf([0,2]), 2/8, 'SupportTestVanilla2')
+        self.assertEqual(database.supportOf([0, 2]), 2/8, 'SupportTestVanilla2')
         self.assertEqual(database.supportOf([0], 0, 18), 1, 'SupportTestWithTimePeriod1')
         self.assertEqual(database.supportOf([3], 0, 8), 1/3, 'SupportTestWithTimePeriod2')
         self.assertEqual(database.supportOf([3], 0, 8), 1/3, 'SupportTestWithTimePeriod3')
@@ -130,8 +129,8 @@ class HTARTests(unittest.TestCase):
         self.assertEqual(database.supportOf([8], 0, 1), 0, 'SupportTestWithTimePeriod7')
 
         #Now assert items =============================================================
-        self.assertEqual(len(database.getItemsByDepthAndPeriod(0,1)), 0, 'Items_in_time_period_test_1')
-        items_in_0_8 = database.getItemsByDepthAndPeriod(0,8)
+        self.assertEqual(len(database.getItemsByDepthAndPeriod(0, 1)), 0, 'Items_in_time_period_test_1')
+        items_in_0_8 = database.getItemsByDepthAndPeriod(0, 8)
         self.assertEqual(len(items_in_0_8), 7, 'Items_in_time_period_test_2a')
         self.assertEqual(5 in items_in_0_8, True, 'Items_in_time_period_test_2b')
         self.assertEqual(7 in items_in_0_8, False, 'Items_in_time_period_test_2c')
@@ -142,19 +141,16 @@ class HTARTests(unittest.TestCase):
     def test_TFI(self):
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-        tfi_0_8 = findIndividualTFI(database, 0, 8, 0.55)["TFI"]
-        tfi_0_8_lower_lamda = findIndividualTFI(database, 0, 8, 0.02)["TFI"]
+        tfi_0_8 = findIndividualTFI(database, 8, 0.55)["TFI"]
+        tfi_0_8_lower_lamda = findIndividualTFI(database, 8, 0.02)["TFI"]
 
-        tfi_2_2 = findIndividualTFI(database, 2, 2, 0.49)["TFI"]
-        tfi_0_5 = findIndividualTFI(database, 0, 5, 0.02)["TFI"]
+        tfi_0_5 = findIndividualTFI(database, 5, 0.02)["TFI"]
         self.assertEqual(tfi_0_8[1], {(6,), (2,)}, 'TFI-1')
         self.assertEqual(len(tfi_0_8.keys()), 1, 'TFI-1B')
-        self.assertEqual((5,) in tfi_2_2[1], True, 'TFI-2')
-        self.assertEqual((3, 5) in tfi_2_2[2], True, 'TFI-2B')
         self.assertEqual(len(tfi_0_5.keys()), 0, 'TFI-3')
 
-        tfi_0_11 = findIndividualTFI(database, 0, 11, 0.02)["TFI"]
-        tfi_0_12 = findIndividualTFI(database, 0, 12, 0.02)["TFI"]
+        tfi_0_11 = findIndividualTFI(database, 11, 0.02)["TFI"]
+        tfi_0_12 = findIndividualTFI(database, 12, 0.02)["TFI"]
         TFI_by_period = {11: tfi_0_11, 12: tfi_0_12, 8: tfi_0_8_lower_lamda}
 
         mergedTFIUnion_1 = getTFIUnion(TFI_by_period, [11,12])
@@ -201,7 +197,7 @@ class HTARTests(unittest.TestCase):
         database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         #3 levels of complexity
         sups = [0.4, 0.35, 0.002]
-        confs= [0.6, 0.6, 0.4]
+        confs = [0.6, 0.6, 0.4]
 
         for i in range(0, 3):
             rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i])

@@ -1,38 +1,53 @@
+from utility import getPeriodsIncluded
+
+
 class PTT:  # Periodical Total Transaction
     # A list of lists. Outer list is l-levels (Hardcoded in 3 elements). Inner lists are the amount of transactions contained in each time period contained in each level.
-    # They are initialized in 0. So if your HTG is [4,2,5] the ptt created will be [[0,0,0,0], [0,0], [0,0,0,0,0]]
+    # They are initialized in 0. So if your HTG is [4,2,5] the ptt created will be [0,0,0,0]
+
+    # UPDATE: PTT is only saving data for 0-level time granules
 
     def __init__(self):
         hardcoded_htg = [24, 12, 4, 1]
-        self.ptt = [[], [], [], []]
-        for lLevel, maxPi in enumerate(hardcoded_htg):
-            for x in range(maxPi):
-                self.ptt[lLevel].append({'itemsSet': set(), 'totalTransactions': 0})
+        self.ptt = []
+        for x in range(hardcoded_htg[0]):
+            self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'firstTID': None})
 
     def addMultiplePeriods(self, periods):
         for period in periods:
             self.addItemPeriodToPtt(period)
 
     def getTotalPTTSumWithinPeriodsInLevel0(self, boundaries):
-        return sum(list(map(lambda pi: self.getPTTValueFromLlevelAndPeriod(0, pi)['totalTransactions'], range(boundaries[0], boundaries[1] + 1))))
+        return sum(list(map(lambda pi: self.getPTTValueFromLeafLevelGranule(pi)['totalTransactions'],
+                            range(boundaries[0], boundaries[1] + 1))))
 
-    def addItemPeriodToPtt(self, period, items = set()):
-        # periods is an array of numbers, where each column is the l-level and the number is the pi in it. (eg. [1,
-        # 30,10])
+    def getEveryItemInPTTInPG(self, l_level, period):
+        level_0_periods_included = getPeriodsIncluded(l_level, period)
+        finalItems = set()
+        for pj in range(level_0_periods_included[0], level_0_periods_included[1]+1):
+            leafSet = self.getPTTValueFromLeafLevelGranule(pj)['itemsSet']
+            finalItems.update(leafSet)
+        return finalItems
 
-        #TODO: Refactor so only bottom level 0 is saved in PTT.
-        for l_level, pi in enumerate(period):
-            if self.checkIfLlevelAndPeriodAreValid(l_level, pi):
-                self.ptt[l_level][pi - 1]['itemsSet'].update(items)
-                self.ptt[l_level][pi - 1]['totalTransactions'] += 1
-            else:
-                print('ERROR AL AGREGAR ELEMENTO AL PTT. PERIODOS NO COMPATIBLE CON HTG')
 
-    def getPTTValueFromLlevelAndPeriod(self, l_level, pi):
-        if self.checkIfLlevelAndPeriodAreValid(l_level, pi-1):
-            return self.ptt[l_level][pi - 1]
+    def addItemPeriodToPtt(self, pi, items=set()):
+        # pi is the leaf-granule where to add the items
+        if self.checkIfLlevelAndPeriodAreValid(pi):
+            self.ptt[pi - 1]['itemsSet'].update(items)
+            self.ptt[pi - 1]['totalTransactions'] += 1
+        else:
+            print('ERROR AL AGREGAR ELEMENTO AL PTT. PERIODOS NO COMPATIBLE CON HTG')
+
+    def getPTTValueFromLeafLevelGranule(self, pi):
+        if self.checkIfLlevelAndPeriodAreValid(pi - 1):
+            return self.ptt[pi - 1]
         else:
             print('ERROR AL OBTENER ELEMENTO EN LA PTT. EL NIVEL O PERIODO ASOCIADO NO EXISTE')
 
-    def checkIfLlevelAndPeriodAreValid(self, l_level, period):
-        return (len(self.ptt) >= l_level) and (len(self.ptt[l_level]) >= period)
+    def getPTTValueFromNonLeafLevelGranule(self, level, pi):
+        level_0_periods_included = getPeriodsIncluded(level, pi)
+        return self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included)
+
+
+    def checkIfLlevelAndPeriodAreValid(self, period):
+        return len(self.ptt) >= period
