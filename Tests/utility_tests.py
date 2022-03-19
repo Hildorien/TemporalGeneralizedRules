@@ -32,6 +32,8 @@ class UtilityTests(unittest.TestCase):
         self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr4, self.arr3, 0, 4), [], 'ordered intersection with boundaries 4')
         self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr4, self.arr3, 100, 300), [], 'ordered intersection with boundaries 5')
         self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr4, self.arr3, 4, 30), [5, 6, 20], 'ordered intersection with boundaries 6')
+        self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr4, self.arr3, 9, 17), [], 'ordered intersection with boundaries 7')
+
 
     def test_valid_join(self):
         orderedlist1 = [1, 2, 3]
