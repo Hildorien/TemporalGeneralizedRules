@@ -36,14 +36,17 @@ class Database:
     # Methods for debugging purposes
 
     def transaction_ids_intersection(self, itemset):
-        final_intersection = []
+        final_intersection = None
         for itemColumnIndex in itemset:
             item_valid_indexes = self.matrix_data_by_item[self.items_dic[itemColumnIndex]]['tids']
 
-            if len(final_intersection) == 0:
+            if final_intersection is None:
                 final_intersection = item_valid_indexes
+            elif len(final_intersection) == 0:
+                return []
             else:
                 final_intersection = findOrderedIntersection(final_intersection, item_valid_indexes)
+
         return final_intersection
 
     def supportOf(self, itemset, l_level=None, period=None):

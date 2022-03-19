@@ -15,6 +15,13 @@ class AprioriTests(unittest.TestCase):
                                    "Datasets/data7.csv"]  # 154 item(s), 522661 transaction(s)
                                   ))
 
+    def test_transaction_id_intersection(self):
+        database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
+        self.assertEqual(database.transaction_ids_intersection([0, 2]), [4, 5], 'Transaction_id_intersection_test_1')
+        self.assertEqual(database.transaction_ids_intersection([2, 1, 0]), [], 'Transaction_id_intersection_test_2')
+        self.assertEqual(database.transaction_ids_intersection([3, 6]), [1, 3], 'Transaction_id_intersection_test_3')
+        self.assertEqual(database.transaction_ids_intersection([0, 7, 8, 2]), [5], 'Transaction_id_intersection_test_4')
+
     def test_apriori_correctness(self):
         # All outputs where checked against apriori from arules package in R with the same parameters
         rules_database_1 = apriori(self.databases[0], 0.2, 0.6)

@@ -201,7 +201,7 @@ class HTARTests(unittest.TestCase):
         database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         #3 levels of complexity
         sups = [0.4, 0.35, 0.002]
-        confs= [0.6, 0.6, 0,4]
+        confs= [0.6, 0.6, 0.4]
 
         for i in range(0, 3):
             rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i])
