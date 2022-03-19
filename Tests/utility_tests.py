@@ -1,7 +1,8 @@
 import time
 import unittest
 
-from utility import findOrderedIntersection, apriori_gen, binary_search_or_first_higher_value
+from utility import findOrderedIntersection, apriori_gen, binary_search_or_first_higher_value, \
+    findOrderedIntersectionBetweenBoundaries
 from utility import getValidJoin
 from DataStructures.Parser import Parser
 
@@ -12,6 +13,8 @@ class UtilityTests(unittest.TestCase):
     def setUp(self):
         self.arr1 = [0, 2, 50, 721]
         self.arr2 = [2, 3, 13, 23, 50]
+        self.arr3 = [5, 6, 8, 10, 15, 20, 25, 30]
+        self.arr4 = [4, 5, 6, 7, 11, 12, 18, 20]
 
     def test_binary_search(self):
         self.assertEqual(binary_search_or_first_higher_value(self.arr1, 50, 0, len(self.arr1)-1), 2, 'binary_search_test_1')
@@ -21,6 +24,14 @@ class UtilityTests(unittest.TestCase):
     def test_find_ordered_itersection(self):
         result = findOrderedIntersection(self.arr1, self.arr2)
         self.assertEqual(len(result), 2, 'incorrect default size')
+
+    def test_find_ordered_intersection_with_boundaries(self):
+        self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr3, self.arr4, 2, 10), [5, 6], 'ordered intersection with boundaries 1')
+        self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr4, self.arr3, 2, 10), [5, 6], 'ordered intersection with boundaries 2')
+        self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr4, self.arr3, 25, 30), [], 'ordered intersection with boundaries 3')
+        self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr4, self.arr3, 0, 4), [], 'ordered intersection with boundaries 4')
+        self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr4, self.arr3, 100, 300), [], 'ordered intersection with boundaries 5')
+        self.assertEqual(findOrderedIntersectionBetweenBoundaries(self.arr4, self.arr3, 4, 30), [5, 6, 20], 'ordered intersection with boundaries 6')
 
     def test_valid_join(self):
         orderedlist1 = [1, 2, 3]

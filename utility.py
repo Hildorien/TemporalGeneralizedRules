@@ -3,25 +3,19 @@ from datetime import datetime
 
 
 def binary_search_or_first_higher_value(list, value, low, high):
-    if low <= high:
+    while low < high:
 
         mid = (low + high) // 2
-
-        if list[mid] == value:
+        indexedValue = list[mid]
+        if indexedValue == value:
             return mid
-
-        elif list[mid] > value:
-            return binary_search_or_first_higher_value(list, value, low, mid - 1)
-
+        elif indexedValue > value:
+            high = mid - 1
         else:
-            return binary_search_or_first_higher_value(list, value, mid + 1, high)
+            low = mid + 1
 
-    else:
-        if list[low] > value:
-            return low
-        else:
-            return high
-
+    # By this far, low and high points to the same value. Is the closest indexedValue to targetValue available.
+    return low
 
 
 def findOrderedIntersection(arr1, arr2):
@@ -29,13 +23,40 @@ def findOrderedIntersection(arr1, arr2):
         :param: two ordered int arrays
         :return: ordered int array
     """
-
     pointer_1 = 0
     pointer_2 = 0
     arr1_size = len(arr1)
     arr2_size = len(arr2)
     result_array = []
     while pointer_1 < arr1_size and pointer_2 < arr2_size:
+        val_dif = arr1[pointer_1] - arr2[pointer_2]
+        if val_dif == 0:
+            result_array.append(arr1[pointer_1])
+            pointer_1 += 1
+            pointer_2 += 1
+        elif val_dif > 0:
+            pointer_2 += 1
+        else:
+            pointer_1 += 1
+
+    return result_array
+
+
+def findOrderedIntersectionBetweenBoundaries(arr1, arr2, lb, ub):
+    """
+        :param: two ordered int arrays, lowerBoundary, upperBoundary
+        :return: ordered int array
+    """
+    if lb > ub:
+        print('ERROR. UPPERBOUND IS NOT HIGHER OR EQUAL LOWERBOUND')
+        return None
+    arr1_size = len(arr1)
+    arr2_size = len(arr2)
+    pointer_1 = binary_search_or_first_higher_value(arr1, lb, 0, arr1_size - 1)
+    pointer_2 = binary_search_or_first_higher_value(arr2, lb, 0, arr2_size - 1)
+
+    result_array = []
+    while pointer_1 < arr1_size and pointer_2 < arr2_size and arr1[pointer_1] < ub and arr2[pointer_2] < ub:
         val_dif = arr1[pointer_1] - arr2[pointer_2]
         if val_dif == 0:
             result_array.append(arr1[pointer_1])
@@ -76,7 +97,7 @@ def allSubsetofSizeKMinus1(a_candidate_of_size_k, k):
 
 
 def stringifyPg(l_level, period):
-    return str(l_level)+'-'+str(period)
+    return str(l_level) + '-' + str(period)
 
 
 def flatten(t):
@@ -202,7 +223,6 @@ def getPeriodStampFromTimestamp(timestamp):
 #         max_period = max(lth_level_values)
 #         res.append(max_period)
 #     return res
-
 
 
 def hash_candidate(candidate):
