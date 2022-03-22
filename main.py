@@ -102,9 +102,5 @@ print(dfSingle)
 
 #dfSingle.to_csv('Taxonomies/salesfact_taxonomy_single_2.csv', header=False, sep=',', index=False)
 """
-#vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Root\R250.data', 'single', 'F:\TesisSyntheticDatasets\Root\R250.tax')
-#vertical_db = Parser().parse('Datasets/synthetic_dataset_test.csv', 'single', 'F:\TesisSyntheticDatasets\Root\R250.tax')
-#vertical_cumulate(vertical_db, 0.5, 0.5, 0)
-
-database = Parser().parse('Datasets/synthetic_dataset_test.csv', 'single', None, True)
-apriori(database, 0.5, 0.5)
+#database = Parser().parse('Datasets/synthetic_dataset_test.csv', 'single')
+#apriori(database, 0.5, 0.5)
