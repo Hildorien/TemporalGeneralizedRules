@@ -23,13 +23,25 @@ class Parser:
         return self.fit_database(dataset, timestamps.to_dict(), None, usingTimestamp)
 
     def build_dataset_timestamp_from_file(self, filepath):
-        df = pd.read_csv(filepath,
-                         dtype={'order_id': int, 'timestamp': int, 'product_name': "string"})
-        df['product_name'].replace(',', '.', inplace=True)
-        dfG = df.groupby(['order_id', 'timestamp'])['product_name'].apply(lambda x: list(x)).reset_index()
-        timestamps = dfG['timestamp']
-        dataset = list(dfG['product_name'])
-        return (dataset, timestamps)
+        header_with_timestamp = {'order_id', 'timestamp', 'product_name'}
+        header_without_timestamp = {'order_id', 'product_name'}
+        with open(filepath) as f:
+            firstline = set(f.readline().rstrip().split(','))
+
+        if firstline == header_with_timestamp:
+            df = pd.read_csv(filepath, dtype={'order_id': int, 'timestamp': int, 'product_name': "string"})
+            df['product_name'].replace(',', '.', inplace=True)
+            dfG = df.groupby(['order_id', 'timestamp'])['product_name'].apply(lambda x: list(x)).reset_index()
+            timestamps = dfG['timestamp']
+            dataset = list(dfG['product_name'])
+            return dataset, timestamps
+        elif firstline == header_without_timestamp:
+            df = pd.read_csv(filepath, dtype={'order_id': int, 'product_name': "string"})
+            df['product_name'].replace(',', '.', inplace=True)
+            dfG = df.groupby(['order_id'])['product_name'].apply(lambda x: list(x)).reset_index()
+            timestamps = pd.DataFrame(columns=['timestamp']) # Empty dataframe
+            dataset = list(dfG['product_name'])
+            return dataset, timestamps
 
     def parse_basket_file(self, filepath):
         return self.fit_database(self.build_dataset_from_basket(filepath), {})

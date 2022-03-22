@@ -38,34 +38,26 @@ def calculate_itemset_ancestor(itemset, taxonomy):
         itemset_ancestor.append(ancestor)
     return sorted(itemset_ancestor)
 
+
 def calculate_support(a_candidate, database):
     return a_candidate, database.supportOf(a_candidate)
 
 
 def calculate_Ck(frequent_dictionary, k):
-    start = time.time()
     candidate_hashmap = apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
-    end = time.time()
-    # print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using apriori-gen'))
     return candidate_hashmap
 
 
 def calculate_C2(frequent_dictionary, k):
     candidate_hashmap = {}
-    start = time.time()
     [add_candidate_to_hashmap(list(x), candidate_hashmap) for x in
      itertools.combinations(flatten(frequent_dictionary[1]), 2)]
-    end = time.time()
-    # print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k) + ' using combinations'))
     return candidate_hashmap
 
 
 def calculate_C1(all_items, k):
     candidate_hashmap = {}
-    start = time.time()
     [add_candidate_to_hashmap(list(x), candidate_hashmap) for x in list(map(lambda x: [x], all_items))]
-    end = time.time()
-    # print('Took ' + (str(end - start) + ' seconds to generate ' + str(len(list(candidate_hashmap.keys()))) + ' candidates of size ' + str(k)))
     return candidate_hashmap
 
 
@@ -112,8 +104,6 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
     # STEP 1: JOIN
     candidate_hashmap = {}
     n = len(frequent_itemset_of_size_k_minus_1)
-    # print('Joining ' + str(n) + ' candidate of size ' + str(k - 1) + ' using apriori_gen')
-    start = time.time()
     for i in range(n):
         j = i + 1
         while j < n:
@@ -123,14 +113,10 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
             else:
                 candidate_hashmap[hash_candidate(joined_itemset)] = joined_itemset
             j += 1
-    end = time.time()
-    # print('Took ' + (str(end - start) + ' seconds to JOIN ' + str(n) + ' candidates of size ' + str(k - 1)))
     # STEP 2: PRUNE -> For each itemset in L_k check if all subsets are frequent
     if k > 2:
         candidates_size_k = list(candidate_hashmap.values()).copy()
         n = len(candidates_size_k)
-        # print('Pruning ' + str(n) + ' candidates of size ' + str(k) + ' using apriori_gen')
-        start = time.time()
         for i in range(n):
             subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(candidates_size_k[i],
                                                                k - 1)  # candidates_size_k[i] is a list
@@ -138,9 +124,6 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
                 if not (a_subset_of_size_k_minus_1 in frequent_dictionary[k - 1]):
                     candidate_hashmap.pop(hash_candidate(candidates_size_k[i]), None)  # Prunes the entire candidate
                     break
-        end = time.time()
-        # print('Took ' + (str(end - start) + ' seconds to PRUNE ' + str(n) + ' candidates of size ' + str(k)))
-        # print('Left with ' + str(len(list(candidate_hashmap.keys()))) + ' candidates')
     return candidate_hashmap
 
 

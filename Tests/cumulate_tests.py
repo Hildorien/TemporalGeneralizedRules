@@ -78,3 +78,4 @@ class CumulateTests(unittest.TestCase):
         self.assertEqual(taxonomy_retail_horizontal_db_basket_format, taxonomy_retail_horizontal_db_single_format)
         self.assertEqual(taxonomy_retail_vertical_db_single_format, taxonomy_retail_horizontal_db_single_format)
         self.assertEqual(taxonomy_foodmart_horizontal_db_single_format, taxonomy_foodmart_vertical_db_single_format)
+
