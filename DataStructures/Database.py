@@ -38,8 +38,11 @@ class Database:
     def transaction_ids_intersection(self, itemset, lb=None, ub=None):
         final_intersection = None
         for itemColumnIndex in itemset:
-            item_valid_indexes = self.matrix_data_by_item[self.items_dic[itemColumnIndex]]['tids']
-
+            item = self.items_dic[itemColumnIndex]
+            if item in self.matrix_data_by_item:
+                item_valid_indexes = self.matrix_data_by_item[self.items_dic[itemColumnIndex]]['tids']
+            else:
+                item_valid_indexes = []
             if final_intersection is None:
                 final_intersection = item_valid_indexes
             elif len(final_intersection) == 0:
