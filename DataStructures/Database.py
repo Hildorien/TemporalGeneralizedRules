@@ -39,7 +39,11 @@ class Database:
     def transaction_ids_intersection(self, itemset, lb=None, ub=None):
         final_intersection = None
         for itemColumnIndex in itemset:
-            all_tids_indexes = self.matrix_data_by_item[self.items_dic[itemColumnIndex]]['tids']
+            item = self.items_dic[itemColumnIndex]
+            if item in self.matrix_data_by_item:
+                all_tids_indexes = self.matrix_data_by_item[self.items_dic[itemColumnIndex]]['tids']
+            else:
+                all_tids_indexes = []
             item_valid_indexes = getFilteredTIDSThatBelongToPeriod(all_tids_indexes, lb, ub)
             if final_intersection is None:
                 final_intersection = item_valid_indexes
