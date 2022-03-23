@@ -1,6 +1,29 @@
 from itertools import combinations
 from datetime import datetime
 
+def maximal_time_period_interval(list_of_tuples, period1, period2):
+    if period1 > period2 or len(list_of_tuples) < period2 or period1 < 0:
+        print('ERROR GETTING MAXIMAL TIME PERIOD')
+        return None
+
+    pointer1 = period1
+    pointer2 = period2
+    lbTID = None
+    ubTID = None
+
+    while pointer1 <= pointer2 and (not(lbTID is not None and ubTID is not None)):
+        if lbTID is None:
+            if list_of_tuples[pointer1] is not None:
+                lbTID = list_of_tuples[pointer1][0]
+            else:
+                pointer1 += 1
+        if ubTID is None:
+            if list_of_tuples[pointer2] is not None:
+                ubTID = list_of_tuples[pointer2][1]
+            else:
+                pointer2 -= 1
+
+    return [lbTID, ubTID]
 
 def binary_search_or_first_higher_value(list, value, low, high):
     while low < high:
@@ -14,8 +37,10 @@ def binary_search_or_first_higher_value(list, value, low, high):
         else:
             low = mid + 1
 
-    # By this far, low and high points to the same value. Is the closest indexedValue to targetValue available.
-    return low
+    if list[low] >= value:
+        return low
+    else:
+        return low+1
 
 
 def findOrderedIntersection(arr1, arr2):
@@ -41,6 +66,17 @@ def findOrderedIntersection(arr1, arr2):
 
     return result_array
 
+def getFilteredTIDSThatBelongToPeriod(arr, lb=None, ub=None):
+    if lb is None or ub is None:
+        return arr
+    res = []
+    pointer = binary_search_or_first_higher_value(arr, lb, 0, len(arr) - 1)
+    while pointer < len(arr) and arr[pointer] <= ub:
+        res.append(arr[pointer])
+        pointer += 1
+    return res
+
+
 
 def findOrderedIntersectionBetweenBoundaries(arr1, arr2, lb, ub):
     """
@@ -56,7 +92,7 @@ def findOrderedIntersectionBetweenBoundaries(arr1, arr2, lb, ub):
     pointer_2 = binary_search_or_first_higher_value(arr2, lb, 0, arr2_size - 1)
 
     result_array = []
-    while pointer_1 < arr1_size and pointer_2 < arr2_size and arr1[pointer_1] < ub and arr2[pointer_2] < ub:
+    while pointer_1 < arr1_size and pointer_2 < arr2_size and arr1[pointer_1] <= ub and arr2[pointer_2] <= ub:
         val_dif = arr1[pointer_1] - arr2[pointer_2]
         if val_dif == 0:
             result_array.append(arr1[pointer_1])

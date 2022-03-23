@@ -143,8 +143,8 @@ class HTARTests(unittest.TestCase):
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
         tfi_0_8 = findIndividualTFI(database, 8, 0.55)["TFI"]
         tfi_0_8_lower_lamda = findIndividualTFI(database, 8, 0.02)["TFI"]
-
         tfi_0_5 = findIndividualTFI(database, 5, 0.02)["TFI"]
+
         self.assertEqual(tfi_0_8[1], {(6,), (2,)}, 'TFI-1')
         self.assertEqual(len(tfi_0_8.keys()), 1, 'TFI-1B')
         self.assertEqual(len(tfi_0_5.keys()), 0, 'TFI-3')
@@ -153,7 +153,7 @@ class HTARTests(unittest.TestCase):
         tfi_0_12 = findIndividualTFI(database, 12, 0.02)["TFI"]
         TFI_by_period = {11: tfi_0_11, 12: tfi_0_12, 8: tfi_0_8_lower_lamda}
 
-        mergedTFIUnion_1 = getTFIUnion(TFI_by_period, [11,12])
+        mergedTFIUnion_1 = getTFIUnion(TFI_by_period, [11, 12])
         self.assertEqual(len(mergedTFIUnion_1[1]), 6, 'TFI-MERGE-1a')
         self.assertEqual(len(mergedTFIUnion_1[2]), 11, 'TFI-MERGE-1b')
 
@@ -211,12 +211,12 @@ class HTARTests(unittest.TestCase):
 
     def test_leaf_tid_starters(self):
         database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-        starters_tid = database.getPTTPeriodTIDsStarters()
-        self.assertEqual(starters_tid[7], 0, 'test_starters_tid_1')
-        self.assertEqual(starters_tid[10], 3, 'test_starters_tid_2')
-        self.assertEqual(starters_tid[11], 4, 'test_starters_tid_3')
-        self.assertEqual(starters_tid[17], 5, 'test_starters_tid_4')
-        self.assertEqual(starters_tid[22], 7, 'test_starters_tid_5')
+        starters_tid = database.getPTTPeriodTIDBoundaryTuples()
+        self.assertEqual(starters_tid[7], [0, 2], 'test_starters_tid_1')
+        self.assertEqual(starters_tid[10], [3, 3], 'test_starters_tid_2')
+        self.assertEqual(starters_tid[11], [4, 4], 'test_starters_tid_3')
+        self.assertEqual(starters_tid[17], [5, 6], 'test_starters_tid_4')
+        self.assertEqual(starters_tid[22], [7, 7], 'test_starters_tid_5')
 
 
     # def test_HTAR_foodmart_data_1997_correctness_and_completness(self):
@@ -238,8 +238,8 @@ class HTARTests(unittest.TestCase):
 
     # def test_HTAR_foodmart_data_1998_correctness_and_completness(self):
     #     database = Parser().parse("Datasets/sales_formatted_1997.csv", 'single', None, True)
-    #     rules_by_pg = HTAR_BY_PG(database, 0.006, 0.01, 0.006)
-    #     apriori_rules = apriori(database,0.006, 0.01)
+    #     rules_by_pg = HTAR_BY_PG(database, 0.002, 0.01, 0.002)
+    #     apriori_rules = apriori(database, 0.002, 0.01)
     #     print(len(rules_by_pg))
     #     print(len(apriori_rules))
     #     self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)

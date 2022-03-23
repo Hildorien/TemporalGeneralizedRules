@@ -11,7 +11,7 @@ class PTT:  # Periodical Total Transaction
         hardcoded_htg = [24, 12, 4, 1]
         self.ptt = []
         for x in range(hardcoded_htg[0]):
-            self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'firstTID': None})
+            self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'FirstAndLastTID': None})
 
     def addMultiplePeriods(self, periods):
         for period in periods:
@@ -35,8 +35,10 @@ class PTT:  # Periodical Total Transaction
         if self.checkIfLlevelAndPeriodAreValid(pi):
             self.ptt[pi - 1]['itemsSet'].update(items)
             self.ptt[pi - 1]['totalTransactions'] += 1
-            if self.ptt[pi - 1]['firstTID'] is None:
-                self.ptt[pi - 1]['firstTID'] = tid
+            if self.ptt[pi - 1]['FirstAndLastTID'] is None:
+                self.ptt[pi - 1]['FirstAndLastTID'] = [tid, tid]
+            else:
+                self.ptt[pi - 1]['FirstAndLastTID'][1] = tid
         else:
             print('ERROR AL AGREGAR ELEMENTO AL PTT. PERIODOS NO COMPATIBLE CON HTG')
 
@@ -50,9 +52,8 @@ class PTT:  # Periodical Total Transaction
         level_0_periods_included = getPeriodsIncluded(level, pi)
         return self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included)
 
-    def getPTTPeriodTIDsStarters(self):
-        return list(map(lambda x: x['firstTID'], self.ptt))
-
+    def getPTTPeriodTIDBoundaryTuples(self):
+        return list(map(lambda x: x['FirstAndLastTID'], self.ptt))
 
     def checkIfLlevelAndPeriodAreValid(self, period):
         return len(self.ptt) >= period
