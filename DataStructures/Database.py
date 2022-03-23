@@ -33,17 +33,17 @@ class Database:
         return self.items_dic
 
     def getItemTids(self, item_number):
-        return self.matrix_data_by_item[self.items_dic[item_number]]['tids']
+        item = self.items_dic[item_number]
+        if item in self.matrix_data_by_item:
+            return self.matrix_data_by_item[item]['tids']
+        else:
+            return []
     #Methods for debugging purposes
 
     def transaction_ids_intersection(self, itemset, lb=None, ub=None):
         final_intersection = None
         for itemColumnIndex in itemset:
-            item = self.items_dic[itemColumnIndex]
-            if item in self.matrix_data_by_item:
-                all_tids_indexes = self.matrix_data_by_item[self.items_dic[itemColumnIndex]]['tids']
-            else:
-                all_tids_indexes = []
+            all_tids_indexes = self.getItemTids(itemColumnIndex)
             item_valid_indexes = getFilteredTIDSThatBelongToPeriod(all_tids_indexes, lb, ub)
             if final_intersection is None:
                 final_intersection = item_valid_indexes
