@@ -41,6 +41,12 @@ class Parser:
             df['product_name'].replace(',', '.', inplace=True)
             dataset, timestamps =self.groupby_multikey_dataframe_fast(df, ['order_id'])
             return dataset, timestamps
+        elif len(firstline) == 2:   # No header but we assume format is order_id,product_name
+            df = pd.read_csv(filepath, names=['order_id', 'product_name'], header=None,
+                             dtype={'order_id': int, 'product_name': "string"})
+            df['product_name'].replace(',', '.', inplace=True)
+            dataset, timestamps =self.groupby_multikey_dataframe_fast(df, ['order_id'])
+            return dataset, timestamps
 
     def groupby_multikey_dataframe_fast(self, df, key_cols):
         """

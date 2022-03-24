@@ -13,6 +13,10 @@ loggerA = logging.getLogger(__name__ + '_vanilla')
 loggerB = logging.getLogger(__name__ + '_vertical')
 loggerC = logging.getLogger(__name__ + '_vertical_with_parallel_count')
 
+loggerAPlotter = logging.getLogger(__name__ + '_vanilla_plot')
+loggerBPlotter = logging.getLogger(__name__ + '_vertical_plot')
+loggerCPlotter = logging.getLogger(__name__ + '_vertical_with_parallel_count_plot')
+
 
 def cumulate(horizontal_database, min_supp, min_conf, min_r):
     """
@@ -64,6 +68,8 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
         k += 1
     end = time.time()
     loggerA.info('FrequentPhase,' + str(end-start))
+    loggerAPlotter.info('y,' + str(end-start))
+
     # Generate Rules
     start = time.time()
     rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
@@ -123,8 +129,10 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
     end = time.time()
     if parallel_count:
         loggerC.info('FrequentPhase,' + str(end-start))
+        loggerCPlotter.info('y,' + str(end-start))
     else:
         loggerB.info('FrequentPhase,' + str(end - start))
+        loggerBPlotter.info('y,' + str(end - start))
     # Generate Rules
     start = time.time()
     rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
