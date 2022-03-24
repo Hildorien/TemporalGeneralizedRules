@@ -2,10 +2,9 @@ import numpy as np
 import pandas as pd
 from DataStructures.Database import Database
 from DataStructures.HorizontalDatabase import HorizontalDatabase
-from DataStructures.PTT import PTT
+from HTAR.HTAR_utility import getPeriodStampFromTimestamp
+from HTAR.PTT import PTT
 from DataStructures.Transaction import Transaction
-from utility import getPeriodStampFromTimestamp
-
 
 class Parser:
 

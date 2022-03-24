@@ -1,6 +1,5 @@
-from DataStructures.PTT import PTT
-from utility import findOrderedIntersection, getPeriodStampFromTimestamp, allSubsetofSizeKMinus1, \
-    findOrderedIntersectionBetweenBoundaries, getPeriodsIncluded, maximal_time_period_interval, \
+from HTAR.HTAR_utility import getPeriodsIncluded
+from utility import findOrderedIntersection, findOrderedIntersectionBetweenBoundaries, maximal_time_period_interval, \
     getFilteredTIDSThatBelongToPeriod
 
 

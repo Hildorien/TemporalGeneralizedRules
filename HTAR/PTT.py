@@ -1,4 +1,4 @@
-from utility import getPeriodsIncluded
+from HTAR.HTAR_utility import getPeriodsIncluded
 
 
 class PTT:  # Periodical Total Transaction
