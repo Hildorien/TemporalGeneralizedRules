@@ -25,8 +25,11 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
                                        itertools.repeat(taxonomy),
                                        len(all_frequents) * [min_confidence],
                                        len(all_frequents) * [min_r]))
+
         for result in results:
             rules.extend(result)
+        pool.close()  # Close pools after using them
+        pool.join()  # Main process waits after last pool closes
     else:
         for key in frequent_dictionary:
             if key != 1:

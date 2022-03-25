@@ -114,7 +114,9 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
         if len(candidates_size_k) == 0:
             break
         if parallel_count:
+            #pool = multiprocessing.Pool(multiprocessing.cpu_count())
             results = pool.starmap(calculate_support, zip(candidates_size_k, itertools.repeat(vertical_database)))
+
             for a_result in results:
                 support_dictionary[hash_candidate(a_result[0])] = a_result[1]
                 if a_result[1] >= min_supp:
@@ -127,7 +129,10 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
                     frequent_dictionary[k].append(a_candidate_size_k)
         k += 1
     end = time.time()
+
     if parallel_count:
+        pool.close()  # Close pools after using them
+        pool.join()  # Main process waits after last pool closes
         loggerC.info('FrequentPhase,' + str(end-start))
         loggerCPlotter.info('y,' + str(end-start))
     else:

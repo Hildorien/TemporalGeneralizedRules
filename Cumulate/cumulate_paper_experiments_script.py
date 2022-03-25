@@ -20,6 +20,7 @@ synthetic_parameters = {
     'fanout': [5, 7, 10, 15, 20, 25],
     'item': [10, 25, 50, 75, 100],  # Multiplied by thousand
     'transaction': [0.1, 0.25, 0.5, 1, 2, 5, 10],  # Multiplied by a million
+    'support': [0.02, 0.01, 0.0075, 0.005, 0.003]
 }
 
 synthetic_datasets_filepath = {
@@ -91,6 +92,7 @@ synthetic_taxonomies_filepath = {
                     'F:\TesisSyntheticDatasets\Transaction\T2M.tax',
                     'F:\TesisSyntheticDatasets\Transaction\T5M.tax',
                     'F:\TesisSyntheticDatasets\Transaction\T10M.tax'],
+    'support': ['F:\TesisSyntheticDatasets\Support\S1M.tax']
 }
 
 
@@ -160,7 +162,7 @@ def run_cumulate(logger, dataset_filepath, taxonomy_filepath):
     horizontal_db = Parser().parse_horizontal_database(dataset_filepath, taxonomy_filepath, 'single')
     end = time.time()
     logger.info('ParsingPhase,' + str(end - start))
-    cumulate(horizontal_db, 0.5, 0.5, 0)
+    cumulate(horizontal_db, 0.005, 0.5, 0)
     log_experiment_end([logger])
 
 
@@ -171,8 +173,8 @@ def run_vertical_cumulate_and_parallel_version(loggers, dataset_filepath, taxono
     end = time.time()
     for logger in loggers:
         logger.info('ParsingPhase,' + str(end - start))
-    vertical_cumulate(vertical_db, 0.5, 0.5, 0)
-    vertical_cumulate(vertical_db, 0.5, 0.5, 0, True)
+    vertical_cumulate(vertical_db, 0.005, 0.5, 0)
+    vertical_cumulate(vertical_db, 0.005, 0.5, 0, True)
     log_experiment_end(loggers)
 
 
@@ -247,12 +249,15 @@ def plot_experiment(experiment_key):
 
 def main():
     loggerError = setup_logger('Experiment.ErrorLogger',  'Experiments/error_log.txt', logging.ERROR)
+
+    """
     # Run all experiments by key
     for key in synthetic_datasets_filepath:
         try:
             run_experiments(key)
         except Exception as e:
             loggerError.error(''.join(traceback.format_exception(None, e, e.__traceback__)))
+    """
 
     #run_experiments('root')
     #run_experiments('depth_ratio')
