@@ -1,6 +1,7 @@
 import math
 import time
 import unittest
+from datetime import datetime
 from multiprocessing import freeze_support
 import pandas as pd
 
@@ -104,3 +105,11 @@ print(dfSingle)
 """
 #database = Parser().parse('Datasets/synthetic_dataset_test.csv', 'single')
 #apriori(database, 0.5, 0.5)
+
+#df = pd.read_csv('Datasets/sales_formatted_1998.csv', dtype={'order_id': int, 'timestamp': int, 'product_name': "string"})
+#dfS = df.sort_values(by=['timestamp', 'order_id'])
+#print(dfS)
+#dfS.to_csv('Datasets/sales_formatted_1998_sorted_by_timestamp.csv', sep=',', index=False)
+#df['product_name'].replace(',', '.', inplace=True)
+#dfG = df.groupby(['timestamp', 'order_id'])['product_name'].apply(lambda x: list(x)).reset_index()
+#print(dfG)
