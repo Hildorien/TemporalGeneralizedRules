@@ -30,8 +30,9 @@ class Parser:
 
         if firstline == header_with_timestamp:
             df = pd.read_csv(filepath, dtype={'order_id': int, 'timestamp': int, 'product_name': "string"})
+            df = df.sort_values(by=['timestamp', 'order_id'])
             df['product_name'].replace(',', '.', inplace=True)
-            dfG = df.groupby(['order_id', 'timestamp'])['product_name'].apply(lambda x: list(x)).reset_index()
+            dfG = df.groupby(['timestamp', 'order_id'])['product_name'].apply(lambda x: list(x)).reset_index()
             timestamps = dfG['timestamp']
             dataset = list(dfG['product_name'])
             return dataset, timestamps
