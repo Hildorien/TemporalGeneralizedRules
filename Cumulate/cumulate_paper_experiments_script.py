@@ -1,15 +1,17 @@
 import logging
 import os
+import sys
 import time
+import traceback
 
-import astropy.version
 import numpy as np
 from matplotlib import pyplot as plt
 
 from Cumulate.cumulate import cumulate, vertical_cumulate
 from DataStructures.Parser import Parser
 
-formatter = logging.Formatter('%(message)s')
+only_message_format = logging.Formatter('%(message)s')
+error_format = logging.Formatter('%(asctime)s  %(name)s  %(levelname)s: %(message)s')
 
 synthetic_parameters = {
     'test': [1, 2, 3, 4, 5],
@@ -17,7 +19,7 @@ synthetic_parameters = {
     'depth_ratio': [0.5, 0.75, 1, 1.5, 2],
     'fanout': [5, 7, 10, 15, 20, 25],
     'item': [10, 25, 50, 75, 100],  # Multiplied by thousand
-    'transaction': [0.1, 0.25, 0.5, 1, 2, 5, 10]  # Multiplied by a million
+    'transaction': [0.1, 0.25, 0.5, 1, 2, 5, 10],  # Multiplied by a million
 }
 
 synthetic_datasets_filepath = {
@@ -29,7 +31,32 @@ synthetic_datasets_filepath = {
     'root': ['F:\TesisSyntheticDatasets\Root\R250.data',
              'F:\TesisSyntheticDatasets\Root\R500.data',
              'F:\TesisSyntheticDatasets\Root\R750.data',
-             'F:\TesisSyntheticDatasets\Root\R1000.data']}
+             'F:\TesisSyntheticDatasets\Root\R1000.data'],
+    'depth_ratio': ['F:\TesisSyntheticDatasets\DepthRatio\D05.data',
+                    'F:\TesisSyntheticDatasets\DepthRatio\D075.data',
+                    'F:\TesisSyntheticDatasets\DepthRatio\D1.data',
+                    'F:\TesisSyntheticDatasets\DepthRatio\D2.data',
+                    'F:\TesisSyntheticDatasets\DepthRatio\D15.data'],
+    'fanout': ['F:\TesisSyntheticDatasets\Fanout\F5.data',
+               'F:\TesisSyntheticDatasets\Fanout\F7.data',
+               'F:\TesisSyntheticDatasets\Fanout\F10.data',
+               'F:\TesisSyntheticDatasets\Fanout\F15.data',
+               'F:\TesisSyntheticDatasets\Fanout\F20.data',
+               'F:\TesisSyntheticDatasets\Fanout\F25.data'],
+    'item': ['F:\TesisSyntheticDatasets\Item\I10k.data',
+             'F:\TesisSyntheticDatasets\Item\I25k.data',
+             'F:\TesisSyntheticDatasets\Item\I50k.data',
+             'F:\TesisSyntheticDatasets\Item\I75k.data',
+             'F:\TesisSyntheticDatasets\Item\I100k.data'],
+    'transaction': ['F:\TesisSyntheticDatasets\Transaction\T100k.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T250k.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T500k.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T1M.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T2M.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T5M.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T10M.data'],
+    'support': ['F:\TesisSyntheticDatasets\Support\S1M.data']
+}
 
 synthetic_taxonomies_filepath = {
     'test': ['F:\TesisSyntheticDatasets\Test\Test1.tax',
@@ -40,7 +67,31 @@ synthetic_taxonomies_filepath = {
     'root': ['F:\TesisSyntheticDatasets\Root\R250.tax',
              'F:\TesisSyntheticDatasets\Root\R500.tax',
              'F:\TesisSyntheticDatasets\Root\R750.tax',
-             'F:\TesisSyntheticDatasets\Root\R1000.tax']}
+             'F:\TesisSyntheticDatasets\Root\R1000.tax'],
+    'depth_ratio': ['F:\TesisSyntheticDatasets\DepthRatio\D05.tax',
+                    'F:\TesisSyntheticDatasets\DepthRatio\D075.tax',
+                    'F:\TesisSyntheticDatasets\DepthRatio\D1.tax',
+                    'F:\TesisSyntheticDatasets\DepthRatio\D2.tax',
+                    'F:\TesisSyntheticDatasets\DepthRatio\D15.tax'],
+    'fanout': ['F:\TesisSyntheticDatasets\Fanout\F5.tax',
+               'F:\TesisSyntheticDatasets\Fanout\F7.tax',
+               'F:\TesisSyntheticDatasets\Fanout\F10.tax',
+               'F:\TesisSyntheticDatasets\Fanout\F15.tax',
+               'F:\TesisSyntheticDatasets\Fanout\F20.tax',
+               'F:\TesisSyntheticDatasets\Fanout\F25.tax'],
+    'item': ['F:\TesisSyntheticDatasets\Item\I10k.tax',
+             'F:\TesisSyntheticDatasets\Item\I25k.tax',
+             'F:\TesisSyntheticDatasets\Item\I50k.tax',
+             'F:\TesisSyntheticDatasets\Item\I75k.tax',
+             'F:\TesisSyntheticDatasets\Item\I100k.tax'],
+    'transaction': ['F:\TesisSyntheticDatasets\Transaction\T100k.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T250k.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T500k.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T1M.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T2M.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T5M.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T10M.tax'],
+}
 
 
 def parse_and_plot_files(experiment_key):
@@ -72,13 +123,14 @@ def parse_and_plot_files(experiment_key):
     cumulate_vertical_time = y_axis_dict['cumulate_vertical']
     cumulate_vertical_with_parallel_count_time = y_axis_dict['cumulate_vertical_with_parallel_count']
 
-    #Check if avg time in seconds surpasses a threshhold. If so, express time in minutes
-    avg_time_in_seconds = (np.average(cumulate_vanilla_time) + np.average(cumulate_vertical_time) + np.average(cumulate_vertical_with_parallel_count_time)) //3
+    # Check if avg time in seconds surpasses a threshhold. If so, express time in minutes
+    avg_time_in_seconds = (np.average(cumulate_vanilla_time) + np.average(cumulate_vertical_time) + np.average(
+        cumulate_vertical_with_parallel_count_time)) // 3
     if avg_time_in_seconds > 60:
-        cumulate_vanilla_time = list(map(lambda x: x//60, cumulate_vanilla_time))
-        cumulate_vertical_time = list(map(lambda x: x//60, cumulate_vertical_time))
-        cumulate_vertical_with_parallel_count_time = list(map(lambda x: x//60, cumulate_vertical_with_parallel_count_time))
-
+        cumulate_vanilla_time = list(map(lambda x: x // 60, cumulate_vanilla_time))
+        cumulate_vertical_time = list(map(lambda x: x // 60, cumulate_vertical_time))
+        cumulate_vertical_with_parallel_count_time = list(
+            map(lambda x: x // 60, cumulate_vertical_with_parallel_count_time))
 
     plt.plot(x_axis, cumulate_vanilla_time, color='r', label='cumulate')
     plt.plot(x_axis, cumulate_vertical_time, color='g', label='cumulate_vertical')
@@ -130,11 +182,11 @@ def log_for_plot_x_axis_(logPlotters, value):
 
 
 def run_algorithms(experiment_key):
-    loggerA = setup_logger('Cumulate.cumulate_vanilla',
+    loggerA = setup_logger('Cumulate.cumulate_vanilla' + '_' + experiment_key,
                            'Experiments/' + experiment_key + '_' + 'cumulate_vanilla.txt')
-    loggerB = setup_logger('Cumulate.cumulate_vertical',
+    loggerB = setup_logger('Cumulate.cumulate_vertical' + '_' + experiment_key,
                            'Experiments/' + experiment_key + '_' + 'cumulate_vertical.txt')
-    loggerC = setup_logger('Cumulate.cumulate_vertical_with_parallel_count',
+    loggerC = setup_logger('Cumulate.cumulate_vertical_with_parallel_count' + '_' + experiment_key,
                            'Experiments/' + experiment_key + '_' + 'cumulate_vertical_with_parallel_count.txt')
 
     loggerAPlotter = setup_logger('Cumulate.cumulate_vanilla_plot',
@@ -153,13 +205,20 @@ def run_algorithms(experiment_key):
         run_cumulate(loggerA, datasets_filepaths[i], taxonomy_datasets_filepaths[i])
         run_vertical_cumulate_and_parallel_version([loggerB, loggerC], datasets_filepaths[i],
                                                    taxonomy_datasets_filepaths[i])
+    loggers = [loggerA, loggerB, loggerC, loggerAPlotter, loggerBPlotter, loggerCPlotter]
+    for logger in loggers:
+        for handler in logger.handlers[:]:
+            logger.removeHandler(handler) # This is for renewing file handlers on next call
 
 
 def setup_logger(name, log_file, level=logging.INFO):
     """To setup as many loggers as you want"""
 
     handler = logging.FileHandler(log_file)
-    handler.setFormatter(formatter)
+    if level == logging.INFO:
+        handler.setFormatter(only_message_format)
+    else:
+        handler.setFormatter(error_format)
 
     logger = logging.getLogger(name)
     logger.setLevel(level)
@@ -178,7 +237,7 @@ def log_experiment_end(loggers):
         logger.info('############################################################################')
 
 
-def run_experiment(experiment_key):
+def run_experiments(experiment_key):
     run_algorithms(experiment_key)
 
 
@@ -187,9 +246,26 @@ def plot_experiment(experiment_key):
 
 
 def main():
-    run_experiment('test')
-    plot_experiment('test')
+    loggerError = setup_logger('Experiment.ErrorLogger',  'Experiments/error_log.txt', logging.ERROR)
+    # Run all experiments by key
+    for key in synthetic_datasets_filepath:
+        try:
+            run_experiments(key)
+        except Exception as e:
+            loggerError.error(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
+    #run_experiments('root')
+    #run_experiments('depth_ratio')
+    #run_experiments('fanout')
+    #run_experiments('item')
+    #run_experiments('transaction')
+
+    # Plot experiments by key
+    #parse_and_plot_files('root')
+    #parse_and_plot_files('depth_ratio')
+    #parse_and_plot_files('fanout')
+    #parse_and_plot_files('item')
+    #parse_and_plot_files('transaction')
 
 
 if __name__ == '__main__':
