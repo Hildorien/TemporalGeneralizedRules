@@ -9,7 +9,7 @@ import multiprocessing
 def calculateSupportInPJ(a_candidate, database, l_level, pj):
     return a_candidate, database.supportOf(a_candidate, l_level, pj)
 
-def findIndividualTFI(database, pj, lam, parallel_count=True):
+def findIndividualTFI(database, pj, lam, parallel_count=False):
     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
     ptt_entry = database.getPTTValueFromLeafLevelGranule(pj)
     TFI_j = {}
