@@ -36,7 +36,7 @@ def calculate_itemset_ancestor(itemset, taxonomy):
     for item in itemset:
         ancestor = close_ancestor(item, taxonomy)  # returns same item if item has no ancestor
         itemset_ancestor.append(ancestor)
-    return sorted(itemset_ancestor)
+    return sorted(list(set(itemset_ancestor))) # Remove duplicate ancestors in case taxonomy has parents repeated across levels
 
 
 def calculate_support(a_candidate, database):

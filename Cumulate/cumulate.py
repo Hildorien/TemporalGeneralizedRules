@@ -26,6 +26,18 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     :param min_r: User-defined minimum R interesting measure
     :return: Set of association rules
     """
+    frequent_dictionary, support_dictionary, taxonomy = cumulate_frequents(horizontal_database, min_supp)
+
+    # Generate Rules
+    start = time.time()
+    rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
+                            False, taxonomy, min_r, horizontal_database)
+    end = time.time()
+    loggerA.info('RulePhase,' + str(end-start))
+    return rules
+
+
+def cumulate_frequents(horizontal_database, min_supp):
     start = time.time()
     # Instantiate local variables
     frequent_dictionary = {}
@@ -67,16 +79,9 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
 
         k += 1
     end = time.time()
-    loggerA.info('FrequentPhase,' + str(end-start))
-    loggerAPlotter.info('y,' + str(end-start))
-
-    # Generate Rules
-    start = time.time()
-    rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
-                            False, taxonomy, min_r, horizontal_database)
-    end = time.time()
-    loggerA.info('RulePhase,' + str(end-start))
-    return rules
+    loggerA.info('FrequentPhase,' + str(end - start))
+    loggerAPlotter.info('y,' + str(end - start))
+    return frequent_dictionary, support_dictionary, taxonomy
 
 
 def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_count=False, parallel_rule_gen=False):
@@ -89,6 +94,21 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
     :param parallel_rule_gen: Optional parameter to set parallel rule gen
     :return: Set of association rules
     """
+    frequent_dictionary, support_dictionary, taxonomy = vertical_cumulate_frequents(vertical_database, min_supp,
+                                                                                    parallel_count)
+    # Generate Rules
+    start = time.time()
+    rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
+                            parallel_rule_gen, taxonomy, min_r, vertical_database)
+    end = time.time()
+    if parallel_count:
+        loggerC.info('RulePhase,' + str(end-start))
+    else:
+        loggerB.info('RulePhase,' + str(end - start))
+    return rules
+
+
+def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=False):
     start = time.time()
     # Instantiate local variables
     frequent_dictionary = {}
@@ -114,7 +134,7 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
         if len(candidates_size_k) == 0:
             break
         if parallel_count:
-            #pool = multiprocessing.Pool(multiprocessing.cpu_count())
+            # pool = multiprocessing.Pool(multiprocessing.cpu_count())
             results = pool.starmap(calculate_support, zip(candidates_size_k, itertools.repeat(vertical_database)))
 
             for a_result in results:
@@ -129,22 +149,12 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
                     frequent_dictionary[k].append(a_candidate_size_k)
         k += 1
     end = time.time()
-
     if parallel_count:
         pool.close()  # Close pools after using them
         pool.join()  # Main process waits after last pool closes
-        loggerC.info('FrequentPhase,' + str(end-start))
-        loggerCPlotter.info('y,' + str(end-start))
+        loggerC.info('FrequentPhase,' + str(end - start))
+        loggerCPlotter.info('y,' + str(end - start))
     else:
         loggerB.info('FrequentPhase,' + str(end - start))
         loggerBPlotter.info('y,' + str(end - start))
-    # Generate Rules
-    start = time.time()
-    rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
-                            parallel_rule_gen, taxonomy, min_r, vertical_database)
-    end = time.time()
-    if parallel_count:
-        loggerC.info('RulePhase,' + str(end-start))
-    else:
-        loggerB.info('RulePhase,' + str(end - start))
-    return rules
+    return frequent_dictionary, support_dictionary, taxonomy

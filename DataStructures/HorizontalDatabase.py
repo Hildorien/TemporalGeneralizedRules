@@ -49,13 +49,18 @@ class HorizontalDatabase:
         """
         taxonomy_pruned = self.taxonomy.copy()
         checked = set()
+        # Check in linear time if an ancestor is contained in a candidate
+        setOfCandidates = set(map(tuple, candidates_size_k))
         for item in taxonomy_pruned:
             ancestors = taxonomy_pruned[item]
             for an_ancestor in ancestors:
                 if an_ancestor not in checked:
                     checked.add(an_ancestor)
-                    contained_in_a_candidate = an_ancestor in (item for sublist in candidates_size_k for item in
-                                                               sublist)
+                    contained_in_a_candidate = False
+                    for a_candidate in setOfCandidates:
+                        if an_ancestor in a_candidate:
+                            contained_in_a_candidate = True
+                            break
                     if not contained_in_a_candidate:
                         ancestors.remove(an_ancestor)
         return taxonomy_pruned

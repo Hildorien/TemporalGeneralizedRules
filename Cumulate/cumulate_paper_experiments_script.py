@@ -7,7 +7,7 @@ import traceback
 import numpy as np
 from matplotlib import pyplot as plt
 
-from Cumulate.cumulate import cumulate, vertical_cumulate
+from Cumulate.cumulate import cumulate, vertical_cumulate, cumulate_frequents, vertical_cumulate_frequents
 from DataStructures.Parser import Parser
 
 only_message_format = logging.Formatter('%(message)s')
@@ -156,26 +156,33 @@ def parse_and_plot_files(experiment_key):
     plt.close()
 
 
-def run_cumulate(logger, dataset_filepath, taxonomy_filepath):
-    log_experiment_start([logger], dataset_filepath)
+def run_cumulate(horizontal_db):
+    cumulate_frequents(horizontal_db, 0.005)
+
+
+def create_horizontal_db(logger, dataset_filepath, taxonomy_filepath):
     start = time.time()
     horizontal_db = Parser().parse_horizontal_database(dataset_filepath, taxonomy_filepath, 'single')
     end = time.time()
     logger.info('ParsingPhase,' + str(end - start))
-    cumulate(horizontal_db, 0.005, 0.5, 0)
-    log_experiment_end([logger])
+    return horizontal_db
 
 
-def run_vertical_cumulate_and_parallel_version(loggers, dataset_filepath, taxonomy_filepath):
-    log_experiment_start(loggers, dataset_filepath)
+def run_vertical_cumulate(vertical_db):
+    vertical_cumulate_frequents(vertical_db, 0.005)
+
+
+def run_vertical_cumulate_parallel_count(vertical_db):
+    vertical_cumulate_frequents(vertical_db, 0.005, True)
+
+
+def create_vertical_db(loggers, dataset_filepath, taxonomy_filepath):
     start = time.time()
     vertical_db = Parser().parse(dataset_filepath, 'single', taxonomy_filepath)
     end = time.time()
     for logger in loggers:
         logger.info('ParsingPhase,' + str(end - start))
-    vertical_cumulate(vertical_db, 0.005, 0.5, 0)
-    vertical_cumulate(vertical_db, 0.005, 0.5, 0, True)
-    log_experiment_end(loggers)
+    return vertical_db
 
 
 def log_for_plot_x_axis_(logPlotters, value):
@@ -204,13 +211,27 @@ def run_algorithms(experiment_key):
     total_datasets = len(datasets_filepaths)
     for i in range(total_datasets):
         log_for_plot_x_axis_([loggerAPlotter, loggerBPlotter, loggerCPlotter], experiment_parameters[i])
-        run_cumulate(loggerA, datasets_filepaths[i], taxonomy_datasets_filepaths[i])
-        run_vertical_cumulate_and_parallel_version([loggerB, loggerC], datasets_filepaths[i],
-                                                   taxonomy_datasets_filepaths[i])
+
+        # Create and run cumulate
+        log_experiment_start(loggerA, datasets_filepaths[i])
+        hdb = create_horizontal_db(loggerA, datasets_filepaths[i], taxonomy_datasets_filepaths[i])
+        run_cumulate(hdb)
+        log_experiment_end(loggerA)
+
+        # Create and run vertical cumulate
+        log_experiment_start(loggerB, datasets_filepaths[i])
+        log_experiment_start(loggerC, datasets_filepaths[i])
+        vdb = create_vertical_db([loggerB, loggerC], datasets_filepaths[i], taxonomy_datasets_filepaths[i])
+        run_vertical_cumulate(vdb)
+        log_experiment_end(loggerB)
+        # Create and run vertical cumulate parallel count
+        run_vertical_cumulate_parallel_count(vdb)
+        log_experiment_end(loggerC)
+
     loggers = [loggerA, loggerB, loggerC, loggerAPlotter, loggerBPlotter, loggerCPlotter]
     for logger in loggers:
         for handler in logger.handlers[:]:
-            logger.removeHandler(handler) # This is for renewing file handlers on next call
+            logger.removeHandler(handler)  # This is for renewing file handlers on next call
 
 
 def setup_logger(name, log_file, level=logging.INFO):
@@ -229,14 +250,12 @@ def setup_logger(name, log_file, level=logging.INFO):
     return logger
 
 
-def log_experiment_start(loggers, filepath):
-    for logger in loggers:
-        logger.info(filepath)
+def log_experiment_start(logger, filepath):
+    logger.info(filepath)
 
 
-def log_experiment_end(loggers):
-    for logger in loggers:
-        logger.info('############################################################################')
+def log_experiment_end(logger):
+    logger.info('############################################################################')
 
 
 def run_experiments(experiment_key):
@@ -248,8 +267,8 @@ def plot_experiment(experiment_key):
 
 
 def main():
-    loggerError = setup_logger('Experiment.ErrorLogger',  'Experiments/error_log.txt', logging.ERROR)
-
+    loggerError = setup_logger('Experiment.ErrorLogger', 'Experiments/error_log.txt', logging.ERROR)
+    run_experiments('test')
     """
     # Run all experiments by key
     for key in synthetic_datasets_filepath:
@@ -259,18 +278,18 @@ def main():
             loggerError.error(''.join(traceback.format_exception(None, e, e.__traceback__)))
     """
 
-    #run_experiments('root')
-    #run_experiments('depth_ratio')
-    #run_experiments('fanout')
-    #run_experiments('item')
-    #run_experiments('transaction')
+    # run_experiments('root')
+    # run_experiments('depth_ratio')
+    # run_experiments('fanout')
+    # run_experiments('item')
+    # run_experiments('transaction')
 
     # Plot experiments by key
-    #parse_and_plot_files('root')
-    #parse_and_plot_files('depth_ratio')
-    #parse_and_plot_files('fanout')
-    #parse_and_plot_files('item')
-    #parse_and_plot_files('transaction')
+    # parse_and_plot_files('root')
+    # parse_and_plot_files('depth_ratio')
+    # parse_and_plot_files('fanout')
+    # parse_and_plot_files('item')
+    # parse_and_plot_files('transaction')
 
 
 if __name__ == '__main__':
