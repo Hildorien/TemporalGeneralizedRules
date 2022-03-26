@@ -22,6 +22,18 @@ def getPeriodStampFromTimestamp(timestamp):
     return [getFortnight(dt.day, dt.month), dt.month, ((dt.month // 4) + 1), 1]
 
 
+def getPeriodStampFromTimestampHONG(timestamp):
+    # Only for HTG = [10,5,1]
+    fromDate = 852076800 # 1/1/1997
+    untilDate = 883612800 # 1/1/1998 (assuming they only use one year), else use 1/1/1999(915148800)
+    totalWidth = untilDate - fromDate
+    basketSize = totalWidth // 10
+    leafbasket = (timestamp - fromDate) // basketSize
+    upperLeaf = leafbasket // 2
+    return [leafbasket + 1, upperLeaf + 1, 1]
+
+
+
 def getTFIUnion(TFI_by_period, bounderies):
     """
     :param TFI_by_period: A dictionary of TFI's indexed by period
@@ -57,6 +69,18 @@ def getPeriodsIncluded(l_length, period):
         return [later_fortnight - 5, later_fortnight]
     elif l_length == 3:
         return [1, 24]
+    else:
+        print("ERROR: L_LENGTH NOT AVAILABLE FOR DEFAULT HTG")
+
+def getPeriodsIncludedInHONG(l_length, period):
+    # Note: This method does only works for any period in level above 0 with hardcoded HTG = [10, 5, 1]
+    if l_length == 0:
+        return [period, period]
+    elif l_length == 1:
+        ub = period*2
+        return [ub-1, ub]
+    elif l_length == 2:
+        return [1, 10]
     else:
         print("ERROR: L_LENGTH NOT AVAILABLE FOR DEFAULT HTG")
 

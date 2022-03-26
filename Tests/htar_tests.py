@@ -4,7 +4,8 @@ from Apriori.apriori import apriori
 from HTAR.PTT import PTT
 from DataStructures.Parser import Parser
 from HTAR.HTAR import findIndividualTFI, HTAR_BY_PG
-from HTAR.HTAR_utility import getPeriodStampFromTimestamp, getTFIUnion, getPeriodsIncluded
+from HTAR.HTAR_utility import getPeriodStampFromTimestamp, getTFIUnion, getPeriodsIncluded, \
+    getPeriodStampFromTimestampHONG
 
 
 class HTARTests(unittest.TestCase):
@@ -212,6 +213,20 @@ class HTARTests(unittest.TestCase):
         self.assertEqual(starters_tid[11], [4, 4], 'test_starters_tid_3')
         self.assertEqual(starters_tid[17], [5, 6], 'test_starters_tid_4')
         self.assertEqual(starters_tid[22], [7, 7], 'test_starters_tid_5')
+
+    def test_get_period_stamp_from_timestamp_HONG(self):
+        t1 = 852076800  # 1/1/1997
+        t2 = 883526400  # 12/12/1997
+        t3 = 859248000  # 25/3/1997
+        t4 = 866332800  # 15/6/1997
+
+        self.assertEqual(getPeriodStampFromTimestampHONG(t1), [1, 1, 1], 'Periodstamp HONG 1')
+        self.assertEqual(getPeriodStampFromTimestampHONG(t2), [10, 5, 1], 'Periodstamp HONG 2')
+        self.assertEqual(getPeriodStampFromTimestampHONG(t3), [3, 2, 1], 'Periodstamp HONG 3')
+        self.assertEqual(getPeriodStampFromTimestampHONG(t4), [5, 3, 1], 'Periodstamp HONG 4')
+
+
+
 
 # def test_HTAR_foodmart_data_1997_correctness_and_completness(self):
 #     database = Parser().parse("Datasets/sales_formatted_1997.csv", 'single', None, True)
