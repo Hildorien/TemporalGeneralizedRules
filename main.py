@@ -5,7 +5,7 @@ from datetime import datetime
 from multiprocessing import freeze_support
 import pandas as pd
 
-from Cumulate.cumulate import vertical_cumulate
+from Cumulate.cumulate import vertical_cumulate, cumulate_frequents, vertical_cumulate_frequents
 from DataStructures.Parser import Parser
 from Tests.utility_tests import UtilityTests
 from Apriori.apriori import apriori
@@ -106,8 +106,18 @@ print(dfSingle)
 #database = Parser().parse('Datasets/synthetic_dataset_test.csv', 'single')
 #apriori(database, 0.5, 0.5)
 if __name__=="__main__":
-    vertical_db = Parser().parse('Datasets/sales_formatted_1998.csv', 'single', 'Taxonomies/salesfact_taxonomy_single_2.csv')
+
+    vertical_db = Parser().parse('Datasets/synthetic_dataset_test_2.csv', 'single', 'Taxonomies/synthetic_taxonomy_test_2.csv')
     start = time.time()
-    r = vertical_cumulate(vertical_db, 0.02, 0.5, 0)
+    r = vertical_cumulate_frequents(vertical_db, 0.005)
     end = time.time()
     print('Took ' + str(end-start) + ' generated ' + str(len(r)))
+
+    """
+    horizontal_db = Parser().parse_horizontal_database('Datasets/synthetic_dataset_test_2.csv',
+                                                       'Taxonomies/synthetic_taxonomy_test_2.csv', 'single')
+    start = time.time()
+    r = cumulate_frequents(horizontal_db, 0.005)
+    end = time.time()
+    print('Took ' + str(end - start) + ' generated ' + str(len(r)))
+    """
