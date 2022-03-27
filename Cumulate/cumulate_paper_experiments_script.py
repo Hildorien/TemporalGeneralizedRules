@@ -92,7 +92,7 @@ synthetic_taxonomies_filepath = {
                     'F:\TesisSyntheticDatasets\Transaction\T2M.tax',
                     'F:\TesisSyntheticDatasets\Transaction\T5M.tax',
                     'F:\TesisSyntheticDatasets\Transaction\T10M.tax'],
-    'support': ['F:\TesisSyntheticDatasets\Support\S1M.tax']
+    'support': ['F:\TesisSyntheticDatasets\Support\S1M.tax'],
 }
 
 
@@ -191,11 +191,11 @@ def log_for_plot_x_axis_(logPlotters, value):
 
 
 def run_algorithms(experiment_key):
-    loggerA = setup_logger('Cumulate.cumulate_vanilla' + '_' + experiment_key,
+    loggerA = setup_logger('Cumulate.cumulate_vanilla',
                            'Experiments/' + experiment_key + '_' + 'cumulate_vanilla.txt')
-    loggerB = setup_logger('Cumulate.cumulate_vertical' + '_' + experiment_key,
+    loggerB = setup_logger('Cumulate.cumulate_vertical',
                            'Experiments/' + experiment_key + '_' + 'cumulate_vertical.txt')
-    loggerC = setup_logger('Cumulate.cumulate_vertical_with_parallel_count' + '_' + experiment_key,
+    loggerC = setup_logger('Cumulate.cumulate_vertical_with_parallel_count',
                            'Experiments/' + experiment_key + '_' + 'cumulate_vertical_with_parallel_count.txt')
 
     loggerAPlotter = setup_logger('Cumulate.cumulate_vanilla_plot',
@@ -213,20 +213,22 @@ def run_algorithms(experiment_key):
         log_for_plot_x_axis_([loggerAPlotter, loggerBPlotter, loggerCPlotter], experiment_parameters[i])
 
         # Create and run cumulate
+        """
         log_experiment_start(loggerA, datasets_filepaths[i])
         hdb = create_horizontal_db(loggerA, datasets_filepaths[i], taxonomy_datasets_filepaths[i])
         run_cumulate(hdb)
         log_experiment_end(loggerA)
+        """
 
         # Create and run vertical cumulate
         log_experiment_start(loggerB, datasets_filepaths[i])
-        log_experiment_start(loggerC, datasets_filepaths[i])
+        #log_experiment_start(loggerC, datasets_filepaths[i])
         vdb = create_vertical_db([loggerB, loggerC], datasets_filepaths[i], taxonomy_datasets_filepaths[i])
         run_vertical_cumulate(vdb)
         log_experiment_end(loggerB)
         # Create and run vertical cumulate parallel count
-        run_vertical_cumulate_parallel_count(vdb)
-        log_experiment_end(loggerC)
+        #run_vertical_cumulate_parallel_count(vdb)
+        #log_experiment_end(loggerC)
 
     loggers = [loggerA, loggerB, loggerC, loggerAPlotter, loggerBPlotter, loggerCPlotter]
     for logger in loggers:
@@ -268,7 +270,7 @@ def plot_experiment(experiment_key):
 
 def main():
     loggerError = setup_logger('Experiment.ErrorLogger', 'Experiments/error_log.txt', logging.ERROR)
-    run_experiments('test')
+    run_experiments('root')
     """
     # Run all experiments by key
     for key in synthetic_datasets_filepath:
