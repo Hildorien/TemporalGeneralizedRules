@@ -6,10 +6,10 @@ from rule_generator import rule_generation
 from utility import generateCanidadtesOfSizeK, stringifyPg, hash_candidate
 import multiprocessing
 
-def calculateSupportInPJ(a_candidate, database, l_level, pj):
-    return a_candidate, database.supportOf(a_candidate, l_level, pj)
+def calculateSupportInPJ(a_candidate, database, l_level, pj, hong=False):
+    return a_candidate, database.supportOf(a_candidate, l_level, pj, hong)
 
-def findIndividualTFI(database, pj, lam, parallel_count=False):
+def findIndividualTFI(database, pj, lam, parallel_count=False, hong = False):
     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
     ptt_entry = database.getPTTValueFromLeafLevelGranule(pj)
     TFI_j = {}
@@ -29,7 +29,7 @@ def findIndividualTFI(database, pj, lam, parallel_count=False):
         # print("/////////////////")
         if parallel_count:
             pool = multiprocessing.Pool(multiprocessing.cpu_count())
-            results = pool.starmap(calculateSupportInPJ, zip(C_j, itertools.repeat(database), itertools.repeat(0), itertools.repeat(pj)))
+            results = pool.starmap(calculateSupportInPJ, zip(C_j, itertools.repeat(database), itertools.repeat(0), itertools.repeat(pj), itertools.repeat(hong)))
             for a_result in results:
                 if a_result[1] >= lam:
                     TFI_r.append(tuple(a_result[0]))
@@ -37,7 +37,7 @@ def findIndividualTFI(database, pj, lam, parallel_count=False):
                     frequent_dictionary[r].append(a_result[0])
         else:
             for k_size_itemset in C_j:
-                support = database.supportOf(k_size_itemset, 0, pj)
+                support = database.supportOf(k_size_itemset, 0, pj, hong)
                 if support >= lam:
                     TFI_r.append(tuple(k_size_itemset))
                     support_dictionary[hash_candidate(k_size_itemset)] = support
@@ -60,9 +60,13 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1]):
     support_dictionary_by_pg = {}
     HTFI_by_pg = {}
 
+    hong = False
+    if HTG == [10, 5, 1]:
+        hong = True
+
     for pi in range(HTG[0]):
         #start = time.time()
-        individualTFI = findIndividualTFI(database, pi + 1, lam)
+        individualTFI = findIndividualTFI(database, pi + 1, lam, hong)
 
         if len(individualTFI["TFI"]) > 0:
             TFI_by_period_in_l_0[pi + 1] = individualTFI["TFI"]

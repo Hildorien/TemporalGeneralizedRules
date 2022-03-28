@@ -1,3 +1,4 @@
+import time
 import unittest
 
 from Apriori.apriori import apriori
@@ -225,6 +226,19 @@ class HTARTests(unittest.TestCase):
         self.assertEqual(getPeriodStampFromTimestampHONG(t3), [3, 2, 1], 'Periodstamp HONG 3')
         self.assertEqual(getPeriodStampFromTimestampHONG(t4), [5, 3, 1], 'Periodstamp HONG 4')
 
+    # def test_HONG_apriori(self):
+    #     database = Parser().parseHONG("Datasets/sales_formatted_1997.csv", 'single', True)
+    #     print('---')
+    #     # start = time.time()
+    #     # apriori_rules = apriori(database, 0.006, 0.2)
+    #     # end = time.time()
+    #     #print('Apriori Took ' + (str(end - start) + ' seconds'))
+    #     # start = time.time()
+    #     rules_by_pg = HTAR_BY_PG(database, 0.006, 0.2, 0.006, [10, 5, 1])
+    #     # end = time.time()
+    #     # print('HONG Took ' + (str(end - start) + ' seconds'))
+    #
+    #     self.printRulesDebugging(database, rules_by_pg, {})
 
 
 

@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from DataStructures.Database import Database
 from DataStructures.HorizontalDatabase import HorizontalDatabase
-from HTAR.HTAR_utility import getPeriodStampFromTimestamp
+from HTAR.HTAR_utility import getPeriodStampFromTimestamp, getPeriodStampFromTimestampHONG
 from HTAR.PTT import PTT
 from DataStructures.Transaction import Transaction
 
@@ -17,6 +17,14 @@ class Parser:
             return self.parse_basket_with_taxonomy(filepath, taxonomy_filepath)
         elif csv_format == 'single' and taxonomy_filepath is not None:
             return self.parse_single_with_taxonomy(filepath, taxonomy_filepath)
+
+    #DELETE WHEN FINISH TESTING FOR HONG
+    def parseHONG(self, filepath, csv_format='single', usingTimestamp = True):
+        #self.parse_single_file(filepath, usingTimestamp)
+        dataset, timestamps = self.build_dataset_timestamp_from_file(filepath)
+        matrix_dictionary_and_ptt = self.fit(dataset).create_matrix_dictionary_using_timestamps_HONG(dataset, timestamps)
+        return Database(matrix_dictionary_and_ptt["md"], timestamps, self.item_name_by_index,
+                        len(dataset), {}, matrix_dictionary_and_ptt["ptt"])
 
     def parse_single_file(self, filepath, usingTimestamp=False):
         dataset, timestamps = self.build_dataset_timestamp_from_file(filepath)
@@ -268,6 +276,24 @@ class Parser:
         ptt = PTT()
         for tid, transaction in enumerate(dataset):
             transactionHTGLeafGranule = getPeriodStampFromTimestamp(timestamps[tid])[0]
+            itemsToAddToPTT = set(map(lambda x: self.item_index_by_name[x], set(transaction)))
+            ptt.addItemPeriodToPtt(transactionHTGLeafGranule, tid, itemsToAddToPTT)
+            for item in set(transaction):
+                if item in matrix_dictionary:
+                    matrix_dictionary[item]['tids'].append(tid)
+                else:
+                    matrix_dictionary[item] = {}
+                    matrix_dictionary[item]['tids'] = [tid]
+
+        return {"md": matrix_dictionary, "ptt": ptt}
+
+
+    #DELETE WHEN FINISH TESTING
+    def create_matrix_dictionary_using_timestamps_HONG(self, dataset, timestamps):
+        matrix_dictionary = {}
+        ptt = PTT(True)
+        for tid, transaction in enumerate(dataset):
+            transactionHTGLeafGranule = getPeriodStampFromTimestampHONG(timestamps[tid])[0]
             itemsToAddToPTT = set(map(lambda x: self.item_index_by_name[x], set(transaction)))
             ptt.addItemPeriodToPtt(transactionHTGLeafGranule, tid, itemsToAddToPTT)
             for item in set(transaction):
