@@ -20,7 +20,7 @@ class Parser:
 
     def parse_single_file(self, filepath, usingTimestamp=False):
         dataset, timestamps = self.build_dataset_timestamp_from_file(filepath)
-        return self.fit_database(dataset, timestamps.to_dict(), None, usingTimestamp)
+        return self.fit_database(dataset, timestamps, None, usingTimestamp)
 
     def build_dataset_timestamp_from_file(self, filepath):
         header_with_timestamp = {'order_id', 'timestamp', 'product_name'}
@@ -46,17 +46,12 @@ class Parser:
                              dtype={'order_id': int, 'product_name': "string"})
             df['product_name'].replace(',', '.', inplace=True)
             dataset, timestamps =self.groupby_multikey_dataframe_fast(df, ['order_id'])
-            return dataset, timestamps
+            return dataset, timestamps.to_dict()
 
     def groupby_multikey_dataframe_fast(self, df, key_cols):
-        """
-        pandas.groupby is slow.
-        Explanation: https://stackoverflow.com/questions/60028836/combination-of-columns-for-aggregation-after-groupby/60029108#60029108
-        Performance can be improved using numpy arrays https://stackoverflow.com/a/56525582
-        :param df:
-        :param key_cols: Columns in group by
-        :return:
-        """
+        #pandas.groupby is slow.
+        #Explanation: https://stackoverflow.com/questions/60028836/combination-of-columns-for-aggregation-after-groupby/60029108#60029108
+        #Performance can be improved using numpy arrays https://stackoverflow.com/a/56525582
         if not isinstance(key_cols, list):
             key_cols = [key_cols]
 
@@ -101,6 +96,85 @@ class Parser:
             timestamps = pd.DataFrame(columns=['timestamp'])  # Empty pandas series -> no timestamps used
         dataset = [x.tolist() for x in list(list(list_agg_vals.values())[0])]
         return dataset, timestamps
+
+    def build_dataset_timestamp_from_file_without_pandas(self, filepath):
+        header_with_timestamp = {'order_id', 'timestamp', 'product_name'}
+        header_without_timestamp = {'order_id', 'product_name'}
+        dataset = [] # [[product_name]]
+        timestamp = {} # dict { order_id: timestamp }
+        with open(filepath) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            pos = csv_file.tell()
+            line = csv_file.readline()
+            csv_file.seek(pos)
+            firstline = set(line.rstrip().split(','))
+            if firstline == header_with_timestamp:
+                csv_file.readline() # skips header
+                pos = csv_file.tell()
+                line = csv_file.readline()
+                csv_file.seek(pos)
+                csv_order_id = int(line[0])
+                csv_last_order_id = int(line[0])
+                tx_id = 0
+                order = []
+                for row in csv_reader:
+
+                    csv_last_order_id = csv_order_id
+                    csv_order_id = int(row[0])
+
+                    if csv_last_order_id == csv_order_id:
+                        order.append(row[2])
+                        timestamp.setdefault(tx_id, int(row[1]))
+                    else:
+                        dataset.append(order) # append last order
+                        order = [] # start a new one
+                        order.append(row[2])
+                        timestamp.setdefault(tx_id, int(row[1]))
+                        tx_id += 1
+
+            elif firstline == header_without_timestamp:
+                csv_file.readline()  # skips header
+                pos = csv_file.tell()
+                line = csv_file.readline()
+                csv_file.seek(pos)
+                csv_order_id = int(line[0])
+                csv_last_order_id = int(line[0])
+                tx_id = 0
+                order = []
+                for row in csv_reader:
+
+                    csv_last_order_id = csv_order_id
+                    csv_order_id = int(row[0])
+
+                    if csv_last_order_id == csv_order_id:
+                        order.append(row[1])
+                    else:
+                        dataset.append(order)  # append last order
+                        order = []  # start a new one
+                        order.append(row[1])
+                        tx_id += 1
+
+            elif len(firstline) == 2:  # No header but we assume format is order_id,product_name
+                pos = csv_file.tell()
+                line = csv_file.readline()
+                csv_file.seek(pos)
+                csv_order_id = int(line[0])
+                csv_last_order_id = int(line[0])
+                tx_id = 0
+                order = []
+                for row in csv_reader:
+
+                    csv_last_order_id = csv_order_id
+                    csv_order_id = int(row[0])
+
+                    if csv_last_order_id == csv_order_id:
+                        order.append(row[1])
+                    else:
+                        dataset.append(order)  # append last order
+                        order = []  # start a new one
+                        order.append(row[1])
+                        tx_id += 1
+            return dataset, timestamp
 
     def parse_basket_file(self, filepath):
         return self.fit_database(self.build_dataset_from_basket(filepath), {})
@@ -285,7 +359,7 @@ class Parser:
     def parse_single_with_taxonomy(self, dataset_filepath, taxonomy_filepath):
         dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
         taxonomy = self.parse_taxonomy_single(taxonomy_filepath)
-        return self.fit_database(dataset, timestamps.to_dict(), taxonomy)
+        return self.fit_database(dataset, timestamps, taxonomy)
 
     def parse_basket_with_taxonomy(self, dataset_filepath, taxonomy_filepath):
         dataset = self.build_dataset_from_basket(dataset_filepath)
@@ -332,7 +406,7 @@ class Parser:
     def parse_single_file_for_horizontal_database(self, dataset_filepath, taxonomy_filepath):
         dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
         taxonomy = self.parse_taxonomy_single(taxonomy_filepath)
-        return self.fit_horizontal_database(dataset, timestamps.to_dict(), taxonomy)
+        return self.fit_horizontal_database(dataset, timestamps, taxonomy)
 
     def parse_basket_file_for_horizontal_database(self, dataset_filepath, taxonomy_filepath):
         dataset = self.build_dataset_from_basket(dataset_filepath)
