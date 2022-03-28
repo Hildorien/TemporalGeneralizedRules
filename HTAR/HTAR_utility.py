@@ -57,20 +57,23 @@ def getTFIUnion(TFI_by_period, bounderies):
 
     return finalTFI
 
-def getPeriodsIncluded(l_length, period):
+def getPeriodsIncluded(l_length, period, hong = False):
     # Note: This method does only works for any period in level above 0 with hardcoded HTG = [24,12,4, 1]
-    if l_length == 0:
-        return [period, period]
-    elif l_length == 1:
-        later_fortnight = period * 2
-        return [later_fortnight - 1, later_fortnight]
-    elif l_length == 2:
-        later_fortnight = period * 6
-        return [later_fortnight - 5, later_fortnight]
-    elif l_length == 3:
-        return [1, 24]
+    if hong:
+        return getPeriodsIncludedInHONG(l_length, period)
     else:
-        print("ERROR: L_LENGTH NOT AVAILABLE FOR DEFAULT HTG")
+        if l_length == 0:
+            return [period, period]
+        elif l_length == 1:
+            later_fortnight = period * 2
+            return [later_fortnight - 1, later_fortnight]
+        elif l_length == 2:
+            later_fortnight = period * 6
+            return [later_fortnight - 5, later_fortnight]
+        elif l_length == 3:
+            return [1, 24]
+        else:
+            print("ERROR: L_LENGTH NOT AVAILABLE FOR DEFAULT HTG")
 
 def getPeriodsIncludedInHONG(l_length, period):
     # Note: This method does only works for any period in level above 0 with hardcoded HTG = [10, 5, 1]

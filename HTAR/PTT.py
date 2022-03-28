@@ -7,11 +7,17 @@ class PTT:  # Periodical Total Transaction
 
     # UPDATE: PTT is only saving data for 0-level time granules
 
-    def __init__(self):
+    def __init__(self, hong = False):
         hardcoded_htg = [24, 12, 4, 1]
-        self.ptt = []
-        for x in range(hardcoded_htg[0]):
-            self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'FirstAndLastTID': None})
+
+        if hong:
+            self.ptt = []
+            for x in range(10):
+                self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'FirstAndLastTID': None})
+        else:
+            self.ptt = []
+            for x in range(hardcoded_htg[0]):
+                self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'FirstAndLastTID': None})
 
     def addMultiplePeriods(self, periods):
         for period in periods:

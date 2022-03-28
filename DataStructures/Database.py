@@ -55,7 +55,7 @@ class Database:
 
         return final_intersection
 
-    def supportOf(self, itemset, l_level=None, period=None):
+    def supportOf(self, itemset, l_level=None, period=None, hong = False):
         """
         :param itemset: set/list of integers
         :param l_level: L_level of HTG of the period
@@ -87,7 +87,7 @@ class Database:
             #     return filtered_by_period_tids / ptt_j
 
 
-            level_0_periods_included = getPeriodsIncluded(l_level, period)
+            level_0_periods_included = getPeriodsIncluded(l_level, period, hong)
             return self.getItemsetRelativeSupport(itemset, level_0_periods_included)
         else:
             final_intersection = self.transaction_ids_intersection(itemset)
