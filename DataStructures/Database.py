@@ -6,7 +6,7 @@ from utility import findOrderedIntersection, findOrderedIntersectionBetweenBound
 class Database:
     timestamp_mapping = {}  # {transactionIndex(int) : timestamp(long)}
     items_dic = {}  # {itemIndex(int) : itemName(string)}
-    row_count = 0
+    tx_count = 0
 
     ptt = None
 
@@ -23,7 +23,7 @@ class Database:
         self.matrix_data_by_item = matrix_data_by_item
         self.timestamp_mapping = timestamp_dict
         self.items_dic = items_dict
-        self.row_count = row_count
+        self.tx_count = row_count
         self.taxonomy = taxonomy_dict
         self.ptt = ptt
 
@@ -91,7 +91,7 @@ class Database:
             return self.getItemsetRelativeSupport(itemset, level_0_periods_included)
         else:
             final_intersection = self.transaction_ids_intersection(itemset)
-            return len(final_intersection) / self.row_count
+            return len(final_intersection) / self.tx_count
 
     def getItemsByDepthAndPeriod(self, l_level, period):
         return self.ptt.getEveryItemInPTTInPG(l_level, period)
