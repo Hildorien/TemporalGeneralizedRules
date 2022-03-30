@@ -20,6 +20,9 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, hong = False):
     TFI_r = list()
     frequent_dictionary = {}
     support_dictionary = {}
+    pool = None
+    if parallel_count:
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
     while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
         frequent_dictionary[r] = []
         C_j = generateCanidadtesOfSizeK(r, C_j, frequent_dictionary)
@@ -28,13 +31,14 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, hong = False):
         # print(str(len(C_j)))
         # print("/////////////////")
         if parallel_count:
-            pool = multiprocessing.Pool(multiprocessing.cpu_count())
             results = pool.starmap(calculateSupportInPJ, zip(C_j, itertools.repeat(database), itertools.repeat(0), itertools.repeat(pj), itertools.repeat(hong)))
             for a_result in results:
                 if a_result[1] >= lam:
                     TFI_r.append(tuple(a_result[0]))
                     support_dictionary[hash_candidate(a_result[0])] = a_result[1]
                     frequent_dictionary[r].append(a_result[0])
+            pool.close()
+            pool.join()
         else:
             for k_size_itemset in C_j:
                 support = database.supportOf(k_size_itemset, 0, pj, hong)
