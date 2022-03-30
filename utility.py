@@ -1,5 +1,8 @@
 from itertools import combinations
 
+import numpy as np
+
+
 def maximal_time_period_interval(list_of_tuples, period1, period2):
     if period1 > period2 or len(list_of_tuples) < period2 or period1 < 0:
         print('ERROR GETTING MAXIMAL TIME PERIOD')
@@ -159,15 +162,24 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
                 candidates_of_size_k.append(joined_itemset)
             j += 1
     # STEP 2: PRUNE -> For each itemset in L_k check if all subsets are frequent
-    for a_candidate_of_size_k in candidates_of_size_k:  # Iterating over a lists of lists
-        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k,
-                                                           k - 1)  # a_candidate_of_size_k is a list
-        for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
-            if not (a_subset_of_size_k_minus_1 in frequent_dictionary[k - 1]):
-                candidates_of_size_k.remove(a_candidate_of_size_k)  # Prunes the entire candidate
-                break
 
-    return candidates_of_size_k
+    frequent_dictionary_k_1 = frequent_dictionary[k - 1]
+    frequent_dictionary_k_1_hashed = set(map(tuple, frequent_dictionary_k_1))
+    #frequent_dictionary_k_1_numpy = np.array(frequent_dictionary[k - 1])
+    pruned_candidates = []
+    for a_candidate_of_size_k in candidates_of_size_k:  # Iterating over a lists of lists
+
+        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k, k - 1)  # a_candidate_of_size_k is a list
+
+        all_subsets_are_frequent = True
+        for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
+            all_subsets_are_frequent = all_subsets_are_frequent and tuple(a_subset_of_size_k_minus_1) in frequent_dictionary_k_1_hashed
+            if not all_subsets_are_frequent:
+                break
+        if all_subsets_are_frequent:
+            pruned_candidates.append(a_candidate_of_size_k)
+
+    return pruned_candidates
 
 
 def generateCanidadtesOfSizeK(k, all_items, frequent_dictionary):
