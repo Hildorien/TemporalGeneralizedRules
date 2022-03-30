@@ -43,31 +43,35 @@ class Parser:
             firstline = set(line.rstrip().split(','))
             if firstline == header_with_timestamp:
                 csv_file.readline() # skips header
-                return self.read_csv_and_build_dataset_timestamps(csv_file, csv_reader)
+                return self.read_csv_and_build_dataset_timestamps(csv_reader, True)
             elif firstline == header_without_timestamp:
                 csv_file.readline()  # skips header
-                return self.read_csv_and_build_dataset_timestamps(csv_file)
+                return self.read_csv_and_build_dataset_timestamps(csv_reader)
             elif len(firstline) == 2:  # No header but we assume format is order_id,product_name
-                return self.read_csv_and_build_dataset_timestamps(csv_file, csv_reader)
+                return self.read_csv_and_build_dataset_timestamps(csv_reader)
 
-    def read_csv_and_build_dataset_timestamps(self, csv_file, csv_reader):
+    def read_csv_and_build_dataset_timestamps(self, csv_reader, parse_timestamp=False):
         dataset = [] # [[product_name]]
         timestamp = {} # dict { order_id: timestamp }
-        pos = csv_file.tell()
-        line = csv_file.readline()
-        csv_file.seek(pos)
         transactions = {}
         for row in csv_reader:
             id = int(row[0])
             if id not in transactions:
-                transactions[id] = {'timestamp': int(row[1]), 'products': [row[2]]}
+                if parse_timestamp:
+                    transactions[id] = {'timestamp': int(row[1]), 'products': [row[2]]}
+                else:
+                    transactions[id] = {'products': [row[1]]}
             else:
-                if int(row[1]) != transactions[id]['timestamp']:
-                    print('Different timestamps in the same order')
-                transactions[id]['products'].append(row[2])
+                if parse_timestamp:
+                    if int(row[1]) != transactions[id]['timestamp']:
+                        print('Different timestamps in the same order')
+                    transactions[id]['products'].append(row[2])
+                else:
+                    transactions[id]['products'].append(row[1])
         orders = transactions.keys()
         for idx, order_id in enumerate(orders):
-            timestamp[idx] = transactions[order_id]['timestamp']
+            if parse_timestamp:
+                timestamp[idx] = transactions[order_id]['timestamp']
             dataset.append(transactions[order_id]['products'])
 
         return dataset, timestamp
@@ -146,85 +150,6 @@ class Parser:
     #         timestamps = pd.DataFrame(columns=['timestamp'])  # Empty pandas series -> no timestamps used
     #     dataset = [x.tolist() for x in list(list(list_agg_vals.values())[0])]
     #     return dataset, timestamps
-
-    def build_dataset_timestamp_from_file_without_pandas(self, filepath):
-        header_with_timestamp = {'order_id', 'timestamp', 'product_name'}
-        header_without_timestamp = {'order_id', 'product_name'}
-        dataset = [] # [[product_name]]
-        timestamp = {} # dict { order_id: timestamp }
-        with open(filepath) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
-            pos = csv_file.tell()
-            line = csv_file.readline()
-            csv_file.seek(pos)
-            firstline = set(line.rstrip().split(','))
-            if firstline == header_with_timestamp:
-                csv_file.readline() # skips header
-                pos = csv_file.tell()
-                line = csv_file.readline()
-                csv_file.seek(pos)
-                csv_order_id = int(line[0])
-                csv_last_order_id = int(line[0])
-                tx_id = 0
-                order = []
-                for row in csv_reader:
-
-                    csv_last_order_id = csv_order_id
-                    csv_order_id = int(row[0])
-
-                    if csv_last_order_id == csv_order_id:
-                        order.append(row[2])
-                        timestamp.setdefault(tx_id, int(row[1]))
-                    else:
-                        dataset.append(order) # append last order
-                        order = [] # start a new one
-                        order.append(row[2])
-                        timestamp.setdefault(tx_id, int(row[1]))
-                        tx_id += 1
-
-            elif firstline == header_without_timestamp:
-                csv_file.readline()  # skips header
-                pos = csv_file.tell()
-                line = csv_file.readline()
-                csv_file.seek(pos)
-                csv_order_id = int(line[0])
-                csv_last_order_id = int(line[0])
-                tx_id = 0
-                order = []
-                for row in csv_reader:
-
-                    csv_last_order_id = csv_order_id
-                    csv_order_id = int(row[0])
-
-                    if csv_last_order_id == csv_order_id:
-                        order.append(row[1])
-                    else:
-                        dataset.append(order)  # append last order
-                        order = []  # start a new one
-                        order.append(row[1])
-                        tx_id += 1
-
-            elif len(firstline) == 2:  # No header but we assume format is order_id,product_name
-                pos = csv_file.tell()
-                line = csv_file.readline()
-                csv_file.seek(pos)
-                csv_order_id = int(line[0])
-                csv_last_order_id = int(line[0])
-                tx_id = 0
-                order = []
-                for row in csv_reader:
-
-                    csv_last_order_id = csv_order_id
-                    csv_order_id = int(row[0])
-
-                    if csv_last_order_id == csv_order_id:
-                        order.append(row[1])
-                    else:
-                        dataset.append(order)  # append last order
-                        order = []  # start a new one
-                        order.append(row[1])
-                        tx_id += 1
-            return dataset, timestamp
 
     def parse_basket_file(self, filepath):
         return self.fit_database(self.build_dataset_from_basket(filepath), {})
