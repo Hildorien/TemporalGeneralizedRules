@@ -61,17 +61,16 @@ def calculate_C1(all_items, k):
     return candidate_hashmap
 
 
-def prune_candidates_in_same_family(candidates_size_k, candidate_hashmap, taxonomy):
+def prune_candidates_in_same_family(candidates_size_k, taxonomy):
+    candidate_hashmap = set(map(tuple, candidates_size_k))
+    ancestor_set = set()
+    new_candidates = []
     for item in taxonomy:
-        for ancestor in taxonomy[item]:
-            hashed_itemset_1 = hash_candidate([item, ancestor])
-            hashed_itemset_2 = hash_candidate([ancestor, item])
-            if hashed_itemset_1 in candidate_hashmap:
-                candidate_hashmap.remove(hashed_itemset_1)
-                candidates_size_k.remove([item, ancestor])
-            elif hashed_itemset_2 in candidate_hashmap:
-                candidate_hashmap.remove(hashed_itemset_2)
-                candidates_size_k.remove([ancestor, item])
+        ancestors = taxonomy[item]
+        for ancestor in ancestors:
+            hashed_itemset = hash_candidate(sorted([item, ancestor]))
+            ancestor_set.add(hashed_itemset)
+    return sorted(list(map(list, candidate_hashmap.difference(ancestor_set))))
 
 
 def count_candidates_in_transaction(k, expanded_transaction, support_dictionary, candidate_hashmap):
