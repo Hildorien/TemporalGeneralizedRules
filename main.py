@@ -4,6 +4,8 @@ import unittest
 from datetime import datetime
 from multiprocessing import freeze_support
 
+import numpy as np
+
 from Cumulate.cumulate import vertical_cumulate, cumulate_frequents, vertical_cumulate_frequents
 from DataStructures.Parser import Parser
 from Tests.utility_tests import UtilityTests
@@ -104,22 +106,57 @@ print(dfSingle)
 """
 #database = Parser().parse('Datasets/synthetic_dataset_test.csv', 'single')
 #apriori(database, 0.5, 0.5)
+import pandas as pd
+
+def func(orders, total_orders, target_orders):
+    return round((orders / total_orders) * target_orders)
+
 if __name__=="__main__":
 
-    vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Root\R500.data', 'single',
-                                 'F:\TesisSyntheticDatasets\Root\R500.tax')
-    start = time.time()
-    r = vertical_cumulate_frequents(vertical_db, 0.005)
-    end = time.time()
-    print('vertical_cumulate_frequents took ' + str(end-start) + ' generated ' + str(len(r)))
+    # vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Root\R500.data', 'single',
+    #                              'F:\TesisSyntheticDatasets\Root\R500.tax')
+    # start = time.time()
+    # r = vertical_cumulate_frequents(vertical_db, 0.005)
+    # end = time.time()
+    # print('vertical_cumulate_frequents took ' + str(end-start) + ' generated ' + str(len(r)))
+    #
+    #
+    # horizontal_db = Parser().parse_horizontal_database('F:\TesisSyntheticDatasets\Root\R500.data',
+    #                                                    'F:\TesisSyntheticDatasets\Root\R500.tax', 'single')
+    # start = time.time()
+    # r2 = cumulate_frequents(horizontal_db, 0.005)
+    # end = time.time()
+    # print('cumulate_frequents took ' + str(end - start) + ' generated ' + str(len(r2)))
+
+    # database = Parser().parse('F:\TesisSyntheticDatasets\Root\R250.data', 'single')
+    # start = time.time()
+    # r = apriori(database, 0.001, 0.1)
+    # end = time.time()
+    # print('apriori took ' + str(end - start) + ' generated ' + str(len(r)))
+    df = pd.read_csv('Datasets/sales_formatted_1998_sorted_by_timestamp.csv', delimiter=',',
+                     usecols=['order_id', 'timestamp']).drop_duplicates(subset=None, keep='first', inplace=False)
+    foodmart_days_arr = np.zeros(365)
+    synth_days_arr = np.zeros(365)
+    foodmart_unique_orders = len(df.order_id.unique())
+    target_unique_orders = 1000000
+    dfGroupedByTmp = df.groupby(['timestamp']).size().reset_index(name='counts')
+    for index, row in dfGroupedByTmp.iterrows():
+        day_of_the_year = datetime.fromtimestamp(row['timestamp']).timetuple().tm_yday
+        counts = row['counts']
+        foodmart_days_arr[day_of_the_year-1] = counts
+    func_vec = np.vectorize(lambda x: func(x, foodmart_unique_orders, target_unique_orders))
+    synth_distribution = func_vec(foodmart_days_arr)
+    total_target_orders = np.sum(synth_distribution)
+    if total_target_orders < target_unique_orders:
+        import random
+        n = random.randint(1, 365)
 
 
-    horizontal_db = Parser().parse_horizontal_database('F:\TesisSyntheticDatasets\Root\R500.data',
-                                                       'F:\TesisSyntheticDatasets\Root\R500.tax', 'single')
-    start = time.time()
-    r2 = cumulate_frequents(horizontal_db, 0.005)
-    end = time.time()
-    print('cumulate_frequents took ' + str(end - start) + ' generated ' + str(len(r2)))
+
+
+
+
+
 
 
 
