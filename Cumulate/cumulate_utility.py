@@ -82,11 +82,15 @@ def count_candidates_in_transaction(k, expanded_transaction, support_dictionary,
     :return:
     """
     if k < 3:  # If k is small candidate size is large
-        all_subets = list(map(list, itertools.combinations(expanded_transaction, k)))
-        for a_subset_size_k in all_subets:
-            hashed_subset = hash_candidate(a_subset_size_k)
-            if hashed_subset in candidate_hashmap:
-                support_dictionary[hashed_subset] += 1
+        # all_subets = list(map(list, itertools.combinations(expanded_transaction, k)))
+        # for a_subset_size_k in all_subets:
+        #     hashed_subset = hash_candidate(a_subset_size_k)
+        #     if hashed_subset in candidate_hashmap:
+        #         support_dictionary[hashed_subset] += 1
+        all_subsets = itertools.combinations(expanded_transaction, k)
+        for subset in all_subsets:
+            if subset in candidate_hashmap:
+                support_dictionary[subset] += 1
     else:  # If k is large candidates size is smaller
         for hashed_candidate in candidate_hashmap:
             candidate = candidate_hashmap[hashed_candidate]
@@ -118,10 +122,11 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
         candidates_size_k = list(candidate_hashmap.values()).copy()
         n = len(candidates_size_k)
         for i in range(n):
-            subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(candidates_size_k[i],
-                                                               k - 1)  # candidates_size_k[i] is a list
+            subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(candidates_size_k[i], k - 1)  # candidates_size_k[i] is a list
+            frequent_dictionary_k_1 = frequent_dictionary[k - 1]
+            frequent_dictionary_k_1_hashed = set(map(tuple, frequent_dictionary_k_1))
             for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
-                if not (a_subset_of_size_k_minus_1 in frequent_dictionary[k - 1]):
+                if not (tuple(a_subset_of_size_k_minus_1) in frequent_dictionary_k_1_hashed):
                     candidate_hashmap.pop(hash_candidate(candidates_size_k[i]), None)  # Prunes the entire candidate
                     break
     return candidate_hashmap

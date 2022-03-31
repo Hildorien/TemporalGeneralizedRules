@@ -60,11 +60,13 @@ def cumulate_frequents(horizontal_database, min_supp):
         frequent_dictionary[k] = []
         if len(candidates_size_k) == 0:
             break
-        taxonomy_pruned = horizontal_database.prune_ancestors(
-            candidates_size_k)  # Cumulate Optimization 1 in original paper
+        if k > 1:
+            taxonomy_pruned = horizontal_database.prune_ancestors(set(map(tuple, frequent_dictionary[1])))  # Cumulate Optimization 1 in original paper
+        else:
+            taxonomy_pruned = horizontal_database.prune_ancestors(set(map(tuple, candidates_size_k)))  # Cumulate Optimization 1 in original paper
 
-        candidate_support_dictionary = dict.fromkeys(candidate_hashmap.keys(),
-                                                     0)  # Auxiliary structure for counting supports of size k
+
+        candidate_support_dictionary = dict.fromkeys(candidate_hashmap.keys(), 0)  # Auxiliary structure for counting supports of size k
         # Count Candidates of size k in transactions
         for a_transaction in transactions:
             expanded_transaction = horizontal_database.expand_transaction(a_transaction, taxonomy_pruned)

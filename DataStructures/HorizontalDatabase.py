@@ -40,7 +40,7 @@ class HorizontalDatabase:
                 count += 1
         return count / len(self.transactions)
 
-    def prune_ancestors(self, candidates_size_k):
+    def prune_ancestors(self, hashed_candidates):
         """
         Delete any ancestors in taxonomy that are not present in any of the candidates in candidates_size_k
         :param candidates_size_k:
@@ -49,18 +49,12 @@ class HorizontalDatabase:
         """
         taxonomy_pruned = self.taxonomy.copy()
         checked = set()
-        # Check in linear time if an ancestor is contained in a candidate
-        setOfCandidates = set(map(tuple, candidates_size_k))
         for item in taxonomy_pruned:
             ancestors = taxonomy_pruned[item]
             for an_ancestor in ancestors:
+                hashed_ancestor = tuple([an_ancestor])
                 if an_ancestor not in checked:
                     checked.add(an_ancestor)
-                    contained_in_a_candidate = False
-                    for a_candidate in setOfCandidates:
-                        if an_ancestor in a_candidate:
-                            contained_in_a_candidate = True
-                            break
-                    if not contained_in_a_candidate:
+                    if hashed_ancestor not in hashed_candidates:
                         ancestors.remove(an_ancestor)
         return taxonomy_pruned
