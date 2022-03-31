@@ -215,13 +215,13 @@ def run_algorithms(experiment_key):
         # Create and run cumulate
         log_experiment_start(loggerA, datasets_filepaths[i])
         hdb = create_horizontal_db(loggerA, datasets_filepaths[i], taxonomy_datasets_filepaths[i])
-        #run_cumulate(hdb)
+        run_cumulate(hdb)
         log_experiment_end(loggerA)
 
         # Create and run vertical cumulate
         log_experiment_start(loggerB, datasets_filepaths[i])
         log_experiment_start(loggerC, datasets_filepaths[i])
-        vdb = create_vertical_db([loggerB, loggerC], datasets_filepaths[i], taxonomy_datasets_filepaths[i])
+        #vdb = create_vertical_db([loggerB, loggerC], datasets_filepaths[i], taxonomy_datasets_filepaths[i])
         #run_vertical_cumulate(vdb)
         log_experiment_end(loggerB)
         # Create and run vertical cumulate parallel count

@@ -61,15 +61,17 @@ def calculate_C1(all_items, k):
     return candidate_hashmap
 
 
-def prune_candidates_in_same_family(candidate_hashmap, taxonomy):
+def prune_candidates_in_same_family(candidates_size_k, candidate_hashmap, taxonomy):
     for item in taxonomy:
         for ancestor in taxonomy[item]:
             hashed_itemset_1 = hash_candidate([item, ancestor])
             hashed_itemset_2 = hash_candidate([ancestor, item])
             if hashed_itemset_1 in candidate_hashmap:
-                candidate_hashmap.pop(hashed_itemset_1)
+                candidate_hashmap.remove(hashed_itemset_1)
+                candidates_size_k.remove([item, ancestor])
             elif hashed_itemset_2 in candidate_hashmap:
-                candidate_hashmap.pop(hashed_itemset_2)
+                candidate_hashmap.remove(hashed_itemset_2)
+                candidates_size_k.remove([ancestor, item])
 
 
 def count_candidates_in_transaction(k, expanded_transaction, support_dictionary, candidate_hashmap):
@@ -81,20 +83,14 @@ def count_candidates_in_transaction(k, expanded_transaction, support_dictionary,
     :param candidate_hashmap: { 'hashed_candidate': candidate }
     :return:
     """
-    if k < 3:  # If k is small candidate size is large
-        # all_subets = list(map(list, itertools.combinations(expanded_transaction, k)))
-        # for a_subset_size_k in all_subets:
-        #     hashed_subset = hash_candidate(a_subset_size_k)
-        #     if hashed_subset in candidate_hashmap:
-        #         support_dictionary[hashed_subset] += 1
+    if k < 4:  # If k is small candidate size is large
         all_subsets = itertools.combinations(expanded_transaction, k)
         for subset in all_subsets:
             if subset in candidate_hashmap:
                 support_dictionary[subset] += 1
     else:  # If k is large candidates size is smaller
         for hashed_candidate in candidate_hashmap:
-            candidate = candidate_hashmap[hashed_candidate]
-            if set(candidate).issubset(set(expanded_transaction)):
+            if set(hashed_candidate).issubset(set(expanded_transaction)):
                 support_dictionary[hashed_candidate] += 1
 
 

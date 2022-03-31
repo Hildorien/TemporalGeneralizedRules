@@ -5,7 +5,7 @@ import itertools
 from Cumulate.cumulate_utility import calculate_C1, calculate_C2, calculate_Ck, prune_candidates_in_same_family, \
     count_candidates_in_transaction, calculate_support
 from rule_generator import rule_generation
-from utility import hash_candidate
+from utility import hash_candidate, generateCanidadtesOfSizeK
 
 import logging
 
@@ -48,25 +48,28 @@ def cumulate_frequents(horizontal_database, min_supp):
     all_items = sorted(list(horizontal_database.items_dic.keys()))
     support_dictionary = {}  # Auxiliary structure for rule-generation
     while k == 1 or frequent_dictionary[k - 1] != []:
-        if k == 1:
-            candidate_hashmap = calculate_C1(all_items, k)
-        elif k == 2:
-            candidate_hashmap = calculate_C2(frequent_dictionary, k)
-        else:
-            candidate_hashmap = calculate_Ck(frequent_dictionary, k)
+
+        # if k == 1:
+        #     candidate_hashmap = calculate_C1(all_items, k)
+        # elif k == 2:
+        #     candidate_hashmap = calculate_C2(frequent_dictionary, k)
+        # else:
+        #     candidate_hashmap = calculate_Ck(frequent_dictionary, k)
+        candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
+        candidate_hashmap = set(map(tuple, candidates_size_k))
         if k == 2:
-            prune_candidates_in_same_family(candidate_hashmap, taxonomy)  # Cumulate Optimization 3 in original paper
-        candidates_size_k = list(candidate_hashmap.values())
+            prune_candidates_in_same_family(candidates_size_k, candidate_hashmap, taxonomy)  # Cumulate Optimization 3 in original paper
+        #candidates_size_k = list(candidate_hashmap.values())
         frequent_dictionary[k] = []
         if len(candidates_size_k) == 0:
             break
         if k > 1:
             taxonomy_pruned = horizontal_database.prune_ancestors(set(map(tuple, frequent_dictionary[1])))  # Cumulate Optimization 1 in original paper
         else:
-            taxonomy_pruned = horizontal_database.prune_ancestors(set(map(tuple, candidates_size_k)))  # Cumulate Optimization 1 in original paper
+            taxonomy_pruned = horizontal_database.prune_ancestors(candidate_hashmap)  # Cumulate Optimization 1 in original paper
 
 
-        candidate_support_dictionary = dict.fromkeys(candidate_hashmap.keys(), 0)  # Auxiliary structure for counting supports of size k
+        candidate_support_dictionary = dict.fromkeys(candidate_hashmap, 0)  # Auxiliary structure for counting supports of size k
         # Count Candidates of size k in transactions
         for a_transaction in transactions:
             expanded_transaction = horizontal_database.expand_transaction(a_transaction, taxonomy_pruned)
@@ -77,7 +80,7 @@ def cumulate_frequents(horizontal_database, min_supp):
             support = candidate_support_dictionary[hashed_itemset] / transaction_count
             support_dictionary[hashed_itemset] = support
             if support >= min_supp:
-                frequent_dictionary[k].append(candidate_hashmap[hashed_itemset])
+                frequent_dictionary[k].append(list(hashed_itemset))
 
         k += 1
     end = time.time()
@@ -123,15 +126,18 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
     while k == 1 or frequent_dictionary[k - 1] != []:
         # Candidate Generation
-        if k == 1:
-            candidate_hashmap = calculate_C1(all_items, k)
-        elif k == 2:
-            candidate_hashmap = calculate_C2(frequent_dictionary, k)
-        else:
-            candidate_hashmap = calculate_Ck(frequent_dictionary, k)
+
+        # if k == 1:
+        #     candidate_hashmap = calculate_C1(all_items, k)
+        # elif k == 2:
+        #     candidate_hashmap = calculate_C2(frequent_dictionary, k)
+        # else:
+        #     candidate_hashmap = calculate_Ck(frequent_dictionary, k)
+        candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
+        candidate_hashmap = set(map(tuple, candidates_size_k))
         if k == 2:
-            prune_candidates_in_same_family(candidate_hashmap, taxonomy)  # Cumulate Optimization 3 in original paper
-        candidates_size_k = list(candidate_hashmap.values())
+            prune_candidates_in_same_family(candidates_size_k, candidate_hashmap, taxonomy)  # Cumulate Optimization 3 in original paper
+        #candidates_size_k = list(candidate_hashmap.values())
         frequent_dictionary[k] = []
         if len(candidates_size_k) == 0:
             break

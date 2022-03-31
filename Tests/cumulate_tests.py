@@ -24,7 +24,10 @@ class CumulateTests(unittest.TestCase):
                                                         'basket', 'Taxonomies/cumulate_test_taxonomy_basket.csv')
         self.retail_vertical_db = Parser().parse('Datasets/cumulate_test_data.csv',
                                                  'single', 'Taxonomies/cumulate_test_taxonomy_single.csv')
-
+        self.synthetic_vertical_db = Parser().parse('Datasets/synthetic_dataset_test_2.csv', 'single',
+                                                    'Taxonomies/synthetic_taxonomy_test_2.csv')
+        self.synthetic_horizontal_db = Parser().parse_horizontal_database('Datasets/synthetic_dataset_test_2.csv',
+                                                    'Taxonomies/synthetic_taxonomy_test_2.csv', 'single')
     def test_cumulate_is_agnostic_wrt_database_representation(self):
         rules_from_single = cumulate(self.retail_horizontal_db, 0.3, 0.6, 0)
         rules_from_basket = cumulate(self.retail_basket_horizontal_db, 0.3, 0.6, 0)
@@ -40,11 +43,15 @@ class CumulateTests(unittest.TestCase):
         retail_cumulate_rules = cumulate(self.retail_horizontal_db, 0.3, 0.6, 0)
         retail_vertical_cumulate_rules = vertical_cumulate(self.retail_vertical_db, 0.3, 0.6, 0)
 
-        foodmart_cumulate_rules = cumulate(self.foodmart_horizontal_db, 0.3, 0.6, 0)
-        foodmart_vertical_cumulate_rules = vertical_cumulate(self.foodmart_vertical_db, 0.3, 0.6, 0)
+        foodmart_cumulate_rules = cumulate(self.foodmart_horizontal_db, 0.5, 0.6, 0)
+        foodmart_vertical_cumulate_rules = vertical_cumulate(self.foodmart_vertical_db, 0.5, 0.6, 0)
+
+        synthetic_cumulate_rules = cumulate(self.synthetic_horizontal_db, 0.05, 0.6, 0)
+        synthetic_verticial_cumulate_rules = vertical_cumulate(self.synthetic_vertical_db, 0.05, 0.6, 0)
 
         self.assertEqual(retail_cumulate_rules, retail_vertical_cumulate_rules, 'Output of vertical_cumulate is the same as cumulate')
         self.assertEqual(foodmart_cumulate_rules, foodmart_vertical_cumulate_rules, 'Output of vertical_cumulate is the same as cumulate')
+        self.assertEqual(synthetic_cumulate_rules, synthetic_verticial_cumulate_rules, 'Output of vertical_cumulate is the same as cumulate')
 
 
     def test_r_interesting_measure_prunes_rules(self):

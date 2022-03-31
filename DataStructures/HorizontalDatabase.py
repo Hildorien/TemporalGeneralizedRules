@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class HorizontalDatabase:
     transactions = []
     taxonomy = {}
@@ -20,15 +23,15 @@ class HorizontalDatabase:
             association_rule.support) + " ,confidence: " + str(association_rule.confidence)
 
     def expand_transaction(self, a_transaction, taxonomy):
-        expanded_transaction = []
+        expanded_transaction = set()
         for an_item in a_transaction.items:
-            expanded_transaction.append(an_item)
+            expanded_transaction.add(an_item)
             # Append ancestors of item to expanded_transaction
             if an_item in taxonomy:
                 ancestors = taxonomy[an_item]
                 for ancestor in ancestors:
                     if ancestor not in expanded_transaction:
-                        expanded_transaction.append(ancestor)
+                        expanded_transaction.add(ancestor)
         return sorted(expanded_transaction)
 
     def supportOf(self, itemset, l_level=None, period=None):
