@@ -1,6 +1,6 @@
 from HTAR.HTAR_utility import getPeriodsIncluded
 from utility import findOrderedIntersection, findOrderedIntersectionBetweenBoundaries, maximal_time_period_interval, \
-    getFilteredTIDSThatBelongToPeriod
+    getFilteredTIDSThatBelongToPeriod, create_ancestor_set
 
 
 class Database:
@@ -17,6 +17,7 @@ class Database:
 
     # { item_id : [ancestor_id] }
     taxonomy = {}
+    ancestor_set = set()
 
     def __init__(self, matrix_data_by_item,
                  timestamp_dict, items_dict, row_count, taxonomy_dict, ptt=None):
@@ -25,6 +26,7 @@ class Database:
         self.items_dic = items_dict
         self.tx_count = row_count
         self.taxonomy = taxonomy_dict
+        self.ancestor_set = create_ancestor_set(self.taxonomy)
         self.ptt = ptt
 
     #Methods for debugging purposes

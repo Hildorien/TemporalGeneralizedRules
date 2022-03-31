@@ -199,3 +199,13 @@ def hash_candidate(candidate):
     :return:
     """
     return tuple(candidate)
+
+
+def create_ancestor_set(taxonomy):
+    ancestor_set = set()
+    for item in taxonomy:
+        ancestors = taxonomy[item]
+        for ancestor in ancestors:
+            hashed_itemset = hash_candidate(sorted([item, ancestor]))
+            ancestor_set.add(hashed_itemset)
+    return ancestor_set

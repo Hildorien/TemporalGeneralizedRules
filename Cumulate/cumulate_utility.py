@@ -61,15 +61,8 @@ def calculate_C1(all_items, k):
     return candidate_hashmap
 
 
-def prune_candidates_in_same_family(candidates_size_k, taxonomy):
+def prune_candidates_in_same_family(candidates_size_k, ancestor_set):
     candidate_hashmap = set(map(tuple, candidates_size_k))
-    ancestor_set = set()
-    new_candidates = []
-    for item in taxonomy:
-        ancestors = taxonomy[item]
-        for ancestor in ancestors:
-            hashed_itemset = hash_candidate(sorted([item, ancestor]))
-            ancestor_set.add(hashed_itemset)
     return sorted(list(map(list, candidate_hashmap.difference(ancestor_set))))
 
 

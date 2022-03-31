@@ -106,19 +106,20 @@ print(dfSingle)
 #apriori(database, 0.5, 0.5)
 if __name__=="__main__":
 
-    # vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single',
-    #                              'F:\TesisSyntheticDatasets\Transaction\T100k.tax')
-    # start = time.time()
-    # r = vertical_cumulate_frequents(vertical_db, 0.05)
-    # end = time.time()
-    # print('vertical_cumulate_frequents took ' + str(end-start) + ' generated ' + str(len(r)))
-
-
-    horizontal_db = Parser().parse_horizontal_database('F:\TesisSyntheticDatasets\Root\R250.data',
-                                                       'F:\TesisSyntheticDatasets\Root\R250.tax', 'single')
+    vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Root\R500.data', 'single',
+                                 'F:\TesisSyntheticDatasets\Root\R500.tax')
     start = time.time()
-    r = cumulate_frequents(horizontal_db, 0.005)
+    r = vertical_cumulate_frequents(vertical_db, 0.005)
     end = time.time()
-    print('cumulate_frequents took ' + str(end - start) + ' generated ' + str(len(r)))
+    print('vertical_cumulate_frequents took ' + str(end-start) + ' generated ' + str(len(r)))
+
+
+    horizontal_db = Parser().parse_horizontal_database('F:\TesisSyntheticDatasets\Root\R500.data',
+                                                       'F:\TesisSyntheticDatasets\Root\R500.tax', 'single')
+    start = time.time()
+    r2 = cumulate_frequents(horizontal_db, 0.005)
+    end = time.time()
+    print('cumulate_frequents took ' + str(end - start) + ' generated ' + str(len(r2)))
+
 
 

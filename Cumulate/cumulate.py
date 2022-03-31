@@ -57,7 +57,7 @@ def cumulate_frequents(horizontal_database, min_supp):
         #     candidate_hashmap = calculate_Ck(frequent_dictionary, k)
         candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
         if k == 2:
-            candidates_size_k = prune_candidates_in_same_family(candidates_size_k, taxonomy)  # Cumulate Optimization 3 in original paper
+            candidates_size_k = prune_candidates_in_same_family(candidates_size_k, horizontal_database.ancestor_set)  # Cumulate Optimization 3 in original paper
         candidate_hashmap = set(map(tuple, candidates_size_k))
         frequent_dictionary[k] = []
         if len(candidates_size_k) == 0:
@@ -136,7 +136,7 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
         #     candidate_hashmap = calculate_Ck(frequent_dictionary, k)
         candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
         if k == 2:
-            candidates_size_k = prune_candidates_in_same_family(candidates_size_k, taxonomy)  # Cumulate Optimization 3 in original paper
+            candidates_size_k = prune_candidates_in_same_family(candidates_size_k, vertical_database.ancestor_set)  # Cumulate Optimization 3 in original paper
         frequent_dictionary[k] = []
         if len(candidates_size_k) == 0:
             break

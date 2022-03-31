@@ -1,9 +1,12 @@
 import numpy as np
 
+from utility import hash_candidate, create_ancestor_set
+
 
 class HorizontalDatabase:
     transactions = []
     taxonomy = {}
+    ancestor_set = set()
     transaction_count = 0
     items_dic = {}
     index_items_dic = {}
@@ -12,6 +15,7 @@ class HorizontalDatabase:
     def __init__(self, transactions, taxonomy, items_dic, index_items_dic):
         self.transactions = transactions
         self.taxonomy = taxonomy
+        self.ancestor_set = create_ancestor_set(self.taxonomy)
         self.transaction_count = len(transactions)
         self.items_dic = items_dic
         self.index_items_dic = index_items_dic
@@ -61,3 +65,4 @@ class HorizontalDatabase:
                     if hashed_ancestor not in hashed_candidates:
                         ancestors.remove(an_ancestor)
         return taxonomy_pruned
+
