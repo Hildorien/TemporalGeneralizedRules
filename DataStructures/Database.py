@@ -1,4 +1,4 @@
-from HTAR.HTAR_utility import getPeriodsIncluded
+from HTAR.HTAR_utility import getPeriodsIncluded, getPeriodStampFromTimestamp
 from utility import findOrderedIntersection, findOrderedIntersectionBetweenBoundaries, maximal_time_period_interval, \
     getFilteredTIDSThatBelongToPeriod, create_ancestor_set
 
@@ -41,23 +41,22 @@ class Database:
             return []
     #Methods for debugging purposes
 
-    def transaction_ids_intersection(self, itemset, lb=None, ub=None):
+    def transaction_ids_intersection(self, itemset, lb=None, ub=None, rsc = 2):
         final_intersection = None
         for itemColumnIndex in itemset:
-            all_tids_indexes = self.getItemTids(itemColumnIndex)
-            item_valid_indexes = getFilteredTIDSThatBelongToPeriod(all_tids_indexes, lb, ub)
+            item_valid_indexes = self.getItemTids(itemColumnIndex)
+            if lb is not None and ub is not None:
+                item_valid_indexes = getFilteredTIDSThatBelongToPeriod(item_valid_indexes, lb, ub, rsc)
             if final_intersection is None:
                 final_intersection = item_valid_indexes
-            elif len(final_intersection) == 0:
+            elif len(final_intersection) == 0 or len(item_valid_indexes) == 0:
                 return []
-            elif lb is not None and ub is not None:
-                final_intersection = findOrderedIntersectionBetweenBoundaries(final_intersection, item_valid_indexes, lb, ub)
             else:
                 final_intersection = findOrderedIntersection(final_intersection, item_valid_indexes)
 
         return final_intersection
 
-    def supportOf(self, itemset, l_level=None, period=None, hong = False):
+    def supportOf(self, itemset, l_level=None, period=None, relativeSupportCalculationType = 2, hong = False):
         """
         :param itemset: set/list of integers
         :param l_level: L_level of HTG of the period
@@ -66,31 +65,20 @@ class Database:
         """
 
         if l_level is not None and period is not None:
-            # # Now we have the intersactions in common, we need to filter those who aren't in the selected period and level
-            #
-            # # Since final_intersection is ordered, essentialy we have 3 phases:
-            # # 1: Look for the first transaction within the time period. Discard all tids until then
-            # # 2: Once found, append every transaction to final array.
-            # # 3: When a new transaction is read and isn't within the period, stop iterating and return what you got until then.
-            # period_reach_phase = 1
-            # filtered_by_period_tids = 0
-            # for tid in final_intersection:
-            #     transactionHTG = getPeriodStampFromTimestamp(self.timestamp_mapping[tid])
-            #     if transactionHTG[l_level] == period:
-            #         period_reach_phase = 2
-            #         filtered_by_period_tids += 1
-            #     elif period_reach_phase == 2:
-            #         break
-            # #ptt_j = self.ptt.getPTTValueFromLeafLevelGranule(l_level, period)['totalTransactions']
-            # ptt_j = self.ptt.getTotalPTTSumWithinPeriodsInLevel0(boundaries)
-            # if ptt_j == 0:
-            #     return 0
-            # else:
-            #     return filtered_by_period_tids / ptt_j
+            level_0_periods_included_in_pg = getPeriodsIncluded(l_level, period)
+            starters_tid = self.getPTTPeriodTIDBoundaryTuples()
+            tidLimits = maximal_time_period_interval(starters_tid, level_0_periods_included_in_pg[0] - 1,
+                                                     level_0_periods_included_in_pg[1] - 1)
 
+            lb = tidLimits[0]
+            ub = tidLimits[1]
 
-            level_0_periods_included = getPeriodsIncluded(l_level, period, hong)
-            return self.getItemsetRelativeSupport(itemset, level_0_periods_included)
+            transaction_id_intersection = len(self.transaction_ids_intersection(itemset, lb, ub, relativeSupportCalculationType))
+            PTT_total_sum_with_boundaries = self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
+            if PTT_total_sum_with_boundaries != 0:
+                return transaction_id_intersection / PTT_total_sum_with_boundaries
+            else:
+                return 0
         else:
             final_intersection = self.transaction_ids_intersection(itemset)
             return len(final_intersection) / self.tx_count
@@ -106,60 +94,6 @@ class Database:
 
     def getPTTPeriodTIDBoundaryTuples(self):
         return self.ptt.getPTTPeriodTIDBoundaryTuples()
-
-    # def getItemsetRelativeSupports(self, itemset, level_0_periods_included_in_pg):
-    #     """
-    #     :param itemset: set/list of integers
-    #     :param level_0_periods_included_in_pg: Two-item list which refer to the range of periods of level 0.
-    #     [lowerBoundary, upperBoundary]
-    #     :return: {"rslb": float, "rsup": float} or None
-    #     """
-    #
-    #     faps_period_of_level_0 = list(map(lambda x: self.matrix_data_by_item[self.items_dic[x]]['fap'][0], itemset))
-    #     maximum_common_period_with_boundaries = getMCPOfItemsetBetweenBoundaries(faps_period_of_level_0, level_0_periods_included_in_pg)
-    #     if maximum_common_period_with_boundaries is None:
-    #         return None
-    #     else:
-    #         C_total_X_actual = 0
-    #         transaction_id_intersection = self.transaction_ids_intersection(itemset)
-    #         for tid in transaction_id_intersection:
-    #             transaction_period_in_level_0 = getPeriodStampFromTimestamp(self.timestamp_mapping[tid])[0]
-    #             if maximum_common_period_with_boundaries[0] <= transaction_period_in_level_0 <= maximum_common_period_with_boundaries[1]:
-    #                 C_total_X_actual += 1
-    #
-    #         PTT_total_sum_with_boundaries_and_MCP = self.getTotalPTTSumWithinPeriodsInLevel0(maximum_common_period_with_boundaries)
-    #         PTT_total_sum_with_boundaries = self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
-    #
-    #         relative_support_lower_bound = C_total_X_actual/PTT_total_sum_with_boundaries_and_MCP
-    #         relative_support = C_total_X_actual/PTT_total_sum_with_boundaries
-    #
-    #         return {"rslb": relative_support_lower_bound, "rsup": relative_support}
-
-
-    def getItemsetRelativeSupport(self, itemset, level_0_periods_included_in_pg):
-        """
-        :param itemset: set/list of integers
-        :param level_0_periods_included_in_pg: Two-item list which refer to the range of periods of level 0.
-        :return: float
-        """
-        starters_tid = self.getPTTPeriodTIDBoundaryTuples()
-
-        tidLimits = maximal_time_period_interval(starters_tid, level_0_periods_included_in_pg[0]-1, level_0_periods_included_in_pg[1]-1)
-        lb = tidLimits[0]
-        ub = tidLimits[1]
-        transaction_id_intersection = len(self.transaction_ids_intersection(itemset, lb, ub))
-
-        # C_total_X_actual = 0
-        # for tid in transaction_id_intersection:
-        #     transaction_period_in_level_0 = getPeriodStampFromTimestamp(self.timestamp_mapping[tid])[0]
-        #     if level_0_periods_included_in_pg[0] <= transaction_period_in_level_0 <= level_0_periods_included_in_pg[1]:
-        #        C_total_X_actual += 1firstTID
-
-        PTT_total_sum_with_boundaries = self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
-        if PTT_total_sum_with_boundaries != 0:
-            return transaction_id_intersection/PTT_total_sum_with_boundaries
-        else:
-            return 0
 
     def confidenceOf(self, lhs, rhs):
         """

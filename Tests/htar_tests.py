@@ -242,22 +242,22 @@ class HTARTests(unittest.TestCase):
 
 
 
-# def test_HTAR_foodmart_data_1997_correctness_and_completness(self):
-#     database = Parser().parse("Datasets/sales_formatted_1997.csv", 'single', None, True)
-#     print('---')
-#     start = time.time()
-#     apriori_rules = apriori(database, 0.5, 0.5)
-#     end = time.time()
-#     print('Apriori Took ' + (str(end - start) + ' seconds'))
-#
-#     start = time.time()
-#     rules_by_pg = HTAR_BY_PG(database, 0.5, 0.5, 0.5)
-#     end = time.time()
-#     print('HTAR Took ' + (str(end - start) + ' seconds'))
-#
-#     print(len(rules_by_pg))
-#     print(len(apriori_rules))
-#     self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
+    # def test_HTAR_foodmart_data_1997_correctness_and_completness(self):
+    #     database = Parser().parse("Datasets/sales_formatted_1997_sorted_by_timestamp.csv", 'single', None, True)
+    #     print('---')
+    #     start = time.time()
+    #     apriori_rules = apriori(database, 0.0002, 0.85)
+    #     end = time.time()
+    #     print('Apriori Took ' + (str(end - start) + ' seconds'))
+    #
+    #     start = time.time()
+    #     rules_by_pg = HTAR_BY_PG(database, 0.0002, 0.85, 0.0002)
+    #     end = time.time()
+    #     print('HTAR Took ' + (str(end - start) + ' seconds'))
+    #
+    #     print(len(rules_by_pg))
+    #     print(len(apriori_rules))
+    #     self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
 
 
 #
