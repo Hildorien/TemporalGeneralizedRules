@@ -104,7 +104,8 @@ class Database:
         return self.supportOf(lhs) / self.supportOf(rhs)
 
     def printAssociationRule(self, association_rule):
-        consequent_name = self.items_dic[association_rule.rhs[0]]
+        rhs = list(association_rule.rhs)
+        consequent_name = self.items_dic[rhs[0]]
         antecedent_names = ','.join(list(map(lambda x: self.items_dic[x], association_rule.lhs)))
         return antecedent_names + " => " + consequent_name + " support: " + str(
             association_rule.support) + " confidence: " + str(association_rule.confidence)

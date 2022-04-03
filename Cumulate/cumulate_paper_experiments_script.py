@@ -5,7 +5,6 @@ import time
 import traceback
 
 import numpy as np
-#from matplotlib import pyplot as plt
 from matplotlib import pyplot as plt
 
 from Cumulate.cumulate import cumulate, vertical_cumulate, cumulate_frequents, vertical_cumulate_frequents
@@ -97,64 +96,64 @@ synthetic_taxonomies_filepath = {
 }
 
 
-def parse_and_plot_files(experiment_key):
-    path = os.getcwd() + '\\Experiments\\'
-    files = []
-    for i in os.listdir(path):
-        if os.path.isfile(os.path.join(path, i)) and i.startswith(experiment_key) and i.endswith('plot.txt'):
-            files.append(os.path.join(path, i))
-
-    x_axis = []  # Equal for alll algorithms
-    y_axis_dict = {}  # This has multiple list for each algorithm in the same plot
-    for filepath in files:
-        filename = os.path.basename(filepath)
-        str1 = filename.replace(experiment_key + '_', '')
-        key = str1.replace('_plot.txt', '')
-        y_axis_dict[key] = []  # Define keys based on each algorithm file
-        with open(filepath) as file:
-            lines = file.readlines()
-        for line in lines:
-            string_split = line.rstrip().split(",")
-            if string_split[0] == 'x':
-                x_axis.append(float(string_split[1]))  # Value of x-coordinate
-            elif string_split[0] == 'y':
-                y_axis_dict[key].append(float(string_split[1]))  # Value of y-coordinate
-
-    x_axis = sorted(list(set(x_axis)))
-
-    cumulate_vanilla_time = y_axis_dict['cumulate_vanilla']
-    cumulate_vertical_time = y_axis_dict['cumulate_vertical']
-    cumulate_vertical_with_parallel_count_time = y_axis_dict['cumulate_vertical_with_parallel_count']
-
-    # Check if avg time in seconds surpasses a threshhold. If so, express time in minutes
-    avg_time_in_seconds = (np.average(cumulate_vanilla_time) + np.average(cumulate_vertical_time) + np.average(
-        cumulate_vertical_with_parallel_count_time)) // 3
-    if avg_time_in_seconds > 60:
-        cumulate_vanilla_time = list(map(lambda x: x // 60, cumulate_vanilla_time))
-        cumulate_vertical_time = list(map(lambda x: x // 60, cumulate_vertical_time))
-        cumulate_vertical_with_parallel_count_time = list(
-            map(lambda x: x // 60, cumulate_vertical_with_parallel_count_time))
-
-    plt.plot(x_axis, cumulate_vanilla_time, color='r', label='cumulate')
-    plt.plot(x_axis, cumulate_vertical_time, color='g', label='cumulate_vertical')
-    plt.plot(x_axis, cumulate_vertical_with_parallel_count_time, color='b',
-             label='cumulate_vertical_with_parallel_count')
-
-    # Naming the x-axis, y-axis and the whole graph
-    plt.xlabel(experiment_key.upper())
-    if avg_time_in_seconds > 60:
-        plt.ylabel("Time (Minutes)")
-    else:
-        plt.ylabel("Time (Seconds)")
-
-    plt.title(experiment_key.upper())
-
-    # Adding legend, which helps us recognize the curve according to it's color
-    plt.legend()
-
-    plt.savefig('Plots/' + experiment_key.upper() + '.png', format="png")
-    # plt.show()
-    plt.close()
+# def parse_and_plot_files(experiment_key):
+#     path = os.getcwd() + '\\Experiments\\'
+#     files = []
+#     for i in os.listdir(path):
+#         if os.path.isfile(os.path.join(path, i)) and i.startswith(experiment_key) and i.endswith('plot.txt'):
+#             files.append(os.path.join(path, i))
+#
+#     x_axis = []  # Equal for alll algorithms
+#     y_axis_dict = {}  # This has multiple list for each algorithm in the same plot
+#     for filepath in files:
+#         filename = os.path.basename(filepath)
+#         str1 = filename.replace(experiment_key + '_', '')
+#         key = str1.replace('_plot.txt', '')
+#         y_axis_dict[key] = []  # Define keys based on each algorithm file
+#         with open(filepath) as file:
+#             lines = file.readlines()
+#         for line in lines:
+#             string_split = line.rstrip().split(",")
+#             if string_split[0] == 'x':
+#                 x_axis.append(float(string_split[1]))  # Value of x-coordinate
+#             elif string_split[0] == 'y':
+#                 y_axis_dict[key].append(float(string_split[1]))  # Value of y-coordinate
+#
+#     x_axis = sorted(list(set(x_axis)))
+#
+#     cumulate_vanilla_time = y_axis_dict['cumulate_vanilla']
+#     cumulate_vertical_time = y_axis_dict['cumulate_vertical']
+#     cumulate_vertical_with_parallel_count_time = y_axis_dict['cumulate_vertical_with_parallel_count']
+#
+#     # Check if avg time in seconds surpasses a threshhold. If so, express time in minutes
+#     avg_time_in_seconds = (np.average(cumulate_vanilla_time) + np.average(cumulate_vertical_time) + np.average(
+#         cumulate_vertical_with_parallel_count_time)) // 3
+#     if avg_time_in_seconds > 60:
+#         cumulate_vanilla_time = list(map(lambda x: x // 60, cumulate_vanilla_time))
+#         cumulate_vertical_time = list(map(lambda x: x // 60, cumulate_vertical_time))
+#         cumulate_vertical_with_parallel_count_time = list(
+#             map(lambda x: x // 60, cumulate_vertical_with_parallel_count_time))
+#
+#     plt.plot(x_axis, cumulate_vanilla_time, color='r', label='cumulate')
+#     plt.plot(x_axis, cumulate_vertical_time, color='g', label='cumulate_vertical')
+#     plt.plot(x_axis, cumulate_vertical_with_parallel_count_time, color='b',
+#              label='cumulate_vertical_with_parallel_count')
+#
+#     # Naming the x-axis, y-axis and the whole graph
+#     plt.xlabel(experiment_key.upper())
+#     if avg_time_in_seconds > 60:
+#         plt.ylabel("Time (Minutes)")
+#     else:
+#         plt.ylabel("Time (Seconds)")
+#
+#     plt.title(experiment_key.upper())
+#
+#     # Adding legend, which helps us recognize the curve according to it's color
+#     plt.legend()
+#
+#     plt.savefig('Plots/' + experiment_key.upper() + '.png', format="png")
+#     # plt.show()
+#     plt.close()
 
 
 def run_cumulate(horizontal_db):
@@ -269,12 +268,12 @@ def run_experiments(experiment_key):
 
 def main():
     loggerError = setup_logger('Experiment.ErrorLogger', 'Experiments/error_log.txt', logging.ERROR)
-    experiment_keys = ['root', 'depth_ratio', 'fanout']
-    for key in experiment_keys:
-        try:
-            run_experiments(key)
-        except Exception as e:
-           loggerError.error(''.join(traceback.format_exception(None, e, e.__traceback__)))
+    # experiment_keys = ['root', 'depth_ratio', 'fanout']
+    # for key in experiment_keys:
+    #     try:
+    #         run_experiments(key)
+    #     except Exception as e:
+    #        loggerError.error(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
     # Run all experiments by key
     # for key in synthetic_datasets_filepath:
