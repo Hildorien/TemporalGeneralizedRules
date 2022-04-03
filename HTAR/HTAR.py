@@ -20,9 +20,6 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, hong = False):
     TFI_r = list()
     frequent_dictionary = {}
     support_dictionary = {}
-    pool = None
-    if parallel_count:
-        pool = multiprocessing.Pool(multiprocessing.cpu_count())
     while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
         frequent_dictionary[r] = []
         C_j = generateCanidadtesOfSizeK(r, C_j, frequent_dictionary)
@@ -31,7 +28,8 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, hong = False):
         # print(str(len(C_j)))
         # print("/////////////////")
         if parallel_count:
-            results = pool.starmap(calculateSupportInPJ, zip(C_j, itertools.repeat(database), itertools.repeat(0), itertools.repeat(pj), itertools.repeat(hong)))
+            pool = multiprocessing.Pool(multiprocessing.cpu_count())
+            results = pool.starmap(calculateSupportInPJ, zip(C_j, itertools.repeat(database), itertools.repeat(0), itertools.repeat(pj)))
             for a_result in results:
                 if a_result[1] >= lam:
                     TFI_r.append(tuple(a_result[0]))
@@ -41,7 +39,7 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, hong = False):
             pool.join()
         else:
             for k_size_itemset in C_j:
-                support = database.supportOf(k_size_itemset, 0, pj, hong)
+                support = database.supportOf(k_size_itemset, 0, pj)
                 if support >= lam:
                     TFI_r.append(tuple(k_size_itemset))
                     support_dictionary[hash_candidate(k_size_itemset)] = support
@@ -53,7 +51,7 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, hong = False):
     return {"TFI": TFI_j, "supportDict": support_dictionary}
 
 
-def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1]):
+def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1], paralelExecution = False):
     """
     :param database:
     :return: a set of AssociationRules
@@ -69,25 +67,27 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1]):
         hong = True
 
     for pi in range(HTG[0]):
-        #start = time.time()
-        individualTFI = findIndividualTFI(database, pi + 1, lam, hong)
+        # start = time.time()
+        individualTFI = findIndividualTFI(database, pi + 1, lam, paralelExecution)
 
         if len(individualTFI["TFI"]) > 0:
             TFI_by_period_in_l_0[pi + 1] = individualTFI["TFI"]
             pgStringKey = stringifyPg(0, pi + 1)
             support_dictionary_by_pg[pgStringKey] = individualTFI["supportDict"]
             HTFI_by_pg[pgStringKey] = TFI_by_period_in_l_0[pi + 1]
-        end = time.time()
-        #print(str(pi) + ' leaf-TFI took ' + (str(end - start) + ' seconds'))
-        #print('('+ str(len(individualTFI["TFI"])) + ' frecuent itemsets )')
-        #print('-------------')
+        # end = time.time()
+
+        # totalFrequent = 0
+        # for k in TFI_by_period_in_l_0[pi + 1]:
+        #     totalFrequent += len(TFI_by_period_in_l_0[pi + 1][k])
+        # print(str(pi) + ' leaf-TFI took ' + (str(end - start) + ' seconds'))
+        # print('('+ str(totalFrequent) + ' frecuent itemsets )')
+        # print('-------------')
 
 
     # PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
 
     HTFI = {}
-    #print('--------------------------LEAF TFI COMPLETED------------------------------')
-
     for l_level in range(len(HTG)):
         if l_level != 0:
             for period in range(HTG[l_level]):
@@ -104,7 +104,7 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1]):
                     itemsets_length_k = possible_itemsets_in_pg[k]
                     frequent_itemsets_length_k = set()
                     for itemset in itemsets_length_k:
-                        itemsetSupport = database.getItemsetRelativeSupport(itemset, level_0_periods_included)
+                        itemsetSupport = database.supportOf(itemset, l_level, period + 1)
                         if itemsetSupport is not None and itemsetSupport >= min_rsup:
                             frequent_itemsets_length_k.add(itemset)
                             support_dictionary_by_pg[pgStringKey][hash_candidate(itemset)] = itemsetSupport
@@ -130,6 +130,9 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, HTG=[24, 12, 4, 1]):
     HTFS_by_pg = {}
     for pg in HTFI_by_pg.keys():
         pg_rules = rule_generation(HTFI_by_pg[pg], support_dictionary_by_pg[pg], min_rconf)
+        # print(pg + " RULES")
+        # print(len(pg_rules))
+        # print("----")
         if len(pg_rules) > 0:
             HTFS_by_pg[pg] = pg_rules
 

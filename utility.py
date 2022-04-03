@@ -13,7 +13,7 @@ def maximal_time_period_interval(list_of_tuples, period1, period2):
     lbTID = None
     ubTID = None
 
-    while pointer1 <= pointer2 and (not(lbTID is not None and ubTID is not None)):
+    while pointer1 <= pointer2 and (not (lbTID is not None and ubTID is not None)):
         if lbTID is None:
             if list_of_tuples[pointer1] is not None:
                 lbTID = list_of_tuples[pointer1][0]
@@ -42,7 +42,7 @@ def binary_search_or_first_higher_value(list, value, low, high):
     if list[low] >= value:
         return low
     else:
-        return low+1
+        return low + 1
 
 
 def findOrderedIntersection(arr1, arr2):
@@ -68,43 +68,63 @@ def findOrderedIntersection(arr1, arr2):
 
     return result_array
 
-def getFilteredTIDSThatBelongToPeriod(arr, lb=None, ub=None):
+def getFilteredTIDSThatBelongToPeriod(arr, lb=None, ub=None, relativeSupportCalculationType = 1):
+    """
+    :param arr: array to get sublist of
+    :param lb: lowerbound value
+    :param ub: upperbound value
+    :param relativeSupportCalculationType: {#1: Pointer starts from the beggining of the array. #2: Pointer starts from
+    first value apparition (or next), position found by binary search. #3: Same as 2, but instead of binary search,
+    access inmediatly}
+    :return: sublist of arr delimeted between lb and ub
+    """
     if lb is None or ub is None:
         return arr
     res = []
-    pointer = binary_search_or_first_higher_value(arr, lb, 0, len(arr) - 1)
-    while pointer < len(arr) and arr[pointer] <= ub:
-        res.append(arr[pointer])
-        pointer += 1
+    pointer = 0
+    if relativeSupportCalculationType == 1:
+        while pointer < len(arr) and arr[pointer] <= ub:
+            if arr[pointer] < lb:
+                pointer += 1
+            elif lb <= arr[pointer] <= ub:
+                res.append(arr[pointer])
+                pointer += 1
+    elif relativeSupportCalculationType == 2:
+        pointer = binary_search_or_first_higher_value(arr, lb, 0, len(arr) - 1)
+        while pointer < len(arr) and arr[pointer] <= ub:
+            res.append(arr[pointer])
+            pointer += 1
+
     return res
 
 
-
+#Deprecated. Used for testing only.
 def findOrderedIntersectionBetweenBoundaries(arr1, arr2, lb, ub):
     """
-        :param: two ordered int arrays, lowerBoundary, upperBoundary
-        :return: ordered int array
+    :param: two ordered int arrays, lowerBoundary, upperBoundary
+    :param: upper and lowerbound VALUES
+    :return: ordered int array
     """
+    cutted_arr_1 = getFilteredTIDSThatBelongToPeriod(arr1, lb, ub, 2)
+    cutted_arr_2 = getFilteredTIDSThatBelongToPeriod(arr2, lb, ub, 2)
     if lb > ub:
         print('ERROR. UPPERBOUND IS NOT HIGHER OR EQUAL LOWERBOUND')
         return None
-    arr1_size = len(arr1)
-    arr2_size = len(arr2)
-    pointer_1 = binary_search_or_first_higher_value(arr1, lb, 0, arr1_size - 1)
-    pointer_2 = binary_search_or_first_higher_value(arr2, lb, 0, arr2_size - 1)
-
+    arr1_size = len(cutted_arr_1)
+    arr2_size = len(cutted_arr_2)
+    pointer_1 = 0
+    pointer_2 = 0
     result_array = []
-    while pointer_1 < arr1_size and pointer_2 < arr2_size and arr1[pointer_1] <= ub and arr2[pointer_2] <= ub:
-        val_dif = arr1[pointer_1] - arr2[pointer_2]
+    while pointer_1 < arr1_size and pointer_2 < arr2_size and cutted_arr_1[pointer_1] <= ub and cutted_arr_2[pointer_2] <= ub:
+        val_dif = cutted_arr_1[pointer_1] - cutted_arr_2[pointer_2]
         if val_dif == 0:
-            result_array.append(arr1[pointer_1])
+            result_array.append(cutted_arr_1[pointer_1])
             pointer_1 += 1
             pointer_2 += 1
         elif val_dif > 0:
             pointer_2 += 1
         else:
             pointer_1 += 1
-
     return result_array
 
 
@@ -165,15 +185,13 @@ def apriori_gen(frequent_itemset_of_size_k_minus_1, frequent_dictionary):
 
     frequent_dictionary_k_1 = frequent_dictionary[k - 1]
     frequent_dictionary_k_1_hashed = set(map(tuple, frequent_dictionary_k_1))
-    #frequent_dictionary_k_1_numpy = np.array(frequent_dictionary[k - 1])
     pruned_candidates = []
     for a_candidate_of_size_k in candidates_of_size_k:  # Iterating over a lists of lists
-
-        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k, k - 1)  # a_candidate_of_size_k is a list
-
+        subsets_of_size_k_minus_1 = allSubsetofSizeKMinus1(a_candidate_of_size_k,
+                                                           k - 1)  # a_candidate_of_size_k is a list
         all_subsets_are_frequent = True
         for a_subset_of_size_k_minus_1 in subsets_of_size_k_minus_1:
-            all_subsets_are_frequent = all_subsets_are_frequent and tuple(a_subset_of_size_k_minus_1) in frequent_dictionary_k_1_hashed
+            all_subsets_are_frequent = tuple(a_subset_of_size_k_minus_1) in frequent_dictionary_k_1_hashed
             if not all_subsets_are_frequent:
                 break
         if all_subsets_are_frequent:
