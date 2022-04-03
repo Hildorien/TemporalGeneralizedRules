@@ -1,4 +1,5 @@
 import math
+import sys
 import time
 import unittest
 from datetime import datetime
@@ -106,19 +107,35 @@ print(dfSingle)
 """
 #database = Parser().parse('Datasets/synthetic_dataset_test.csv', 'single')
 #apriori(database, 0.5, 0.5)
-import pandas as pd
 
 def func(orders, total_orders, target_orders):
     return round((orders / total_orders) * target_orders)
 
 if __name__=="__main__":
 
-    # vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Root\R500.data', 'single',
-    #                              'F:\TesisSyntheticDatasets\Root\R500.tax')
+    vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single',
+                                 'F:\TesisSyntheticDatasets\Transaction\T100k.tax')
     # start = time.time()
-    # r = vertical_cumulate_frequents(vertical_db, 0.005)
+    # frequents, support_dict, taxonomy = vertical_cumulate_frequents(vertical_db, 0.005)
     # end = time.time()
-    # print('vertical_cumulate_frequents took ' + str(end-start) + ' generated ' + str(len(r)))
+    # print('vertical_cumulate_frequents took ' + str(end-start))
+    # print('##########################################################')
+    # print('##########################################################')
+    start = time.time()
+    r = vertical_cumulate(vertical_db, 0.01, 0.25, 0, False, True)
+    end = time.time()
+    print('rule gen vertical_cumulate_frequents took ' + str(end-start))
+    print('Generated ' + str(len(r)) + ' rules')
+
+    # for k in frequents:
+    #     print('vertical_cumulate_frequents generated ' + str(len(frequents[k])) + ' frequent itemsets in k=' + str(k))
+
+    # start = time.time()
+    # frequents, support_dict, taxonomy = vertical_cumulate_frequents(vertical_db, 0.005, True)
+    # end = time.time()
+    # print('vertical_cumulate_frequents took ' + str(end - start))
+    # for k in frequents:
+    #     print('vertical_cumulate_frequents generated ' + str(len(frequents[k])) + ' frequent itemsets in k=' + str(k))
     #
     #
     # horizontal_db = Parser().parse_horizontal_database('F:\TesisSyntheticDatasets\Root\R500.data',
@@ -133,23 +150,7 @@ if __name__=="__main__":
     # r = apriori(database, 0.001, 0.1)
     # end = time.time()
     # print('apriori took ' + str(end - start) + ' generated ' + str(len(r)))
-    df = pd.read_csv('Datasets/sales_formatted_1998_sorted_by_timestamp.csv', delimiter=',',
-                     usecols=['order_id', 'timestamp']).drop_duplicates(subset=None, keep='first', inplace=False)
-    foodmart_days_arr = np.zeros(365)
-    synth_days_arr = np.zeros(365)
-    foodmart_unique_orders = len(df.order_id.unique())
-    target_unique_orders = 1000000
-    dfGroupedByTmp = df.groupby(['timestamp']).size().reset_index(name='counts')
-    for index, row in dfGroupedByTmp.iterrows():
-        day_of_the_year = datetime.fromtimestamp(row['timestamp']).timetuple().tm_yday
-        counts = row['counts']
-        foodmart_days_arr[day_of_the_year-1] = counts
-    func_vec = np.vectorize(lambda x: func(x, foodmart_unique_orders, target_unique_orders))
-    synth_distribution = func_vec(foodmart_days_arr)
-    total_target_orders = np.sum(synth_distribution)
-    if total_target_orders < target_unique_orders:
-        import random
-        n = random.randint(1, 365)
+
 
 
 

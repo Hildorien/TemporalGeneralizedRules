@@ -209,3 +209,26 @@ def create_ancestor_set(taxonomy):
             hashed_itemset = hash_candidate(sorted([item, ancestor]))
             ancestor_set.add(hashed_itemset)
     return ancestor_set
+
+
+def calculate_support_for_parallel(candidate, candidate_tids):
+    final_intersection = None
+    for item in candidate_tids:
+        tids = candidate_tids[item]
+        if final_intersection is None:
+            final_intersection = tids
+        else:
+            final_intersection = findOrderedIntersection(final_intersection, tids)
+    return candidate, len(final_intersection)
+
+
+def append_tids(candidate, items_dic, matrix_data_by_item):
+    candidate_tids_dict = {}
+    for item in candidate:
+        item = items_dic[item]
+        if item in matrix_data_by_item:
+            candidate_tids_dict[item] = matrix_data_by_item[item]['tids']
+        else:
+            candidate_tids_dict[item] = []
+
+    return candidate, candidate_tids_dict

@@ -2,7 +2,7 @@ import itertools
 import time
 
 from rule_generator import rule_generation
-from utility import generateCanidadtesOfSizeK, hash_candidate
+from utility import generateCanidadtesOfSizeK, hash_candidate, append_tids, calculate_support_for_parallel
 import multiprocessing
 
 def apriori(database, min_support, min_confidence, parallel_count=False, parallel_rule_gen=False):
@@ -18,6 +18,9 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
     k = 1
     support_dictionary = {}
     frequent_dictionary = {}
+    total_transactions = database.tx_count
+    items_dic = database.items_dic
+    matrix_data_by_item = database.matrix_data_by_item
     pool = None
     if parallel_count:
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
@@ -28,11 +31,13 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
         # start = time.time()
         frequent_dictionary[k] = []
         if parallel_count:
-            results = pool.starmap(calculateSupport, zip(candidates_size_k, itertools.repeat(database)))
+            list_to_parallel = [append_tids(x, items_dic, matrix_data_by_item) for x in candidates_size_k]
+            results = pool.starmap(calculate_support_for_parallel, list_to_parallel)
             for a_result in results:
-                if a_result[1] >= min_support:
+                candidate_support = a_result[1] / total_transactions
+                if candidate_support >= min_support:
                     frequent_dictionary[k].append(a_result[0])
-                    support_dictionary[hash_candidate(a_result[0])] = a_result[1]
+                    support_dictionary[hash_candidate(a_result[0])] = candidate_support
         else:
             for a_candidate_size_k in candidates_size_k:
                 support = database.supportOf(a_candidate_size_k)

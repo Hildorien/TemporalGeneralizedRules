@@ -1,11 +1,12 @@
 import multiprocessing
 import time
 import itertools
-
+import numpy as np
 from Cumulate.cumulate_utility import calculate_C1, calculate_C2, calculate_Ck, prune_candidates_in_same_family, \
     count_candidates_in_transaction, calculate_support
 from rule_generator import rule_generation
-from utility import hash_candidate, generateCanidadtesOfSizeK
+from utility import hash_candidate, generateCanidadtesOfSizeK, findOrderedIntersection, append_tids, \
+    calculate_support_for_parallel
 
 import logging
 
@@ -123,17 +124,13 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
     taxonomy = vertical_database.taxonomy  # Cumulate Optimization 2 in original paper
     all_items = sorted(list(vertical_database.items_dic.keys()))
     pool = None
+    total_transactions = vertical_database.tx_count
+    items_dic = vertical_database.items_dic
+    matrix_data_by_item = vertical_database.matrix_data_by_item
     if parallel_count:
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
     while k == 1 or frequent_dictionary[k - 1] != []:
         # Candidate Generation
-
-        # if k == 1:
-        #     candidate_hashmap = calculate_C1(all_items, k)
-        # elif k == 2:
-        #     candidate_hashmap = calculate_C2(frequent_dictionary, k)
-        # else:
-        #     candidate_hashmap = calculate_Ck(frequent_dictionary, k)
         candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
         if k == 2:
             candidates_size_k = prune_candidates_in_same_family(candidates_size_k, vertical_database.ancestor_set)  # Cumulate Optimization 3 in original paper
@@ -141,12 +138,12 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
         if len(candidates_size_k) == 0:
             break
         if parallel_count:
-            # pool = multiprocessing.Pool(multiprocessing.cpu_count())
-            results = pool.starmap(calculate_support, zip(candidates_size_k, itertools.repeat(vertical_database)))
-
+            list_to_parallel = [append_tids(x, items_dic, matrix_data_by_item) for x in candidates_size_k]
+            results = pool.starmap(calculate_support_for_parallel, list_to_parallel)
             for a_result in results:
-                support_dictionary[hash_candidate(a_result[0])] = a_result[1]
-                if a_result[1] >= min_supp:
+                candidate_support = a_result[1] / total_transactions
+                support_dictionary[hash_candidate(a_result[0])] = candidate_support
+                if candidate_support >= min_supp:
                     frequent_dictionary[k].append(a_result[0])
         else:
             for a_candidate_size_k in candidates_size_k:
@@ -165,3 +162,4 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
         loggerB.info('FrequentPhase,' + str(end - start))
         loggerBPlotter.info('y,' + str(end - start))
     return frequent_dictionary, support_dictionary, taxonomy
+

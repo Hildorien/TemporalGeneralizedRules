@@ -269,12 +269,12 @@ def run_experiments(experiment_key):
 
 def main():
     loggerError = setup_logger('Experiment.ErrorLogger', 'Experiments/error_log.txt', logging.ERROR)
-    # experiment_keys = ['root', 'depth_ratio', 'fanout']
-    # for key in experiment_keys:
-    #     try:
-    #         run_experiments(key)
-    #     except Exception as e:
-    #        loggerError.error(''.join(traceback.format_exception(None, e, e.__traceback__)))
+    experiment_keys = ['root', 'depth_ratio', 'fanout']
+    for key in experiment_keys:
+        try:
+            run_experiments(key)
+        except Exception as e:
+           loggerError.error(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
     # Run all experiments by key
     # for key in synthetic_datasets_filepath:
@@ -291,7 +291,7 @@ def main():
 
     # Plot experiments by key
     # parse_and_plot_files('root')
-    parse_and_plot_files('depth_ratio')
+    # parse_and_plot_files('depth_ratio')
     # parse_and_plot_files('fanout')
     # parse_and_plot_files('item')
     # parse_and_plot_files('transaction')
