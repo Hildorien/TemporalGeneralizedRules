@@ -10,7 +10,7 @@ import multiprocessing
 def calculateSupportInPJ(a_candidate, database, l_level, pj, rsm = 2, hong=False):
     return a_candidate, database.supportOf(a_candidate, l_level, pj, rsm, hong)
 
-def findIndividualTFI(database, pj, lam, parallel_count=False, rsm= 2, hong = False):
+def findIndividualTFI(database, pj, lam, parallel_count=False, debugging = False, rsm= 2, hong = False):
     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
     ptt_entry = database.getPTTValueFromLeafLevelGranule(pj)
     TFI_j = {}
@@ -33,10 +33,6 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, rsm= 2, hong = Fa
         old_C_J = C_j
         C_j = generateCanidadtesOfSizeK(r, old_C_J, frequent_dictionary)
         totalCandidates += len(C_j)
-        # print("NUEVO R")
-        # print(str(r))
-        # print(str(len(C_j)))
-        # print("/////////////////")
         if parallel_count:
             pool = multiprocessing.Pool(multiprocessing.cpu_count())
 
@@ -65,11 +61,12 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, rsm= 2, hong = Fa
         TFI_r = list()
         r += 1
 
-    #print("Total candidates evaluated: " + str(totalCandidates))
+    if debugging:
+        print("Total candidates evaluated: " + str(totalCandidates))
     return {"TFI": TFI_j, "supportDict": support_dictionary}
 
 
-def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG = [24, 12, 4, 1], rsm= 2):
+def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, debugging = False, HTG = [24, 12, 4, 1], rsm= 2):
     """
     :param database:
     :return: a set of AssociationRules
@@ -85,8 +82,8 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
         hong = True
 
     for pi in range(HTG[0]):
-        #start = time.time()
-        individualTFI = findIndividualTFI(database, pi + 1, lam, paralelExecution, rsm, hong)
+        start = time.time()
+        individualTFI = findIndividualTFI(database, pi + 1, lam, paralelExecution, debugging, rsm, hong)
 
         if len(individualTFI["TFI"]) > 0:
             TFI_by_period_in_l_0[pi + 1] = individualTFI["TFI"]
@@ -95,13 +92,14 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
             HTFI_by_pg[pgStringKey] = TFI_by_period_in_l_0[pi + 1]
         end = time.time()
 
-        # totalFrequent = 0
-        # if pi + 1 in TFI_by_period_in_l_0:
-        #     for k in TFI_by_period_in_l_0[pi + 1]:
-        #         totalFrequent += len(TFI_by_period_in_l_0[pi + 1][k])
-        #     print(str(pi) + ' leaf-TFI took ' + (str(end - start) + ' seconds'))
-        #     print('('+ str(totalFrequent) + ' frecuent itemsets )')
-        #     print('-------------')
+        if debugging:
+            totalFrequent = 0
+            if pi + 1 in TFI_by_period_in_l_0:
+                for k in TFI_by_period_in_l_0[pi + 1]:
+                    totalFrequent += len(TFI_by_period_in_l_0[pi + 1][k])
+                print(str(pi) + ' leaf-TFI took ' + (str(end - start) + ' seconds'))
+                print('('+ str(totalFrequent) + ' frecuent itemsets )')
+                print('-------------')
 
 
     # PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
@@ -110,7 +108,7 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
     for l_level in range(len(HTG)):
         if l_level != 0:
             for period in range(HTG[l_level]):
-                #start = time.time()
+                start = time.time()
 
                 pgStringKey = stringifyPg(l_level, period + 1)
                 support_dictionary_by_pg[pgStringKey] = {}
@@ -137,17 +135,18 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
                     del support_dictionary_by_pg[pgStringKey]
                 HTFI = {}
 
-                # end = time.time()
-                # if pgStringKey in HTFI_by_pg:
-                #     totalFrequent = 0
-                #     for k in HTFI_by_pg[pgStringKey]:
-                #         totalFrequent += len(HTFI_by_pg[pgStringKey][k])
-                #     print(pgStringKey + ' took ' + (str(end - start) + ' seconds'))
-                #     print('(' + str(totalFrequent) + ' frecuent itemsets )')
-                #     print('-------------')
-                # else:
-                #     print('(no frecuent itemsets)')
-                # print('-------------')
+                if debugging:
+                    end = time.time()
+                    if pgStringKey in HTFI_by_pg:
+                        totalFrequent = 0
+                        for k in HTFI_by_pg[pgStringKey]:
+                            totalFrequent += len(HTFI_by_pg[pgStringKey][k])
+                        print(pgStringKey + ' took ' + (str(end - start) + ' seconds'))
+                        print('(' + str(totalFrequent) + ' frecuent itemsets )')
+                        print('-------------')
+                    else:
+                        print('(no frecuent itemsets)')
+                    print('-------------')
 
 
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
@@ -156,11 +155,13 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
     for pg in HTFI_by_pg.keys():
         pg_rules = rule_generation(HTFI_by_pg[pg], support_dictionary_by_pg[pg], min_rconf)
         totalRules += len(pg_rules)
-        # print(pg + " RULES")
-        # print(str(len(pg_rules)))
-        # print("----")
+        if debugging:
+            print(pg + " RULES")
+            print(str(len(pg_rules)))
+            print("----")
         if len(pg_rules) > 0:
             HTFS_by_pg[pg] = pg_rules
 
-    # print("Total amount of HTAR rules: " + str(totalRules))
+    if debugging:
+        print("Total amount of HTAR rules: " + str(totalRules))
     return HTFS_by_pg

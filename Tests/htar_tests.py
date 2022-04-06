@@ -204,7 +204,7 @@ class HTARTests(unittest.TestCase):
 
         for paralel_running in [False, True]:
             for i in range(0, 3):
-                rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], paralel_running, [24,12,4,1], 2)
+                rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], paralel_running, False)
                 apriori_rules = apriori(database, sups[i], confs[i])
                 self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
 
