@@ -116,6 +116,7 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
 
 
 def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=False):
+    start = time.time()
     # Instantiate local variables
     frequent_dictionary = {}
     support_dictionary = {}
@@ -136,7 +137,6 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
         frequent_dictionary[k] = []
         if len(candidates_size_k) == 0:
             break
-        #start = time.time()
         if parallel_count:
             list_to_parallel = [append_tids(x, items_dic, matrix_data_by_item) for x in candidates_size_k]
             results = pool.starmap(calculate_support_for_parallel, list_to_parallel)
@@ -152,9 +152,9 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
                 if support >= min_supp:
                     frequent_dictionary[k].append(a_candidate_size_k)
 
-        #end = time.time()
         #print('k =' + str(k) + ' took ' + str(end - start) + ' with candidates '+ str(len(candidates_size_k)))
         k += 1
+    end = time.time()
     if parallel_count:
         pool.close()  # Close pools after using them
         pool.join()  # Main process waits after last pool closes
