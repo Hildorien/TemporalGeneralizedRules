@@ -65,7 +65,7 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, rsm= 2, hong = Fa
         TFI_r = list()
         r += 1
 
-    print("Total candidates evaluated: " + str(totalCandidates))
+    #print("Total candidates evaluated: " + str(totalCandidates))
     return {"TFI": TFI_j, "supportDict": support_dictionary}
 
 
@@ -85,7 +85,7 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
         hong = True
 
     for pi in range(HTG[0]):
-        start = time.time()
+        #start = time.time()
         individualTFI = findIndividualTFI(database, pi + 1, lam, paralelExecution, rsm, hong)
 
         if len(individualTFI["TFI"]) > 0:
@@ -95,13 +95,13 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
             HTFI_by_pg[pgStringKey] = TFI_by_period_in_l_0[pi + 1]
         end = time.time()
 
-        totalFrequent = 0
-        if pi + 1 in TFI_by_period_in_l_0:
-            for k in TFI_by_period_in_l_0[pi + 1]:
-                totalFrequent += len(TFI_by_period_in_l_0[pi + 1][k])
-            print(str(pi) + ' leaf-TFI took ' + (str(end - start) + ' seconds'))
-            print('('+ str(totalFrequent) + ' frecuent itemsets )')
-            print('-------------')
+        # totalFrequent = 0
+        # if pi + 1 in TFI_by_period_in_l_0:
+        #     for k in TFI_by_period_in_l_0[pi + 1]:
+        #         totalFrequent += len(TFI_by_period_in_l_0[pi + 1][k])
+        #     print(str(pi) + ' leaf-TFI took ' + (str(end - start) + ' seconds'))
+        #     print('('+ str(totalFrequent) + ' frecuent itemsets )')
+        #     print('-------------')
 
 
     # PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
@@ -110,7 +110,7 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
     for l_level in range(len(HTG)):
         if l_level != 0:
             for period in range(HTG[l_level]):
-                start = time.time()
+                #start = time.time()
 
                 pgStringKey = stringifyPg(l_level, period + 1)
                 support_dictionary_by_pg[pgStringKey] = {}
@@ -137,17 +137,17 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
                     del support_dictionary_by_pg[pgStringKey]
                 HTFI = {}
 
-                end = time.time()
-                if pgStringKey in HTFI_by_pg:
-                    totalFrequent = 0
-                    for k in HTFI_by_pg[pgStringKey]:
-                        totalFrequent += len(HTFI_by_pg[pgStringKey][k])
-                    print(pgStringKey + ' took ' + (str(end - start) + ' seconds'))
-                    print('(' + str(totalFrequent) + ' frecuent itemsets )')
-                    print('-------------')
-                else:
-                    print('(no frecuent itemsets)')
-                print('-------------')
+                # end = time.time()
+                # if pgStringKey in HTFI_by_pg:
+                #     totalFrequent = 0
+                #     for k in HTFI_by_pg[pgStringKey]:
+                #         totalFrequent += len(HTFI_by_pg[pgStringKey][k])
+                #     print(pgStringKey + ' took ' + (str(end - start) + ' seconds'))
+                #     print('(' + str(totalFrequent) + ' frecuent itemsets )')
+                #     print('-------------')
+                # else:
+                #     print('(no frecuent itemsets)')
+                # print('-------------')
 
 
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
@@ -156,11 +156,11 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, HTG
     for pg in HTFI_by_pg.keys():
         pg_rules = rule_generation(HTFI_by_pg[pg], support_dictionary_by_pg[pg], min_rconf)
         totalRules += len(pg_rules)
-        print(pg + " RULES")
-        print(str(len(pg_rules)))
-        print("----")
-        # if len(pg_rules) > 0:
-        #     HTFS_by_pg[pg] = pg_rules
+        # print(pg + " RULES")
+        # print(str(len(pg_rules)))
+        # print("----")
+        if len(pg_rules) > 0:
+            HTFS_by_pg[pg] = pg_rules
 
-    print("Total amount of HTAR rules: " + str(totalRules))
+    # print("Total amount of HTAR rules: " + str(totalRules))
     return HTFS_by_pg
