@@ -65,7 +65,7 @@ class Database:
         """
 
         if l_level is not None and period is not None:
-            level_0_periods_included_in_pg = getPeriodsIncluded(l_level, period)
+            level_0_periods_included_in_pg = getPeriodsIncluded(l_level, period, hong)
             starters_tid = self.getPTTPeriodTIDBoundaryTuples()
             tidLimits = maximal_time_period_interval(starters_tid, level_0_periods_included_in_pg[0] - 1,
                                                      level_0_periods_included_in_pg[1] - 1)
@@ -83,8 +83,8 @@ class Database:
             final_intersection = self.transaction_ids_intersection(itemset)
             return len(final_intersection) / self.tx_count
 
-    def getItemsByDepthAndPeriod(self, l_level, period):
-        return self.ptt.getEveryItemInPTTInPG(l_level, period)
+    def getItemsByDepthAndPeriod(self, l_level, period, hong=False):
+        return self.ptt.getEveryItemInPTTInPG(l_level, period, hong)
 
     def getPTTValueFromLeafLevelGranule(self, pi):
         return self.ptt.getPTTValueFromLeafLevelGranule(pi)

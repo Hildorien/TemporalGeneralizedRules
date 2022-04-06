@@ -27,8 +27,8 @@ class PTT:  # Periodical Total Transaction
         return sum(list(map(lambda pi: self.getPTTValueFromLeafLevelGranule(pi)['totalTransactions'],
                             range(boundaries[0], boundaries[1] + 1))))
 
-    def getEveryItemInPTTInPG(self, l_level, period):
-        level_0_periods_included = getPeriodsIncluded(l_level, period)
+    def getEveryItemInPTTInPG(self, l_level, period, hong= False):
+        level_0_periods_included = getPeriodsIncluded(l_level, period, hong)
         finalItems = set()
         for pj in range(level_0_periods_included[0], level_0_periods_included[1]+1):
             leafSet = self.getPTTValueFromLeafLevelGranule(pj)['itemsSet']
@@ -54,8 +54,8 @@ class PTT:  # Periodical Total Transaction
         else:
             print('ERROR AL OBTENER ELEMENTO EN LA PTT. EL NIVEL O PERIODO ASOCIADO NO EXISTE')
 
-    def getPTTValueFromNonLeafLevelGranule(self, level, pi):
-        level_0_periods_included = getPeriodsIncluded(level, pi)
+    def getPTTValueFromNonLeafLevelGranule(self, level, pi, hong= False):
+        level_0_periods_included = getPeriodsIncluded(level, pi, hong)
         return self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included)
 
     def getPTTPeriodTIDBoundaryTuples(self):

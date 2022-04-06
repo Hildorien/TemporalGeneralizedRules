@@ -143,26 +143,27 @@ class HTARTests(unittest.TestCase):
     def test_TFI(self):
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-        tfi_0_8 = findIndividualTFI(database, 8, 0.55)["TFI"]
-        tfi_0_8_lower_lamda = findIndividualTFI(database, 8, 0.02)["TFI"]
-        tfi_0_5 = findIndividualTFI(database, 5, 0.02)["TFI"]
+        for paralel_running in [False, True]:
+            tfi_0_8 = findIndividualTFI(database, 8, 0.55, paralel_running)["TFI"]
+            tfi_0_8_lower_lamda = findIndividualTFI(database, 8, 0.02, paralel_running)["TFI"]
+            tfi_0_5 = findIndividualTFI(database, 5, 0.02, paralel_running)["TFI"]
 
-        self.assertEqual(tfi_0_8[1], {(6,), (2,)}, 'TFI-1')
-        self.assertEqual(len(tfi_0_8.keys()), 1, 'TFI-1B')
-        self.assertEqual(len(tfi_0_5.keys()), 0, 'TFI-3')
+            self.assertEqual(tfi_0_8[1], {(6,), (2,)}, 'TFI-1')
+            self.assertEqual(len(tfi_0_8.keys()), 1, 'TFI-1B')
+            self.assertEqual(len(tfi_0_5.keys()), 0, 'TFI-3')
 
-        tfi_0_11 = findIndividualTFI(database, 11, 0.02)["TFI"]
-        tfi_0_12 = findIndividualTFI(database, 12, 0.02)["TFI"]
-        TFI_by_period = {11: tfi_0_11, 12: tfi_0_12, 8: tfi_0_8_lower_lamda}
+            tfi_0_11 = findIndividualTFI(database, 11, 0.02, paralel_running)["TFI"]
+            tfi_0_12 = findIndividualTFI(database, 12, 0.02, paralel_running)["TFI"]
+            TFI_by_period = {11: tfi_0_11, 12: tfi_0_12, 8: tfi_0_8_lower_lamda}
 
-        mergedTFIUnion_1 = getTFIUnion(TFI_by_period, [11, 12])
-        self.assertEqual(len(mergedTFIUnion_1[1]), 6, 'TFI-MERGE-1a')
-        self.assertEqual(len(mergedTFIUnion_1[2]), 11, 'TFI-MERGE-1b')
+            mergedTFIUnion_1 = getTFIUnion(TFI_by_period, [11, 12])
+            self.assertEqual(len(mergedTFIUnion_1[1]), 6, 'TFI-MERGE-1a')
+            self.assertEqual(len(mergedTFIUnion_1[2]), 11, 'TFI-MERGE-1b')
 
-        mergedTFIUnion_2 = getTFIUnion(TFI_by_period, [7, 12])
-        self.assertEqual(len(mergedTFIUnion_2[1]), 9, 'TFI-MERGE-2a')
-        self.assertEqual(len(mergedTFIUnion_2[3]), 12, 'TFI-MERGE-2b')
-        self.assertEqual(len(mergedTFIUnion_2[4]), 3, 'TFI-MERGE-2c')
+            mergedTFIUnion_2 = getTFIUnion(TFI_by_period, [7, 12])
+            self.assertEqual(len(mergedTFIUnion_2[1]), 9, 'TFI-MERGE-2a')
+            self.assertEqual(len(mergedTFIUnion_2[3]), 12, 'TFI-MERGE-2b')
+            self.assertEqual(len(mergedTFIUnion_2[4]), 3, 'TFI-MERGE-2c')
 
     def test_periods_included(self):
         self.assertEqual(getPeriodsIncluded(1, 4), [7, 8], 'Periods_boundaries_included')
@@ -201,10 +202,11 @@ class HTARTests(unittest.TestCase):
         sups = [0.4, 0.35, 0.002]
         confs = [0.6, 0.6, 0.4]
 
-        for i in range(0, 3):
-            rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i])
-            apriori_rules = apriori(database, sups[i], confs[i])
-            self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
+        for paralel_running in [False, True]:
+            for i in range(0, 3):
+                rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], [24,12,4,1], 2, paralel_running)
+                apriori_rules = apriori(database, sups[i], confs[i])
+                self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
 
     def test_leaf_tid_starters(self):
         database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
@@ -225,56 +227,6 @@ class HTARTests(unittest.TestCase):
         self.assertEqual(getPeriodStampFromTimestampHONG(t2), [10, 5, 1], 'Periodstamp HONG 2')
         self.assertEqual(getPeriodStampFromTimestampHONG(t3), [3, 2, 1], 'Periodstamp HONG 3')
         self.assertEqual(getPeriodStampFromTimestampHONG(t4), [5, 3, 1], 'Periodstamp HONG 4')
-
-    # def test_HONG_apriori(self):
-    #     database = Parser().parseHONG("Datasets/sales_formatted_1997.csv", 'single', True)
-    #     print('---')
-    #     # start = time.time()
-    #     # apriori_rules = apriori(database, 0.006, 0.2)
-    #     # end = time.time()
-    #     #print('Apriori Took ' + (str(end - start) + ' seconds'))
-    #     # start = time.time()
-    #     rules_by_pg = HTAR_BY_PG(database, 0.006, 0.2, 0.006, [10, 5, 1])
-    #     # end = time.time()
-    #     # print('HONG Took ' + (str(end - start) + ' seconds'))
-    #
-    #     self.printRulesDebugging(database, rules_by_pg, {})
-
-
-
-    # def test_HTAR_foodmart_data_1997_correctness_and_completness(self):
-    #     database = Parser().parse("Datasets/sales_formatted_1997_sorted_by_timestamp.csv", 'single', None, True)
-    #     print('---')
-    #     start = time.time()
-    #     apriori_rules = apriori(database, 0.0002, 0.85)
-    #     end = time.time()
-    #     print('Apriori Took ' + (str(end - start) + ' seconds'))
-    #
-    #     start = time.time()
-    #     rules_by_pg = HTAR_BY_PG(database, 0.0002, 0.85, 0.0002)
-    #     end = time.time()
-    #     print('HTAR Took ' + (str(end - start) + ' seconds'))
-    #
-    #     print(len(rules_by_pg))
-    #     print(len(apriori_rules))
-    #     self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
-
-
-#
-# def exp_HTAR_foodmart_data_1998_correctness_and_completness(self):
-#     database = Parser().parse("Datasets/sales_formatted_1998.csv", 'single', None, True)
-#     rules_by_pg = HTAR_BY_PG(database, 0.05, 0.01, 0.05)
-#     #apriori_rules = apriori(database, 0.00035, 0.01)
-#     # print(len(rules_by_pg))
-#     # print(len(apriori_rules))
-#     print("--------------------NOW THE RULES----------------------------------")
-#     print(len(rules_by_pg))
-#     # for pg in rules_by_pg:
-#     #     print(pg)
-#     #     print("-----------")
-#     #     print(len(rules_by_pg[pg]))
-#     #     print("///////////////////////")
-
 
 
 
