@@ -18,6 +18,7 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
     k = 1
     support_dictionary = {}
     frequent_dictionary = {}
+    totalCandidates = 0
     total_transactions = database.tx_count
     items_dic = database.items_dic
     matrix_data_by_item = database.matrix_data_by_item
@@ -26,9 +27,10 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
     while (k == 1 or frequent_dictionary[k - 1] != []) and k <= len(all_items):
         candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
+        #totalCandidates += len(candidates_size_k)
         # print('Candidates of size ' + str(k) + ' is ' + str(len(candidates_size_k)))
         # print('Calculating support of each candidate of size ' + str(k))
-        # start = time.time()
+        #start = time.time()
         frequent_dictionary[k] = []
         if parallel_count:
             list_to_parallel = [append_tids(x, items_dic, matrix_data_by_item) for x in candidates_size_k]
@@ -44,9 +46,15 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
                 if support >= min_support:
                     frequent_dictionary[k].append(a_candidate_size_k)
                     support_dictionary[hash_candidate(a_candidate_size_k)] = support
-        # end = time.time()
-        # print('Took ' + (str(end - start) + ' seconds'))
+        #end = time.time()
+        #print('Took ' + (str(end - start) + ' seconds in k =' + str(k) + ' with this amount of candidates: ' + str(len(candidates_size_k))))
         k += 1
+
+    # print("Apriori evaluated " + str(totalCandidates) + ' candidates')
+    # totalFrecuent = 0
+    # for k in frequent_dictionary:
+    #     totalFrecuent += len(frequent_dictionary[k])
+    # print("Total frecuent: "+ str(totalFrecuent))
     # STEP 2: Rule Generation
     rules = rule_generation(frequent_dictionary, support_dictionary, min_confidence, parallel_rule_gen)
     return rules

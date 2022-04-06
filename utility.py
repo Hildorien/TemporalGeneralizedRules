@@ -250,3 +250,30 @@ def append_tids(candidate, items_dic, matrix_data_by_item):
             candidate_tids_dict[item] = []
 
     return candidate, candidate_tids_dict
+
+def append_tids_for_HTAR(candidate, items_dic, matrix_data_by_item, tidLimits, relative_support_calculation_type):
+    candidate_tids_dict = {}
+    for item in candidate:
+        itemName = items_dic[item]
+        if itemName in matrix_data_by_item:
+            candidate_tids_dict[item] = matrix_data_by_item[itemName]['tids']
+        else:
+            candidate_tids_dict[item] = []
+
+    return candidate, candidate_tids_dict, tidLimits, relative_support_calculation_type
+
+def calculate_tid_intersections_HTAR_for_paralel(candidate, candidate_tids, tidLimits, relative_support_calculation_type):
+    lb = tidLimits[0]
+    ub = tidLimits[1]
+    final_intersection = None
+    for item in candidate:
+        tids = getFilteredTIDSThatBelongToPeriod(candidate_tids[item], lb, ub, relative_support_calculation_type)
+        if final_intersection is None:
+            final_intersection = tids
+        elif len(final_intersection) == 0 or len(tids) == 0:
+            return []
+        else:
+            final_intersection = findOrderedIntersection(final_intersection, tids)
+
+    return candidate, len(final_intersection)
+
