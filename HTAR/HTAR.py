@@ -40,7 +40,6 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, debugging = False
                                                      level_0_periods_included_in_pg[1] - 1)
             list_to_parallel = [append_tids_for_HTAR(x, items_dic, matrix_data_by_item, tidLimits, rsm) for x in C_j]
             results = pool.starmap(calculate_tid_intersections_HTAR_for_paralel, list_to_parallel)
-            #results = pool.starmap(calculateSupportInPJ, zip(C_j, itertools.repeat(database), itertools.repeat(0), itertools.repeat(pj), itertools.repeat(rsm)))
             for a_result in results:
                 candidate_support = a_result[1] / total_transactions
                 if candidate_support >= lam:
@@ -66,13 +65,7 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, debugging = False
     return {"TFI": TFI_j, "supportDict": support_dictionary}
 
 
-def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, debugging = False, HTG = [24, 12, 4, 1], rsm= 2):
-    """
-    :param database:
-    :return: a set of AssociationRules
-    """
-    # PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0)
-
+def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution = False, debugging = False, HTG = [24, 12, 4, 1], rsm= 2):
     TFI_by_period_in_l_0 = {}
     support_dictionary_by_pg = {}
     HTFI_by_pg = {}
@@ -83,7 +76,7 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, deb
 
     for pi in range(HTG[0]):
         start = time.time()
-        individualTFI = findIndividualTFI(database, pi + 1, lam, paralelExecution, debugging, rsm, hong)
+        individualTFI = findIndividualTFI(database, pi + 1, lam, paralelExcecution, debugging, rsm, hong)
 
         if len(individualTFI["TFI"]) > 0:
             TFI_by_period_in_l_0[pi + 1] = individualTFI["TFI"]
@@ -98,12 +91,10 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, deb
                 for k in TFI_by_period_in_l_0[pi + 1]:
                     totalFrequent += len(TFI_by_period_in_l_0[pi + 1][k])
                 print(str(pi) + ' leaf-TFI took ' + (str(end - start) + ' seconds'))
-                print('('+ str(totalFrequent) + ' frecuent itemsets )')
+                print('(' + str(totalFrequent) + ' frecuent itemsets )')
                 print('-------------')
 
-
     # PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
-
     HTFI = {}
     for l_level in range(len(HTG)):
         if l_level != 0:
@@ -149,11 +140,26 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, deb
                     print('-------------')
 
 
+    return {'HTFI_by_pg': HTFI_by_pg, 'support_dictionary_by_pg': support_dictionary_by_pg}
+
+
+
+def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, debugging = False, HTG = [24, 12, 4, 1], rsm= 2):
+    """
+    :param database:
+    :return: a set of AssociationRules
+    """
+    # PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0) AND PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
+
+    phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, debugging, HTG, rsm)
+
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
     HTFS_by_pg = {}
+    pgKeys = phase_1_and_2_res['HTFI_by_pg']
+    suppDictionaryByPg = phase_1_and_2_res['support_dictionary_by_pg']
     totalRules = 0
-    for pg in HTFI_by_pg.keys():
-        pg_rules = rule_generation(HTFI_by_pg[pg], support_dictionary_by_pg[pg], min_rconf)
+    for pg in pgKeys.keys():
+        pg_rules = rule_generation(pgKeys[pg], suppDictionaryByPg[pg], min_rconf)
         totalRules += len(pg_rules)
         if debugging:
             print(pg + " RULES")

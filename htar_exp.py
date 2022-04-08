@@ -20,7 +20,7 @@ import time
 
 from Apriori.apriori import apriori
 from DataStructures.Parser import Parser
-from HTAR.HTAR import HTAR_BY_PG
+from HTAR.HTAR import HTAR_BY_PG, getGranulesFrequentsAndSupports
 
 
 def run_HTAR_foodmart_data_1997_correctness_and_completness():
@@ -43,20 +43,37 @@ def run_HTAR_foodmart_data_1997_correctness_and_completness():
     #self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
 
 
-#
-# def exp_HTAR_foodmart_data_1998_correctness_and_completness(self):
-#     database = Parser().parse("Datasets/sales_formatted_1998.csv", 'single', None, True)
-#     rules_by_pg = HTAR_BY_PG(database, 0.05, 0.01, 0.05)
-#     #apriori_rules = apriori(database, 0.00035, 0.01)
-#     # print(len(rules_by_pg))
-#     # print(len(apriori_rules))
-#     print("--------------------NOW THE RULES----------------------------------")
-#     print(len(rules_by_pg))
-#     # for pg in rules_by_pg:
-#     #     print(pg)
-#     #     print("-----------")
-#     #     print(len(rules_by_pg[pg]))
-#     #     print("///////////////////////")
+def exp_apriori_synthetic():
+    database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Root/R250.data", 'single', None, False)
+    print("FINISH PARSING. ALGORITHM BEGINS!")
+    start = time.time()
+    apriori(database, 0.001, 0.1, True, False)
+    end = time.time()
+    print("----------------------")
+    print("Frecuents Per Node took: " + str(end - start))
+    #Frecuents Per Node took: 95.39187145233154
+
+    #Frecuents Per Node took: 8.190893173217773
+
+
+
+def exp_HTAR_synthetic():
+    database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T5M-timestamped.csv", 'single', None, True)
+    print("FINISH PARSING. ALGORITHM BEGINS!")
+    start = time.time()
+    frequents = getGranulesFrequentsAndSupports(database, 0.005, 0.005, True, True)
+    end = time.time()
+    print("----------------------")
+    print("Frecuents Per Node took: " + str(end - start))
+    #apriori_rules = apriori(database, 0.00035, 0.01)
+
+
+    #Frecuents Per Node took: 34.2888822555542
+
+    # print(len(rules_by_pg))
+    # print(len(apriori_rules))
 
 if __name__=="__main__":
-    run_HTAR_foodmart_data_1997_correctness_and_completness()
+    #run_HTAR_foodmart_data_1997_correctness_and_completness()
+    #exp_HTAR_synthetic()
+    exp_apriori_synthetic()
