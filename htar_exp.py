@@ -58,14 +58,13 @@ def exp_apriori_synthetic():
 
 
 def exp_HTAR_synthetic():
-    database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T5M-timestamped.csv", 'single', None, True)
+    database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T1M-timestamped.csv", 'single', None, True)
     print("FINISH PARSING. ALGORITHM BEGINS!")
     start = time.time()
-    frequents = getGranulesFrequentsAndSupports(database, 0.005, 0.005, True, True)
+    frequents = getGranulesFrequentsAndSupports(database, 0.001, 0.001, True, True)
     end = time.time()
     print("----------------------")
     print("Frecuents Per Node took: " + str(end - start))
-    #apriori_rules = apriori(database, 0.00035, 0.01)
 
 
     #Frecuents Per Node took: 34.2888822555542
@@ -75,5 +74,5 @@ def exp_HTAR_synthetic():
 
 if __name__=="__main__":
     #run_HTAR_foodmart_data_1997_correctness_and_completness()
-    #exp_HTAR_synthetic()
-    exp_apriori_synthetic()
+    exp_HTAR_synthetic()
+    #exp_apriori_synthetic()

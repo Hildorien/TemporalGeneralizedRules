@@ -29,16 +29,23 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, debugging = False
     total_transactions = database.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
     starters_tid = database.getPTTPeriodTIDBoundaryTuples()
     while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
+        start = time.time()
         frequent_dictionary[r] = []
         old_C_J = C_j
         C_j = generateCanidadtesOfSizeK(r, old_C_J, frequent_dictionary)
+        if debugging:
+            totalCandidates += len(C_j)
+            print('Candidates of size ' + str(r) + ' is ' + str(len(C_j)))
+            print('Calculating support of each candidate of size ' + str(r))
         totalCandidates += len(C_j)
+
+        tidLimits = maximal_time_period_interval(starters_tid, level_0_periods_included_in_pg[0] - 1,
+                                                 level_0_periods_included_in_pg[1] - 1)
+
         if parallel_count:
             pool = multiprocessing.Pool(multiprocessing.cpu_count())
 
-            tidLimits = maximal_time_period_interval(starters_tid, level_0_periods_included_in_pg[0] - 1,
-                                                     level_0_periods_included_in_pg[1] - 1)
-            list_to_parallel = [append_tids_for_HTAR(x, items_dic, matrix_data_by_item, tidLimits, rsm) for x in C_j]
+            list_to_parallel = [(x, append_tids_for_HTAR(x, items_dic, matrix_data_by_item), tidLimits, rsm) for x in C_j]
             results = pool.starmap(calculate_tid_intersections_HTAR_for_paralel, list_to_parallel)
             for a_result in results:
                 candidate_support = a_result[1] / total_transactions
@@ -50,11 +57,15 @@ def findIndividualTFI(database, pj, lam, parallel_count=False, debugging = False
             pool.join()
         else:
             for k_size_itemset in C_j:
-                support = database.supportOf(k_size_itemset, 0, pj, rsm, hong)
+                a_result = calculate_tid_intersections_HTAR_for_paralel(k_size_itemset, append_tids_for_HTAR(k_size_itemset, items_dic, matrix_data_by_item), tidLimits, rsm)
+                support = a_result[1] / total_transactions
                 if support >= lam:
                     TFI_r.append(tuple(k_size_itemset))
                     support_dictionary[hash_candidate(k_size_itemset)] = support
                     frequent_dictionary[r].append(k_size_itemset)
+        end = time.time()
+        if debugging:
+            print('Took ' + (str(end - start)) + ' seconds in k =' + str(r))
         if len(TFI_r) > 0:
             TFI_j[r] = set(TFI_r)
         TFI_r = list()
