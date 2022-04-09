@@ -1,6 +1,7 @@
 from HTAR.HTAR_utility import getPeriodsIncluded, getPeriodStampFromTimestamp
 from utility import findOrderedIntersection, findOrderedIntersectionBetweenBoundaries, maximal_time_period_interval, \
-    getFilteredTIDSThatBelongToPeriod, create_ancestor_set
+    getFilteredTIDSThatBelongToPeriod, create_ancestor_set, append_tids_for_HTAR, \
+    calculate_tid_intersections_HTAR_with_boundaries
 
 
 class Database:
@@ -65,15 +66,16 @@ class Database:
         """
 
         if l_level is not None and period is not None:
+            #For Testing only. Try to use calculate_tid_intersections_HTAR_with_boundaries and precalculate other parameters instead.
             level_0_periods_included_in_pg = getPeriodsIncluded(l_level, period, hong)
             starters_tid = self.getPTTPeriodTIDBoundaryTuples()
             tidLimits = maximal_time_period_interval(starters_tid, level_0_periods_included_in_pg[0] - 1,
                                                      level_0_periods_included_in_pg[1] - 1)
 
-            lb = tidLimits[0]
-            ub = tidLimits[1]
-
-            transaction_id_intersection = len(self.transaction_ids_intersection(itemset, lb, ub, relativeSupportCalculationType))
+            candidates_tid = append_tids_for_HTAR(itemset,
+                                 self.items_dic,
+                                 self.matrix_data_by_item)
+            transaction_id_intersection = calculate_tid_intersections_HTAR_with_boundaries(itemset, candidates_tid, tidLimits, relativeSupportCalculationType)[1]
             PTT_total_sum_with_boundaries = self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
             if PTT_total_sum_with_boundaries != 0:
                 return transaction_id_intersection / PTT_total_sum_with_boundaries

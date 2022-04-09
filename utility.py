@@ -262,7 +262,7 @@ def append_tids_for_HTAR(candidate, items_dic, matrix_data_by_item):
 
     return candidate_tids_dict
 
-def calculate_tid_intersections_HTAR_for_paralel(candidate, candidate_tids, tidLimits, relative_support_calculation_type):
+def calculate_tid_intersections_HTAR_with_boundaries(candidate, candidate_tids, tidLimits, relative_support_calculation_type):
     lb = tidLimits[0]
     ub = tidLimits[1]
     final_intersection = None
@@ -271,7 +271,7 @@ def calculate_tid_intersections_HTAR_for_paralel(candidate, candidate_tids, tidL
         if final_intersection is None:
             final_intersection = tids
         elif len(final_intersection) == 0 or len(tids) == 0:
-            return []
+            return candidate, 0
         else:
             final_intersection = findOrderedIntersection(final_intersection, tids)
 

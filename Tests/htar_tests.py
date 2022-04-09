@@ -143,17 +143,17 @@ class HTARTests(unittest.TestCase):
     def test_TFI(self):
         parser = Parser()
         database = parser.parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
-        for paralel_running in [False, True]:
-            tfi_0_8 = findIndividualTFI(database, 8, 0.55, paralel_running)["TFI"]
-            tfi_0_8_lower_lamda = findIndividualTFI(database, 8, 0.02, paralel_running)["TFI"]
-            tfi_0_5 = findIndividualTFI(database, 5, 0.02, paralel_running)["TFI"]
+        for paralel_running_in_k_level in [False, True]:
+            tfi_0_8 = findIndividualTFI(database, 8, 0.55, paralel_running_in_k_level)["TFI"]
+            tfi_0_8_lower_lamda = findIndividualTFI(database, 8, 0.02, paralel_running_in_k_level)["TFI"]
+            tfi_0_5 = findIndividualTFI(database, 5, 0.02, paralel_running_in_k_level)["TFI"]
 
             self.assertEqual(tfi_0_8[1], {(6,), (2,)}, 'TFI-1')
             self.assertEqual(len(tfi_0_8.keys()), 1, 'TFI-1B')
             self.assertEqual(len(tfi_0_5.keys()), 0, 'TFI-3')
 
-            tfi_0_11 = findIndividualTFI(database, 11, 0.02, paralel_running)["TFI"]
-            tfi_0_12 = findIndividualTFI(database, 12, 0.02, paralel_running)["TFI"]
+            tfi_0_11 = findIndividualTFI(database, 11, 0.02, paralel_running_in_k_level)["TFI"]
+            tfi_0_12 = findIndividualTFI(database, 12, 0.02, paralel_running_in_k_level)["TFI"]
             TFI_by_period = {11: tfi_0_11, 12: tfi_0_12, 8: tfi_0_8_lower_lamda}
 
             mergedTFIUnion_1 = getTFIUnion(TFI_by_period, [11, 12])
@@ -170,16 +170,6 @@ class HTARTests(unittest.TestCase):
         self.assertEqual(getPeriodsIncluded(2, 3), [13, 18], 'Periods_boundaries_included-2')
         self.assertEqual(getPeriodsIncluded(2, 4), [19, 24], 'Periods_boundaries_included-3')
         self.assertEqual(getPeriodsIncluded(3, 1), [1, 24], 'Periods_boundaries_included-4')
-
-
-    # Deprecated since MCP won't be used
-    # def test_get_MCP_Between_Boundaries(self):
-    #     faps = [2, 4, 7, 9, 12]
-    #     faps2 = [2, 5, 6]
-    #     self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps, [13, 18]), [13, 18], 'MCP_between_boundaries')
-    #     self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps, [11, 18]), [12, 18], 'MCP_between_boundaries_2')
-    #     self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 5]), None, 'MCP_between_boundaries_3')
-    #     self.assertEqual(getMCPOfItemsetBetweenBoundaries(faps2, [1, 8]), [6, 8], 'MCP_between_boundaries_4')
 
 
     def test_TID_and_faps_sales_for_Test(self):
