@@ -1,12 +1,5 @@
 import logging
-import os
-import sys
 import time
-import traceback
-
-import numpy as np
-# from matplotlib import pyplot as plt
-
 from Cumulate.cumulate import cumulate_frequents, vertical_cumulate_frequents
 from DataStructures.Parser import Parser
 
@@ -19,8 +12,7 @@ synthetic_parameters = {
     'depth_ratio': [0.5, 0.75, 1, 1.5, 2],
     'fanout': [5, 7, 10, 15, 20, 25],
     'item': [10, 25, 50, 75, 100],  # Multiplied by thousand
-    #'transaction': [0.1, 0.25, 0.5, 1, 2, 5, 10],  # Multiplied by a million
-    'transaction': [10],  # Multiplied by a million
+    'transaction': [0.1, 0.25, 0.5, 1, 2, 5, 10],  # Multiplied by a million
     'support': [0.02, 0.01, 0.0075, 0.005, 0.003]
 }
 
@@ -51,12 +43,12 @@ synthetic_datasets_filepath = {
              'F:\TesisSyntheticDatasets\Item\I75k.data',
              'F:\TesisSyntheticDatasets\Item\I100k.data'],
     'transaction': [
-        # 'F:\TesisSyntheticDatasets\Transaction\T100k.data',
-        #             'F:\TesisSyntheticDatasets\Transaction\T250k.data',
-        #             'F:\TesisSyntheticDatasets\Transaction\T500k.data',
-        #             'F:\TesisSyntheticDatasets\Transaction\T1M.data',
-        #             'F:\TesisSyntheticDatasets\Transaction\T2M.data',
-        #             'F:\TesisSyntheticDatasets\Transaction\T5M.data',
+        'F:\TesisSyntheticDatasets\Transaction\T100k.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T250k.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T500k.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T1M.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T2M.data',
+                    'F:\TesisSyntheticDatasets\Transaction\T5M.data',
                     'F:\TesisSyntheticDatasets\Transaction\T10M.data'],
     'support': ['F:\TesisSyntheticDatasets\Support\S1M.data']
 }
@@ -88,76 +80,15 @@ synthetic_taxonomies_filepath = {
              'F:\TesisSyntheticDatasets\Item\I75k.tax',
              'F:\TesisSyntheticDatasets\Item\I100k.tax'],
     'transaction': [
-        # 'F:\TesisSyntheticDatasets\Transaction\T100k.tax',
-        #             'F:\TesisSyntheticDatasets\Transaction\T250k.tax',
-        #             'F:\TesisSyntheticDatasets\Transaction\T500k.tax',
-        #             'F:\TesisSyntheticDatasets\Transaction\T1M.tax',
-        #             'F:\TesisSyntheticDatasets\Transaction\T2M.tax',
-        #             'F:\TesisSyntheticDatasets\Transaction\T5M.tax',
+        'F:\TesisSyntheticDatasets\Transaction\T100k.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T250k.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T500k.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T1M.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T2M.tax',
+                    'F:\TesisSyntheticDatasets\Transaction\T5M.tax',
                     'F:\TesisSyntheticDatasets\Transaction\T10M.tax'],
     'support': ['F:\TesisSyntheticDatasets\Support\S1M.tax'],
 }
-
-
-# def parse_and_plot_files(experiment_key):
-#     path = os.getcwd() + '\\Experiments\\'
-#     files = []
-#     for i in os.listdir(path):
-#         if os.path.isfile(os.path.join(path, i)) and i.startswith(experiment_key) and i.endswith('plot.txt'):
-#             files.append(os.path.join(path, i))
-#
-#     x_axis = []  # Equal for all algorithms
-#     y_axis_dict = {}  # This has multiple list for each algorithm in the same plot
-#     for filepath in files:
-#         filename = os.path.basename(filepath)
-#         str1 = filename.replace(experiment_key + '_', '')
-#         key = str1.replace('_plot.txt', '')
-#         y_axis_dict[key] = []  # Define keys based on each algorithm file
-#         with open(filepath) as file:
-#             lines = file.readlines()
-#         for line in lines:
-#             string_split = line.rstrip().split(",")
-#             if string_split[0] == 'x' and float(string_split[1]) not in x_axis:
-#                 x_axis.append(float(string_split[1]))  # Value of x-coordinate
-#             elif string_split[0] == 'y':
-#                 y_axis_dict[key].append(float(string_split[1]))  # Value of y-coordinate
-#
-#     x_axis = sorted(list(set(x_axis)))
-#
-#     cumulate_vanilla_time = y_axis_dict['cumulate_vanilla']
-#     cumulate_vertical_time = y_axis_dict['cumulate_vertical']
-#     cumulate_vertical_with_parallel_count_time = y_axis_dict['cumulate_vertical_with_parallel_count']
-#
-#     # Check if avg time in seconds surpasses a threshhold. If so, express time in minutes
-#     avg_time_in_seconds = (np.average(cumulate_vanilla_time) + np.average(cumulate_vertical_time) + np.average(
-#         cumulate_vertical_with_parallel_count_time)) // 3
-#     if avg_time_in_seconds > 60:
-#         cumulate_vanilla_time = list(map(lambda x: x // 60, cumulate_vanilla_time))
-#         cumulate_vertical_time = list(map(lambda x: x // 60, cumulate_vertical_time))
-#         cumulate_vertical_with_parallel_count_time = list(
-#             map(lambda x: x // 60, cumulate_vertical_with_parallel_count_time))
-#
-#     plt.plot(x_axis, cumulate_vanilla_time, color='r', label='cumulate')
-#     plt.plot(x_axis, cumulate_vertical_time, color='g', label='cumulate_vertical')
-#     plt.plot(x_axis, cumulate_vertical_with_parallel_count_time, color='b',
-#              label='cumulate_vertical_with_parallel_count')
-#     # plt.xlim(max(x_axis),min(x_axis))
-#     # plt.xticks([2,1.5,1,0.75,0.5,0.33])
-#     # Naming the x-axis, y-axis and the whole graph
-#     plt.xlabel(experiment_key.upper())
-#     if avg_time_in_seconds > 60:
-#         plt.ylabel("Time (Minutes)")
-#     else:
-#         plt.ylabel("Time (Seconds)")
-#
-#     plt.title(experiment_key.upper())
-#
-#     # Adding legend, which helps us recognize the curve according to it's color
-#     plt.legend()
-#
-#     plt.savefig('Plots/' + experiment_key.upper() + '.png', format="png")
-#     # plt.show()
-#     plt.close()
 
 
 def run_cumulate(horizontal_db, min_supp):
@@ -286,19 +217,14 @@ def log_experiment_end(logger):
 def run_experiments(experiment_key):
     run_algorithms(experiment_key)
 
-
-# def plot_experiment(experiment_key):
-#     parse_and_plot_files(experiment_key)
-
-
 def main():
     loggerError = setup_logger('Experiment.ErrorLogger', 'Experiments/error_log.txt', logging.ERROR)
-    experiment_keys = ['transaction']
-    for key in experiment_keys:
-        try:
-            run_experiments(key)
-        except Exception as e:
-           loggerError.error(''.join(traceback.format_exception(None, e, e.__traceback__)))
+    # experiment_keys = ['transaction']
+    # for key in experiment_keys:
+    #     try:
+    #         run_experiments(key)
+    #     except Exception as e:
+    #        loggerError.error(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
     # Run all experiments by key
     # for key in synthetic_datasets_filepath:
@@ -312,15 +238,6 @@ def main():
     # run_experiments('fanout')
     # run_experiments('item')
     # run_experiments('transaction')
-
-    # Plot experiments by key
-    # parse_and_plot_files('root')
-    # parse_and_plot_files('depth_ratio')
-    # parse_and_plot_files('fanout')
-    # parse_and_plot_files('item')
-    # parse_and_plot_files('transaction')
-    # parse_and_plot_files('support')
-
 
 if __name__ == '__main__':
     main()
