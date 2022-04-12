@@ -1,7 +1,8 @@
+import time
 from HTAR.HTAR_utility import getPeriodsIncluded, getPeriodStampFromTimestamp
 from utility import findOrderedIntersection, findOrderedIntersectionBetweenBoundaries, maximal_time_period_interval, \
     getFilteredTIDSThatBelongToPeriod, create_ancestor_set, append_tids_for_HTAR, \
-    calculate_tid_intersections_HTAR_with_boundaries
+    calculate_tid_intersections_HTAR_with_boundaries, generateCanidadtesOfSizeK, hash_candidate
 
 
 class Database:
@@ -11,9 +12,8 @@ class Database:
 
     ptt = None
 
-    # {item : {tids:int[], fap:HTG}}
+    # {item : {tids:int[]}}
     # tids: Array of transaction id, in order, where the item i appears
-    # fap: First Appereance Periods from the transaction where the item i was first discovered
     matrix_data_by_item = {}
 
     # { item_id : [ancestor_id] }
@@ -111,3 +111,86 @@ class Database:
         antecedent_names = ','.join(list(map(lambda x: self.items_dic[x], association_rule.lhs)))
         return antecedent_names + " => " + consequent_name + " support: " + str(
             association_rule.support) + " confidence: " + str(association_rule.confidence)
+
+    #HTAR
+
+    def findIndividualTFIForParalel(self, pi, allItems, total_transactions, tid_limits, lam,
+                                    debugging=False, rsm=2):
+        # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
+        start = time.time()
+        TFI_j = {}
+        r = 1
+        C_j = allItems
+        TFI_r = list()
+        frequent_dictionary = {}
+        support_dictionary = {}
+        totalCandidates = 0
+
+        while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
+            frequent_dictionary[r] = []
+            old_C_J = C_j
+            startj = time.time()
+
+            C_j = generateCanidadtesOfSizeK(r, old_C_J, frequent_dictionary)
+            endj = time.time()
+            if debugging:
+                totalCandidates += len(C_j)
+                print('Candidates of size ' + str(r) + ' is ' + str(len(C_j)))
+                print('It lasted '+ str(endj-startj))
+                print('Calculating support of each candidate of size ' + str(r))
+            totalCandidates += len(C_j)
+
+            startFreq= time.time()
+            for k_size_itemset in C_j:
+                a_result = calculate_tid_intersections_HTAR_with_boundaries(k_size_itemset,
+                                                                            append_tids_for_HTAR(k_size_itemset,
+                                                                                                 self.items_dic,
+                                                                                                 self.matrix_data_by_item),
+                                                                            tid_limits, rsm)
+                support = a_result[1] / total_transactions
+                if support >= lam:
+                    TFI_r.append(tuple(k_size_itemset))
+                    support_dictionary[hash_candidate(k_size_itemset)] = support
+                    frequent_dictionary[r].append(k_size_itemset)
+            endFreq = time.time()
+            if debugging:
+                 print('Took ' + (str(endFreq - startFreq)) + ' seconds in k =' + str(r))
+                 print("**********************")
+
+            if len(TFI_r) > 0:
+                TFI_j[r] = set(TFI_r)
+            TFI_r = list()
+            r += 1
+
+        end = time.time()
+        if debugging:
+            print(str(pi) + " leaf finished candidate calculation and lasted " + str(end - start))
+        return {"pi": pi, "TFI": TFI_j, "supportDict": support_dictionary}
+
+    def getIndividualTFIForNotLeafsGranules(self, possible_itemsets_in_pg, total_transactions,
+                                            tid_limits, rsm, min_rsup, pgStringKey, debugging):
+        HTFI = {}
+        start = time.time()
+        pg_spupport_dictionary = {}
+        for k in possible_itemsets_in_pg:
+            itemsets_length_k = possible_itemsets_in_pg[k]
+
+            frequent_itemsets_length_k = set()
+            for itemset in itemsets_length_k:
+                if total_transactions > 0:
+                    a_result = calculate_tid_intersections_HTAR_with_boundaries(itemset,
+                                                                                append_tids_for_HTAR(itemset,
+                                                                                                     self.items_dic,
+                                                                                                     self.matrix_data_by_item),
+                                                                                tid_limits, rsm)
+                    itemsetSupport = a_result[1] / total_transactions
+                    if itemsetSupport >= min_rsup:
+                        frequent_itemsets_length_k.add(itemset)
+                        pg_spupport_dictionary[hash_candidate(itemset)] = itemsetSupport
+
+            if len(frequent_itemsets_length_k) > 0:
+                HTFI[k] = frequent_itemsets_length_k
+        end = time.time()
+        if debugging:
+            print(pgStringKey + " finished candidate calculation and lasted " + str(end - start))
+        return pgStringKey, HTFI, pg_spupport_dictionary
