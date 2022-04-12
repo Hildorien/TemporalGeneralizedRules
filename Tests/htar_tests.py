@@ -67,6 +67,14 @@ class HTARTests(unittest.TestCase):
 
         self.testCorrectnessAndCompletness = testCorrectnessAndCompletness
 
+        def compareEqualHTARRulesGenerated(htar_rules_1, htar_rules_2):
+            for key in htar_rules_1:
+                self.assertEqual(key in htar_rules_2, True, "Same TG generated rules")
+                self.assertEqual(htar_rules_1[key], htar_rules_2[key], "The rules generated are the same")
+
+        self.compareEqualHTARRules = compareEqualHTARRulesGenerated
+
+
     def test_get_period_stamp_from_timestamp(self):
         self.assertEqual(getPeriodStampFromTimestamp(self.t1), [1, 1, 1, 1], 'Periodstamp 1')
         self.assertEqual(getPeriodStampFromTimestamp(self.t2), [23, 12, 4, 1], 'Periodstamp 2')
@@ -192,11 +200,14 @@ class HTARTests(unittest.TestCase):
         sups = [0.4, 0.35, 0.002]
         confs = [0.6, 0.6, 0.4]
 
+        paralelRun = {}
         for paralel_running in [False, True]:
             for i in range(0, 3):
                 rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], paralel_running)
+                paralelRun[str(paralel_running)] = rules_by_pg
                 apriori_rules = apriori(database, sups[i], confs[i])
                 self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
+        self.compareEqualHTARRules(paralelRun["False"], paralelRun["True"])
 
     def test_leaf_tid_starters(self):
         database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)

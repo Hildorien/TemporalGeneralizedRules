@@ -38,7 +38,7 @@ def run_HTAR_foodmart_data_1997_correctness_and_completness():
     print('Apriori produced ' + str(len(apriori_rules)) + ' rules')
 
     start = time.time()
-    rules_by_pg = HTAR_BY_PG(database, 0.0002, 0.6, 0.0002, True)
+    rules_by_pg = HTAR_BY_PG(database, 0.0002, 0.6, 0.0002, False, True)
     end = time.time()
     print('HTAR Took ' + (str(end - start) + ' seconds'))
 
@@ -51,24 +51,21 @@ def exp_apriori_synthetic():
     database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Root/R250.data", 'single', None, False)
     print("FINISH PARSING. ALGORITHM BEGINS!")
     start = time.time()
-    apriori(database, 0.001, 0.1, True, False)
+    apriori(database, 0.001, 0.1, False, False)
     end = time.time()
     print("----------------------")
     print("Frecuents Per Node took: " + str(end - start))
-    #Frecuents Per Node took: 95.39187145233154
-
-    #Frecuents Per Node took: 8.190893173217773
 
 def exp_HTAR_foodmart():
     database = Parser().parse("Datasets/sales_formatted_1997_sorted_by_timestamp.csv", 'single', None, True)
-    getGranulesFrequentsAndSupports(database, 0.0002, 0.0002, False, True)
+    getGranulesFrequentsAndSupports(database, 0.0002, 0.0002, True, True)
 
 
 def exp_HTAR_synthetic():
     database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T250k-timestamped.csv", 'single', None, True)
     print("FINISH PARSING. ALGORITHM BEGINS!")
     start = time.time()
-    frequents = getGranulesFrequentsAndSupports(database, 0.001, 0.001, True, False)
+    frequents = getGranulesFrequentsAndSupports(database, 0.001, 0.001, False, True)
     end = time.time()
     print("----------------------")
     print("Frecuents Per Node took: " + str(end - start))
@@ -135,5 +132,5 @@ if __name__=="__main__":
     #run_HTAR_foodmart_data_1997_correctness_and_completness()
     #exp_HTAR_synthetic()
     #exp_apriori_synthetic()
-    #exp_HTAR_foodmart()
+    exp_HTAR_foodmart()
     #create_heatmap()
