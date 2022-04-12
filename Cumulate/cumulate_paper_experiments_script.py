@@ -1,6 +1,6 @@
 import logging
 import time
-from Cumulate.cumulate import cumulate_frequents, vertical_cumulate_frequents
+from Cumulate.cumulate import cumulate_frequents, vertical_cumulate_frequents, vertical_cumulate
 from DataStructures.Parser import Parser
 
 only_message_format = logging.Formatter('%(message)s')
@@ -213,6 +213,15 @@ def log_experiment_start(logger, filepath):
 def log_experiment_end(logger):
     logger.info('############################################################################')
 
+def run_r_interesting_experiment(min_sup, min_conf, min_r):
+    vertical_db = Parser().parse('..\Datasets\sales_formatted.csv', 'single',
+                                 '..\Taxonomies\salesfact_taxonomy_single_2.csv')
+    rules = vertical_cumulate(vertical_db, min_sup, min_conf, min_r)
+    print('Generated ' + str(len(rules)) + ' rules with vertical cumulate(min_sup: ' +
+          str(min_sup) + ' ,min_conf: ' + str(min_conf) + ',min_r: ' + str(min_r) + ')')
+    # rules_sorted = sorted(rules, key=lambda r: r.support, reverse=True)
+    # for rule in rules_sorted:
+    #     print(vertical_db.printAssociationRule(rule))
 
 def run_experiments(experiment_key):
     run_algorithms(experiment_key)
@@ -238,6 +247,14 @@ def main():
     # run_experiments('fanout')
     # run_experiments('item')
     # run_experiments('transaction')
+
+    # R-Interesting experiments
+    # run_r_interesting_experiment(0.01, 0.25, 0)
+    # run_r_interesting_experiment(0.01, 0.25, 1.1)
+
+    # run_r_interesting_experiment(0.01, 0.5, 0)
+    # run_r_interesting_experiment(0.01, 0.5, 1.1)
+
 
 if __name__ == '__main__':
     main()

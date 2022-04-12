@@ -35,37 +35,37 @@ def parse_and_plot_files(experiment_key, x_label, x_ticks, y_label, y_ticks):
     # Check if avg time in seconds surpasses a threshhold. If so, express time in minutes
     avg_time_in_seconds = (np.average(cumulate_vanilla_time) + np.average(cumulate_vertical_time) + np.average(
         cumulate_vertical_with_parallel_count_time)) // 3
-    if avg_time_in_seconds > 60:
-        cumulate_vanilla_time = list(map(lambda x: x // 60, cumulate_vanilla_time))
-        cumulate_vertical_time = list(map(lambda x: x // 60, cumulate_vertical_time))
-        cumulate_vertical_with_parallel_count_time = list(
-            map(lambda x: x // 60, cumulate_vertical_with_parallel_count_time))
+    # if avg_time_in_seconds > 60:
+    #     cumulate_vanilla_time = list(map(lambda x: x // 60, cumulate_vanilla_time))
+    #     cumulate_vertical_time = list(map(lambda x: x // 60, cumulate_vertical_time))
+    #     cumulate_vertical_with_parallel_count_time = list(
+    #         map(lambda x: x // 60, cumulate_vertical_with_parallel_count_time))
 
     # For Transaction experiment re-scaling
-    # cumulate_vanilla_time = scale_y_axis_by_unit(x_axis, cumulate_vanilla_time, 1)
-    # cumulate_vertical_time = scale_y_axis_by_unit(x_axis, cumulate_vertical_time, 1)
-    # cumulate_vertical_with_parallel_count_time = scale_y_axis_by_unit(x_axis, cumulate_vertical_with_parallel_count_time, 1)
+    if experiment_key == 'transaction':
+        cumulate_vanilla_time = scale_y_axis_by_unit(x_axis, cumulate_vanilla_time, 1)
+        cumulate_vertical_time = scale_y_axis_by_unit(x_axis, cumulate_vertical_time, 1)
+        cumulate_vertical_with_parallel_count_time = scale_y_axis_by_unit(x_axis, cumulate_vertical_with_parallel_count_time, 1)
 
-    plt.plot(x_axis, cumulate_vanilla_time, color='r', label='cumulate')
-    plt.plot(x_axis, cumulate_vertical_time, color='g', label='cumulate_vertical')
-    plt.plot(x_axis, cumulate_vertical_with_parallel_count_time, color='b',
+    plt.plot(x_axis, cumulate_vanilla_time, linestyle='-', marker='o', color='r', label='cumulate')
+    plt.plot(x_axis, cumulate_vertical_time, linestyle='--', marker='s',color='g', label='cumulate_vertical')
+    plt.plot(x_axis, cumulate_vertical_with_parallel_count_time, linestyle='--', marker='d', color='b',
              label='cumulate_vertical_with_parallel_count')
 
-    # plt.xlim(max(x_axis),min(x_axis))
-    # plt.xticks([2,1.5,1,0.75,0.5,0.33])
+    if experiment_key == 'support':
+        plt.xlim(max(x_axis),min(x_axis))
 
     plt.xticks(x_ticks)
     plt.yticks(y_ticks)
 
-    # For Transaction experiment
-    # plt.xticks([0.1, 1, 5, 10])
-    # plt.yticks([0.8, 1, 1.2, 1.4, 1.6, 1.8, 2])
-    # plt.xlabel('TRANSACTIONS (millions)')
-    # plt.ylabel("Time / #TRANSACTIONS (normalized)")
-
     # Naming the x-axis, y-axis and the whole graph
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
+    # plt.xlabel(x_label)
+    # plt.ylabel(y_label)
+
+    # For Transaction experiment
+    if experiment_key == 'transaction':
+        plt.xlabel('TRANSACTIONS (millions)')
+        plt.ylabel("Time / #TRANSACTIONS (normalized)")
 
     # if avg_time_in_seconds > 60:
     #     plt.ylabel("Time (Minutes)")
@@ -103,11 +103,11 @@ def scale_y_axis_by_unit(x_axis, y_axis, x_axis_target_unit):
 
 if __name__ == '__main__':
     #Plot experiments by key
-    parse_and_plot_files('root', 'Number of roots', [250, 500, 750, 1000], 'Time (Minutes)',  [0, 5, 10, 15, 20, 25, 30, 35])
-    parse_and_plot_files('depth_ratio', 'Depth',  [0.5, 0.75, 1, 1.5, 2], 'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35])
-    parse_and_plot_files('fanout', 'Fanout', [5, 7.5, 10, 15, 20, 25], 'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35])
-    parse_and_plot_files('item', 'Number of items (000s)', [10, 25, 50, 75, 100],'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35])
-    # parse_and_plot_files('support', 'Minimum Support (%)', [2,1.5,1,0.75,0.5,0.33], 'Time (Minutes)',
-    #                      [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65])
-    # parse_and_plot_files('transaction', 'Number of transactions (millions)', [0.1, 0.25, 0.5, 1, 2, 5, 10], 'Time / #Transactions (normalized)',
-    # [0.6, 0.8, 1, 1.2, 1.4, 1.8, 2])
+    # parse_and_plot_files('root', 'Number of roots', [250, 500, 750, 1000], 'Time (Minutes)',  [0, 5, 10, 15, 20, 25, 30, 35])
+    # parse_and_plot_files('depth_ratio', 'Depth',  [0.5, 0.75, 1, 1.5, 2], 'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35])
+    # parse_and_plot_files('fanout', 'Fanout', [5, 7.5, 10, 15, 20, 25], 'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35])
+    # parse_and_plot_files('item', 'Number of items (000s)', [10, 25, 50, 75, 100], 'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35])
+    # parse_and_plot_files('support', 'Minimum Support (%)', [2,1.5,1,0.75,0.5,0.33], 'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65])
+    parse_and_plot_files('transaction', 'Number of transactions (millions)',
+                         [0.1, 1, 2, 5, 10], 'Time / #Transactions (normalized)',
+    [0.6, 0.8, 1, 1.2, 1.4, 1.8, 2])
