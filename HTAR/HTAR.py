@@ -82,20 +82,30 @@ def findIndividualTFI(database, pj, lam, parallel_count_in_k_level=False, debugg
         return {"TFI": TFI_j, "supportDict": support_dictionary}
 
 
-def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution = False, paralelExcecutionOnK = False,  debugging = False, debuggingK = False, HTG = [24, 12, 4, 1], rsm= 2):
+def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution = False, paralelExcecutionOnK = False,  debugging = False, debuggingK = False, rsm= 1, HTG = [24, 12, 4, 1]):
+    """
+    :param database: The database you are using
+    :param min_rsup: minimum support to consider frequent in inner time granules
+    :param lam: minimum support to consider frequent in leaf time granules
+    :param paralelExcecution: Enable paralel Excecution on each time granule per level.
+    :param paralelExcecutionOnK: Enable paralel excecution on each element of each K when calculating frequent itemsets
+    :param debugging: Enables console help for paralelExcecution
+    :param debuggingK: Enables console help for paralelExcecutionOnK
+    :param rsm: Mode of calculating itemset intersection. Default = 2.
+    :param HTG: Temporal Time Hierarchy
+    :return: {'HTFI_by_pg', 'support_dictionary_by_pg'}
+
+    """
     TFI_by_period_in_l_0 = {}
     support_dictionary_by_pg = {}
     HTFI_by_pg = {}
 
-    usable_cpu_count = multiprocessing.cpu_count()//3
+    usable_cpu_count = multiprocessing.cpu_count() #//3
     paralel_processing_on_k = 1
     if paralelExcecutionOnK:
         paralel_processing_on_k = usable_cpu_count
 
     starters_tid = database.getPTTPeriodTIDBoundaryTuples()
-    # hong = False
-    # if HTG == [10, 5, 1]:
-    #     hong = True
 
     list_to_parallel = []
 
@@ -199,14 +209,14 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
 
 
 
-def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, paralelExcecutionOnK= False, debugging = False, debuggingK= False, HTG = [24, 12, 4, 1], rsm= 2):
+def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, paralelExcecutionOnK= False, debugging = False, debuggingK= False, rsm= 2, HTG = [24, 12, 4, 1]):
     """
     :param database:
     :return: a set of AssociationRules
     """
     # PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0) AND PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
 
-    phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, paralelExcecutionOnK, debugging, debuggingK, HTG, rsm)
+    phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, paralelExcecutionOnK, debugging, debuggingK, rsm, HTG)
 
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
     HTFS_by_pg = {}

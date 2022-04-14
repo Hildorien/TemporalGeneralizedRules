@@ -69,13 +69,17 @@ def run_HTAR_foodmart_data_1997_correctness_and_completness():
 
 
 def exp_apriori_synthetic():
-    database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Root/R250.data", 'single', None, False)
+    database = Parser().parse("/home/trekkar/Development/Thesis/SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T1M-timestamped.csv", 'single', None, True)
     print("FINISH PARSING. ALGORITHM BEGINS!")
     start = time.time()
-    apriori(database, 0.001, 0.1, False, False)
+    apriori(database, 0.001, 0.1, True, False)
     end = time.time()
     print("----------------------")
     print("Frecuents Per Node took: " + str(end - start))
+
+    #Frecuents Per Node took: 95.25259590148926 SP //Frecuents Per Node took: 70.41164040565491
+
+
 
 def exp_HTAR_foodmart():
     database = Parser().parse("Datasets/sales_formatted_1997_sorted_by_timestamp.csv", 'single', None, True)
@@ -85,22 +89,70 @@ def exp_HTAR_foodmart():
     print("Apriori took " + str(end-start))
 
     start = time.time()
-    getGranulesFrequentsAndSupports(database, 0.0002, 0.0002, False, True, False)
+    getGranulesFrequentsAndSupports(database, 0.0002, 0.0002, False, False, False)
     end = time.time()
     print("Frequents in HTAR took " + str(end-start))
 
 
 def exp_HTAR_synthetic():
-    database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/TransactionLength/TL50-timestamped.csv", 'single', None, True)
+    database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T1M-timestamped.csv", 'single', None, True)
     print("FINISH PARSING. ALGORITHM BEGINS!")
     start = time.time()
-    frequents = getGranulesFrequentsAndSupports(database, 0.001, 0.001, True, False, True)
+    getGranulesFrequentsAndSupports(database, 0.001, 0.001, False, False, True, False, 2)
     end = time.time()
     print("----------------------")
     print("Frecuents Per Node took: " + str(end - start))
 
-#1 leaf finished candidate calculation and lasted 134.69262838363647
-#2 leaf finished candidate calculation and lasted 133.3050844669342
+#Candidates of size 1 is 30506
+# It lasted 0.001199960708618164
+# Calculating support of each candidate of size 1
+# Total in K = 1 took 0.09078693389892578
+
+# Candidates of size 2 is 2318781
+# It lasted 0.5641613006591797
+# Calculating support of each candidate of size 2
+# Total in K = 2 took 12.337119579315186
+
+# Candidates of size 3 is 103
+# It lasted 0.008219718933105469
+# Calculating support of each candidate of size 3
+# Total in K = 3 took 0.06298375129699707
+
+# Candidates of size 4 is 0
+# It lasted 0.00010895729064941406
+# Calculating support of each candidate of size 4
+# Total in K = 4 took 0
+# 1 leaf finished candidate calculation and lasted 39.30932641029358
+# Wasted 2.0681772232055664 preparing for PARALELISING
+# ---------------------------------------------------------------
+
+#SIN
+#Candidates of size 1 is 30506
+# It lasted 0.0012791156768798828
+# Calculating support of each candidate of size 1
+# Total in K = 1 took 0.02590465545654297
+
+# Candidates of size 2 is 2318781
+# It lasted 0.26615262031555176
+# Calculating support of each candidate of size 2
+# Total in K = 2 took 7.97287654876709
+
+# Candidates of size 3 is 103
+# It lasted 0.006603717803955078
+# Calculating support of each candidate of size 3
+# Total in K = 3 took 0.00588679313659668
+
+# Candidates of size 4 is 0
+# It lasted 6.723403930664062e-05
+# Calculating support of each candidate of size 4
+# Total in K = 4 took 0
+# 1 leaf finished candidate calculation and lasted 9.734647750854492
+
+
+
+
+
+
 
 
     #Only w/k paralel (2 nodes). No se banca mas de dos nodos con 1M. Memoria explota.
@@ -209,9 +261,9 @@ def exp_FINAL_HTAR_synthetic():
 
 if __name__=="__main__":
     #run_HTAR_foodmart_data_1997_correctness_and_completness()
-    #exp_HTAR_synthetic()
+    exp_HTAR_synthetic()
     #exp_apriori_synthetic()
     #exp_HTAR_foodmart()
     #create_heatmap()
 
-    exp_FINAL_HTAR_synthetic()
+    #exp_FINAL_HTAR_synthetic()
