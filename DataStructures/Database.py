@@ -126,6 +126,7 @@ class Database:
         frequent_dictionary = {}
         support_dictionary = {}
         totalCandidates = 0
+        timeWastedInStuff = 0
 
         while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
             frequent_dictionary[r] = []
@@ -140,13 +141,19 @@ class Database:
                 print('It lasted '+ str(endj-startj))
                 print('Calculating support of each candidate of size ' + str(r))
             totalCandidates += len(C_j)
+            timeUsagePerk = 0
 
             if paralel_processing_on_k > 1:
+                startProcess = time.time()
                 pool = multiprocessing.Pool(paralel_processing_on_k)
                 list_to_parallel = [(x, append_tids_for_HTAR(x, self.items_dic, self.matrix_data_by_item), tid_limits, rsm) for x
                                     in C_j]
+                endProcess = time.time()
+                timeWastedInStuff += (endProcess-startProcess)
+
                 results = pool.starmap(calculate_tid_intersections_HTAR_with_boundaries, list_to_parallel)
                 for a_result in results:
+                    timeUsagePerk += a_result[2]
                     candidate_support = a_result[1] / total_transactions
                     if candidate_support >= lam:
                         TFI_r.append(tuple(a_result[0]))
@@ -163,6 +170,7 @@ class Database:
                                                                                                      self.matrix_data_by_item),
                                                                                 tid_limits, rsm)
                     support = a_result[1] / total_transactions
+                    timeUsagePerk += a_result[2]
                     if support >= lam:
                         TFI_r.append(tuple(k_size_itemset))
                         support_dictionary[hash_candidate(k_size_itemset)] = support
@@ -172,6 +180,8 @@ class Database:
                 #      print('Took ' + (str(endFreq - startFreq)) + ' seconds in k =' + str(r))
                 #      print("**********************")
 
+            if debugging:
+                print("Total in K = " + str(r) + " took " + str(timeUsagePerk))
             if len(TFI_r) > 0:
                 TFI_j[r] = set(TFI_r)
             TFI_r = list()
@@ -180,6 +190,8 @@ class Database:
         end = time.time()
         if debugging:
             print(str(pi) + " leaf finished candidate calculation and lasted " + str(end - start))
+            print("Wasted " + str(timeWastedInStuff) + " preparing for PARALELISING")
+            print("---------------------------------------------------------------")
         return {"pi": pi, "TFI": TFI_j, "supportDict": support_dictionary}
 
     def getIndividualTFIForNotLeafsGranules(self, possible_itemsets_in_pg, total_transactions,

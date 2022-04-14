@@ -1,3 +1,4 @@
+import time
 from itertools import combinations
 
 import numpy as np
@@ -68,7 +69,7 @@ def findOrderedIntersection(arr1, arr2):
 
     return result_array
 
-def getFilteredTIDSThatBelongToPeriod(arr, lb=None, ub=None, relativeSupportCalculationType = 1):
+def getFilteredTIDSThatBelongToPeriod(arr, lb=None, ub=None, relativeSupportCalculationType = 2):
     """
     :param arr: array to get sublist of
     :param lb: lowerbound value
@@ -263,6 +264,7 @@ def append_tids_for_HTAR(candidate, items_dic, matrix_data_by_item):
     return candidate_tids_dict
 
 def calculate_tid_intersections_HTAR_with_boundaries(candidate, candidate_tids, tidLimits, relative_support_calculation_type):
+    start = time.time()
     lb = tidLimits[0]
     ub = tidLimits[1]
     final_intersection = None
@@ -275,5 +277,7 @@ def calculate_tid_intersections_HTAR_with_boundaries(candidate, candidate_tids, 
         else:
             final_intersection = findOrderedIntersection(final_intersection, tids)
 
-    return candidate, len(final_intersection)
+    end = time.time()
+    timeUsage = end-start
+    return candidate, len(final_intersection), timeUsage
 
