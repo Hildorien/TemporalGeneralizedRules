@@ -7,6 +7,28 @@ from utility import generateCanidadtesOfSizeK, stringifyPg, hash_candidate, maxi
     append_tids_for_HTAR, calculate_tid_intersections_HTAR_with_boundaries
 import multiprocessing
 
+import multiprocessing.pool
+
+class NoDaemonProcess(multiprocessing.Process):
+    @property
+    def daemon(self):
+        return False
+
+    @daemon.setter
+    def daemon(self, value):
+        pass
+
+class NoDaemonContext(type(multiprocessing.get_context())):
+    Process = NoDaemonProcess
+
+
+# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
+# because the latter is only a wrapper function, not a proper class.
+class NestablePool(multiprocessing.pool.Pool):
+    def __init__(self, *args, **kwargs):
+        kwargs['context'] = NoDaemonContext()
+        super(NestablePool, self).__init__(*args, **kwargs)
+
 def findIndividualTFI(database, pj, lam, parallel_count_in_k_level=False, debugging = False, rsm= 2, hong = False):
     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
     ptt_entry = database.getPTTValueFromLeafLevelGranule(pj)
@@ -29,7 +51,7 @@ def findIndividualTFI(database, pj, lam, parallel_count_in_k_level=False, debugg
                                              level_0_periods_included_in_pg[1] - 1)
 
     if not parallel_count_in_k_level:
-        return database.findIndividualTFIForParalel(pj, allItems, total_transactions, tidLimits, lam, debugging, rsm)
+        return database.findIndividualTFIForParalel(pj, allItems, total_transactions, tidLimits, lam, parallel_count_in_k_level, debugging, False, rsm)
 
     else:
         while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
@@ -60,12 +82,15 @@ def findIndividualTFI(database, pj, lam, parallel_count_in_k_level=False, debugg
         return {"TFI": TFI_j, "supportDict": support_dictionary}
 
 
-def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution = False, debugging = False, HTG = [24, 12, 4, 1], rsm= 2):
+def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution = False, paralelExcecutionOnK = False,  debugging = False, debuggingK = False, HTG = [24, 12, 4, 1], rsm= 2):
     TFI_by_period_in_l_0 = {}
     support_dictionary_by_pg = {}
     HTFI_by_pg = {}
 
-    usable_cpu_count = multiprocessing.cpu_count() // 3
+    usable_cpu_count = multiprocessing.cpu_count()
+    paralel_processing_on_k = 1
+    if paralelExcecutionOnK:
+        paralel_processing_on_k = usable_cpu_count
 
     starters_tid = database.getPTTPeriodTIDBoundaryTuples()
     hong = False
@@ -80,11 +105,11 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
         level_0_periods_included_in_pg = [pi, pi]
         total_transactions = database.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
         tid_limits = maximal_time_period_interval(starters_tid, pi_index, pi_index)
-        list_to_parallel.append((pi, allItems, total_transactions, tid_limits, lam, debugging, rsm))
+        list_to_parallel.append((pi, allItems, total_transactions, tid_limits, lam, paralel_processing_on_k, debugging, debuggingK, rsm))
 
     if paralelExcecution:
-        pool = multiprocessing.Pool(usable_cpu_count)
-        results = pool.starmap(database.findIndividualTFIForParalel, list_to_parallel)
+        pool = NestablePool(usable_cpu_count)
+        results = pool.starmap(database.findIndividualTFIForParalel, list_to_parallel, chunksize=usable_cpu_count)
         for a_result in results:
             pi = a_result["pi"]
             if len(a_result["TFI"]) > 0:
@@ -97,8 +122,8 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
     else:
         for param in list_to_parallel:
             #start = time.time()
-            (pi, ai, totalTrans, tidlimits, lam, deb, rsm) = param
-            individualTFI = database.findIndividualTFIForParalel(pi, ai, totalTrans, tidlimits, lam, deb, rsm)
+            (pi, ai, totalTrans, tidlimits, lam, pOnK, deb, debk, rsm) = param
+            individualTFI = database.findIndividualTFIForParalel(pi, ai, totalTrans, tidlimits, lam, pOnK, deb, debk, rsm)
             pi = individualTFI["pi"]
 
             if len(individualTFI["TFI"]) > 0:
@@ -132,12 +157,10 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
                 # Get a single merged TFI of 0-level periods involved
                 possible_itemsets_in_pg = getTFIUnion(TFI_by_period_in_l_0, level_0_periods_included)
 
-                # def getIndividualTFIForNotLeafsGranules(possible_itemsets_in_pg, total_transactions, items_dic, matrix_data_by_item, tid_limits, rsm, min_rsup, pgStringKey):
-
-                list_to_parallel.append((possible_itemsets_in_pg, total_transactions, tid_limits, rsm, min_rsup, pgStringKey, debugging))
+                list_to_parallel.append((possible_itemsets_in_pg, total_transactions, tid_limits, paralel_processing_on_k, rsm, min_rsup, pgStringKey, debugging))
 
             if paralelExcecution:
-                pool = multiprocessing.Pool(usable_cpu_count)
+                pool = NestablePool(usable_cpu_count)
                 results = pool.starmap(database.getIndividualTFIForNotLeafsGranules, list_to_parallel)
                 for a_result in results:
                     pgKey, HTFI_res, sup_dict = a_result
@@ -148,8 +171,8 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
                         del support_dictionary_by_pg[pgKey]
             else:
                 for param in list_to_parallel:
-                    pis, ttx, tidlts, rsm, min_rsup, pgk, dbg = param
-                    pgKey, HTFI_res, sup_dict = database.getIndividualTFIForNotLeafsGranules(pis, ttx, tidlts, rsm,
+                    pis, ttx, tidlts, pOnK, rsm, min_rsup, pgk, dbg = param
+                    pgKey, HTFI_res, sup_dict = database.getIndividualTFIForNotLeafsGranules(pis, ttx, tidlts, pOnK, rsm,
                      min_rsup, pgk, debugging)
                     if len(HTFI_res) > 0:
                         HTFI_by_pg[pgKey] = HTFI_res
@@ -176,14 +199,14 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
 
 
 
-def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, debugging = False, HTG = [24, 12, 4, 1], rsm= 2):
+def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, paralelExcecutionOnK= False, debugging = False, debuggingK= False, HTG = [24, 12, 4, 1], rsm= 2):
     """
     :param database:
     :return: a set of AssociationRules
     """
     # PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0) AND PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
 
-    phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, debugging, HTG, rsm)
+    phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, paralelExcecutionOnK, debugging, debuggingK, HTG, rsm)
 
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
     HTFS_by_pg = {}

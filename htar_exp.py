@@ -26,24 +26,42 @@ from Apriori.apriori import apriori
 from DataStructures.Parser import Parser
 from HTAR.HTAR import HTAR_BY_PG, getGranulesFrequentsAndSupports
 
+synthetic_datasets_filepath = {
+    'item': ['../SyntheticalDatabase/TesisSyntheticDatasets/Item/I10k.data',
+             '../SyntheticalDatabase/TesisSyntheticDatasets/Item/I25k.data',
+             '../SyntheticalDatabase/TesisSyntheticDatasets/Item/I50k.data',
+             '../SyntheticalDatabase/TesisSyntheticDatasets/Item/I75k.data',
+             '../SyntheticalDatabase/TesisSyntheticDatasets/Item/I100k.data'],
+    'transaction': [
+                    '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T100k-timestamped.csv',
+                    '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T250k-timestamped.csv',
+                    '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T500k-timestamped.csv',
+                    '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T1M-timestamped.csv',
+                    '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T2M-timestamped.csv'],
+    'transactionLength': ['../SyntheticalDatabase/TesisSyntheticDatasets/TransactionLength/TL5-timestamped.csv',
+             '../SyntheticalDatabase/TesisSyntheticDatasets/TransactionLength/TL10-timestamped.csv',
+             '../SyntheticalDatabase/TesisSyntheticDatasets/TransactionLength/TL25-timestamped.csv',
+             '../SyntheticalDatabase/TesisSyntheticDatasets/TransactionLength/TL50-timestamped.csv']
+}
 
+#order_id,timestamp,product_name
 def run_HTAR_foodmart_data_1997_correctness_and_completness():
-    database = Parser().parse('Datasets/sales_formatted_1997_sorted_by_timestamp.csv', 'single', None, True)
+    database = Parser().parse('Datasets/sales_formatted_1997_sorted_by_timestamp.csv', 'single', None, False)
     print('---')
     print("EXP. APRIORI/HTAR: FOODMART, 0.0002/0.6, SIN PARALELIZACION")
     start = time.time()
-    apriori_rules = apriori(database, 0.0002, 0.6)
+    apriori_rules = apriori(database, 0.0002, 0.6, False, False)
     end = time.time()
     print('Apriori Took ' + (str(end - start) + ' seconds'))
     print('Apriori produced ' + str(len(apriori_rules)) + ' rules')
+    #
+    # start = time.time()
+    # rules_by_pg = HTAR_BY_PG(database, 0.0002, 0.6, 0.0002, False, True)
+    # end = time.time()
+    # print('HTAR Took ' + (str(end - start) + ' seconds'))
 
-    start = time.time()
-    rules_by_pg = HTAR_BY_PG(database, 0.0002, 0.6, 0.0002, False, True)
-    end = time.time()
-    print('HTAR Took ' + (str(end - start) + ' seconds'))
 
-
-    print(len(rules_by_pg))
+    #print(len(rules_by_pg))
     #self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
 
 
@@ -58,29 +76,53 @@ def exp_apriori_synthetic():
 
 def exp_HTAR_foodmart():
     database = Parser().parse("Datasets/sales_formatted_1997_sorted_by_timestamp.csv", 'single', None, True)
-    getGranulesFrequentsAndSupports(database, 0.0002, 0.0002, True, True)
+    start = time.time()
+    apriori(database, 0.0002, 0.1, False, False)
+    end = time.time()
+    print("Apriori took " + str(end-start))
+
+    start = time.time()
+    getGranulesFrequentsAndSupports(database, 0.0002, 0.0002, False, True, False)
+    end = time.time()
+    print("Frequents in HTAR took " + str(end-start))
 
 
 def exp_HTAR_synthetic():
-    database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T250k-timestamped.csv", 'single', None, True)
+    database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T1M-timestamped.csv", 'single', None, True)
     print("FINISH PARSING. ALGORITHM BEGINS!")
     start = time.time()
-    frequents = getGranulesFrequentsAndSupports(database, 0.001, 0.001, False, True)
+    frequents = getGranulesFrequentsAndSupports(database, 0.001, 0.001, True, True)
     end = time.time()
     print("----------------------")
     print("Frecuents Per Node took: " + str(end - start))
 
 
-    #Frecuents Per Node took: 205.60720348358154 sin
-    #Frecuents Per Node took: ~170 con 8
+    #Frecuents Per Node took: 193.4652750492096
+    #Frecuents Per Node took: 185.1997091770172 (8)
+    #Frecuents Per Node took: 200.57830381393433 (4) SC = 211.00847339630127
+    #Frecuents Per Node took: 199.38851690292358 (2) SIN CHUNK = 190.89905428886414
+
     # 154 con 4
     # 156 con 2
+
+    #250K
+    # Frecuents Per Node took: 80.1402177810669
+    # Frecuents Per Node CON PARALEL took: 94.6226098537445 (con 8 nodos) con chunksize: 76.0896
+    # Frecuents Per Node took: 79.27350997924805 (con 4)
+    # Frecuents Per node CON PARALEL took: 77 (con 2)
+
+    #1M
+    #Frecuents Per Node took: 199.47519254684448 SIN
+    #Frecuents Per Node took: 239.2863690853119 CON 8 #Y CON CHUNKSIZE 186.50438380241394
+    #Frecuents Per Node took: 211.28303456306458 CON 4 #Y CON CHUNKSIZE 200.90830898284912
+    #Frecuents Per Node took: 191.034325838089 CON 2 #Y CON CHUNKSIZE 199.53955
 
     #5M:
     #Frecuents Per Node took: 769.500205039978 sin paralel
 
     # print(len(rules_by_pg))
     # print(len(apriori_rules))
+
 
 # def create_heatmap():
 #     # Candidates
@@ -130,7 +172,7 @@ def exp_HTAR_synthetic():
 
 if __name__=="__main__":
     #run_HTAR_foodmart_data_1997_correctness_and_completness()
-    #exp_HTAR_synthetic()
+    exp_HTAR_synthetic()
     #exp_apriori_synthetic()
-    exp_HTAR_foodmart()
+    #exp_HTAR_foodmart()
     #create_heatmap()

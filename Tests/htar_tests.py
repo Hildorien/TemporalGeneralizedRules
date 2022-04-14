@@ -202,12 +202,16 @@ class HTARTests(unittest.TestCase):
 
         paralelRun = {}
         for paralel_running in [False, True]:
-            for i in range(0, 3):
-                rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], paralel_running)
-                paralelRun[str(paralel_running)] = rules_by_pg
-                apriori_rules = apriori(database, sups[i], confs[i])
-                self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
-        self.compareEqualHTARRules(paralelRun["False"], paralelRun["True"])
+            for paralel_running_on_k in [False, True]:
+                for i in range(0, 3):
+                    rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], paralel_running, paralel_running_on_k)
+                    strJoin = str(paralel_running)+"-"+str(paralel_running_on_k)
+                    paralelRun[strJoin] = rules_by_pg
+                    apriori_rules = apriori(database, sups[i], confs[i])
+                    self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)
+        for keys in paralelRun:
+            for otherKeys in paralelRun:
+                self.compareEqualHTARRules(paralelRun[keys], paralelRun[otherKeys])
 
     def test_leaf_tid_starters(self):
         database = Parser().parse("Datasets/sales_formatted_for_test.csv", 'single', None, True)
