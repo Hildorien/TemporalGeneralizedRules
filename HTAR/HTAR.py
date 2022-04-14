@@ -87,15 +87,15 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
     support_dictionary_by_pg = {}
     HTFI_by_pg = {}
 
-    usable_cpu_count = multiprocessing.cpu_count()
+    usable_cpu_count = multiprocessing.cpu_count()//3
     paralel_processing_on_k = 1
     if paralelExcecutionOnK:
         paralel_processing_on_k = usable_cpu_count
 
     starters_tid = database.getPTTPeriodTIDBoundaryTuples()
-    hong = False
-    if HTG == [10, 5, 1]:
-        hong = True
+    # hong = False
+    # if HTG == [10, 5, 1]:
+    #     hong = True
 
     list_to_parallel = []
 
@@ -109,7 +109,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
 
     if paralelExcecution:
         pool = NestablePool(usable_cpu_count)
-        results = pool.starmap(database.findIndividualTFIForParalel, list_to_parallel, chunksize=usable_cpu_count)
+        results = pool.starmap(database.findIndividualTFIForParalel, list_to_parallel)
         for a_result in results:
             pi = a_result["pi"]
             if len(a_result["TFI"]) > 0:
