@@ -226,6 +226,28 @@ def run_r_interesting_experiment(min_sup, min_conf, min_r):
 def run_experiments(experiment_key):
     run_algorithms(experiment_key)
 
+
+def run_rule_gen_experiment():
+    vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Support\S1M.data',
+                                 'single', 'F:\TesisSyntheticDatasets\Support\S1M.tax')
+    #min_sup_parameters = synthetic_parameters['support']
+    min_sup_parameters = [0.01, 0.0075, 0.005, 0.003, 0.001]
+    loggerRules = setup_logger('rule_gen', 'Experiments/rule_gen.txt')
+    for min_sup in min_sup_parameters:
+        loggerRules.info('vertical_cumulate with min_sup: ' + str(min_sup))
+        rules = vertical_cumulate(vertical_db, min_sup, 0.5, 0)
+        loggerRules.info('vertical_cumulate generated ' + str(len(rules)) + ' rules')
+        loggerRules.info('-------------------------------------------------------------')
+
+    loggerRules.info('###################################################################')
+
+    for min_sup in min_sup_parameters:
+        loggerRules.info('vertical_cumulate_parallel_rule with min_sup: ' + str(min_sup))
+        rules = vertical_cumulate(vertical_db, min_sup, 0.5, 0, False, True)
+        loggerRules.info('vertical_cumulate_parallel_rule generated ' + str(len(rules)) + ' seconds')
+        loggerRules.info('-------------------------------------------------------------')
+
+
 def main():
     loggerError = setup_logger('Experiment.ErrorLogger', 'Experiments/error_log.txt', logging.ERROR)
     # experiment_keys = ['transaction']
@@ -247,6 +269,7 @@ def main():
     # run_experiments('fanout')
     # run_experiments('item')
     # run_experiments('transaction')
+    # run_experiments('support')
 
     # R-Interesting experiments
     # run_r_interesting_experiment(0.01, 0.25, 0)
@@ -254,6 +277,9 @@ def main():
 
     # run_r_interesting_experiment(0.01, 0.5, 0)
     # run_r_interesting_experiment(0.01, 0.5, 1.1)
+
+    # Rule Generation experiment
+    run_rule_gen_experiment()
 
 
 if __name__ == '__main__':

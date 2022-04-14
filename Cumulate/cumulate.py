@@ -18,6 +18,7 @@ loggerAPlotter = logging.getLogger(__name__ + '_vanilla_plot')
 loggerBPlotter = logging.getLogger(__name__ + '_vertical_plot')
 loggerCPlotter = logging.getLogger(__name__ + '_vertical_with_parallel_count_plot')
 
+loggerRules = logging.getLogger('rule_gen')
 
 def cumulate(horizontal_database, min_supp, min_conf, min_r):
     """
@@ -108,6 +109,7 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
     rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
                             parallel_rule_gen, taxonomy, min_r, vertical_database)
     end = time.time()
+    loggerRules.info('Rule Generation took ' + str(end-start))
     if parallel_count:
         loggerC.info('RulePhase,' + str(end-start))
     else:
