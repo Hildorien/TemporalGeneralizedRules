@@ -3,7 +3,9 @@ import time
 from HTAR.HTAR_utility import getPeriodsIncluded, getPeriodStampFromTimestamp
 from utility import findOrderedIntersection, findOrderedIntersectionBetweenBoundaries, maximal_time_period_interval, \
     getFilteredTIDSThatBelongToPeriod, create_ancestor_set, append_tids_for_HTAR, \
-    calculate_tid_intersections_HTAR_with_boundaries, generateCanidadtesOfSizeK, hash_candidate
+    calculate_tid_intersections_HTAR_with_boundaries, generateCanidadtesOfSizeK, hash_candidate, \
+    calculate_tid_intersections_HTAR_with_boundaries_for_paralel, create_minimal_items_dic, \
+    append_tids_for_HTAR_for_single_item
 
 
 class Database:
@@ -125,33 +127,35 @@ class Database:
         TFI_r = list()
         frequent_dictionary = {}
         support_dictionary = {}
-        totalCandidates = 0
         timeWastedInStuff = 0
 
         while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
             frequent_dictionary[r] = []
             old_C_J = C_j
-            startj = time.time()
+            #startj = time.time()
 
             C_j = generateCanidadtesOfSizeK(r, old_C_J, frequent_dictionary)
-            endj = time.time()
-            if debuggingK:
-                totalCandidates += len(C_j)
-                print('Candidates of size ' + str(r) + ' is ' + str(len(C_j)))
-                print('It lasted '+ str(endj-startj))
-                print('Calculating support of each candidate of size ' + str(r))
-            totalCandidates += len(C_j)
+            #endj = time.time()
+            # if debuggingK:
+            #     totalCandidates += len(C_j)
+            #     print('Candidates of size ' + str(r) + ' is ' + str(len(C_j)))
+            #     print('It lasted '+ str(endj-startj))
+            #     print('Calculating support of each candidate of size ' + str(r))
             timeUsagePerk = 0
 
             if paralel_processing_on_k > 1:
-                startProcess = time.time()
                 pool = multiprocessing.Pool(paralel_processing_on_k)
-                list_to_parallel = [(x, append_tids_for_HTAR(x, self.items_dic, self.matrix_data_by_item), tid_limits, rsm) for x
-                                    in C_j]
-                endProcess = time.time()
-                timeWastedInStuff += (endProcess-startProcess)
+                items_transactions_that_belong_to_perdiod = {}
+                for candidate_size_k in C_j:
+                    for item in candidate_size_k:
+                        if item not in items_transactions_that_belong_to_perdiod:
+                            item_filtered_tids = getFilteredTIDSThatBelongToPeriod(append_tids_for_HTAR_for_single_item(item, self.items_dic, self.matrix_data_by_item), tid_limits[0], tid_limits[1], rsm)
+                            items_transactions_that_belong_to_perdiod[item] = item_filtered_tids
 
-                results = pool.starmap(calculate_tid_intersections_HTAR_with_boundaries, list_to_parallel)
+                list_to_parallel = [create_minimal_items_dic(x, items_transactions_that_belong_to_perdiod) for x in C_j]
+
+
+                results = pool.starmap(calculate_tid_intersections_HTAR_with_boundaries_for_paralel, list_to_parallel)
                 for a_result in results:
                     timeUsagePerk += a_result[2]
                     candidate_support = a_result[1] / total_transactions
@@ -162,23 +166,14 @@ class Database:
                 pool.close()
                 pool.join()
             else:
-                #startFreq= time.time()
                 for k_size_itemset in C_j:
-                    a_result = calculate_tid_intersections_HTAR_with_boundaries(k_size_itemset,
-                                                                                append_tids_for_HTAR(k_size_itemset,
-                                                                                                     self.items_dic,
-                                                                                                     self.matrix_data_by_item),
-                                                                                tid_limits, rsm)
-                    support = a_result[1] / total_transactions
+                    a_result = calculate_tid_intersections_HTAR_with_boundaries(k_size_itemset, append_tids_for_HTAR(k_size_itemset, self.items_dic, self.matrix_data_by_item), tid_limits, rsm)
                     timeUsagePerk += a_result[2]
+                    support = a_result[1] / total_transactions
                     if support >= lam:
                         TFI_r.append(tuple(k_size_itemset))
                         support_dictionary[hash_candidate(k_size_itemset)] = support
                         frequent_dictionary[r].append(k_size_itemset)
-                # endFreq = time.time()
-                # if debuggingK:
-                #      print('Took ' + (str(endFreq - startFreq)) + ' seconds in k =' + str(r))
-                #      print("**********************")
 
             if debugging:
                 print("Total in K = " + str(r) + " took " + str(timeUsagePerk))
@@ -190,7 +185,7 @@ class Database:
         end = time.time()
         if debugging:
             print(str(pi) + " leaf finished candidate calculation and lasted " + str(end - start))
-            print("Wasted " + str(timeWastedInStuff) + " preparing for PARALELISING")
+            #print("Wasted " + str(timeWastedInStuff) + " preparing for PARALELISING")
             print("---------------------------------------------------------------")
         return {"pi": pi, "TFI": TFI_j, "supportDict": support_dictionary}
 
