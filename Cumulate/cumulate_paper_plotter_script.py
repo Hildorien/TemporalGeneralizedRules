@@ -59,8 +59,8 @@ def parse_and_plot_files(experiment_key, x_label, x_ticks, y_label, y_ticks):
     plt.yticks(y_ticks)
 
     # Naming the x-axis, y-axis and the whole graph
-    # plt.xlabel(x_label)
-    # plt.ylabel(y_label)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
 
     # For Transaction experiment
     if experiment_key == 'transaction':
@@ -100,6 +100,16 @@ def scale_y_axis_by_unit(x_axis, y_axis, x_axis_target_unit):
         y_axis_rescaled.append(r)
     return y_axis_rescaled
 
+def plot_parallel_count_efectiveness_experiment():
+    plt.xlabel('K')
+    plt.ylabel('Time (seconds)')
+    plt.xticks([1, 2, 3])
+    plt.plot([1, 2, 3], [0.049, 91.163, 0.067], linestyle='-', marker='o', color='r', label='apriori')
+    plt.plot([1, 2, 3], [2.640, 32.975, 1.615], linestyle='--', marker='s', color='g', label='apriori with parallelization')
+    plt.title('Parallelization')
+    plt.legend()
+    plt.savefig('Plots/Parallel_Efectiveness.png', format="png")
+    plt.close()
 
 if __name__ == '__main__':
     #Plot experiments by key
@@ -108,6 +118,7 @@ if __name__ == '__main__':
     # parse_and_plot_files('fanout', 'Fanout', [5, 7.5, 10, 15, 20, 25], 'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35])
     # parse_and_plot_files('item', 'Number of items (000s)', [10, 25, 50, 75, 100], 'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35])
     # parse_and_plot_files('support', 'Minimum Support (%)', [2,1.5,1,0.75,0.5,0.33], 'Time (Minutes)', [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65])
-    parse_and_plot_files('transaction', 'Number of transactions (millions)',
-                         [0.1, 1, 2, 5, 10], 'Time / #Transactions (normalized)',
-    [0.6, 0.8, 1, 1.2, 1.4, 1.8, 2])
+    # parse_and_plot_files('transaction', 'Number of transactions (millions)',
+    #                      [0.1, 1, 2, 5, 10], 'Time / #Transactions (normalized)',
+    # [0.6, 0.8, 1, 1.2, 1.4, 1.8, 2])
+    plot_parallel_count_efectiveness_experiment()

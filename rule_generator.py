@@ -19,14 +19,14 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
     [explode_frequent_itemset_in_potential_rule(itemset, support_dictionary, min_confidence, potential_rules_dict) for sublist in frequent_itemsets for itemset in sublist]
     end = time.time()
 
-    print('Preparing data took  ' + str(end - start) + ' seconds. Potential rules ' + str(len(potential_rules_dict)))
+    # print('Preparing data took  ' + str(end - start) + ' seconds. Potential rules ' + str(len(potential_rules_dict)))
     if parallel_rule_gen:
         pool = multiprocessing.Pool(os.cpu_count())
         list_to_parallel = [(key, potential_rules_dict[key][3], potential_rules_dict[key][4]) for key in potential_rules_dict]
         start = time.time()
         results = pool.starmap(check_rule_for_parallel, list_to_parallel)
         end = time.time()
-        print('Parallel rule_gen took ' + str(end-start) + ' seconds')
+        # print('Parallel rule_gen took ' + str(end-start) + ' seconds')
         rules = [generate_rule_for_parallel(r, potential_rules_dict) for r in results if r is not None]
         pool.close()  # Close pools after using them
         pool.join()  # Main process waits after last pool closes
@@ -46,7 +46,7 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
                                                                                           database):
                     rules.append(AssociationRule(antecedent, consequent, rule_support, rule_confidence))
         end = time.time()
-        print('Sequential rule_gen took ' + str(end-start) + ' seconds')
+        # print('Sequential rule_gen took ' + str(end-start) + ' seconds')
 
 
     return rules
