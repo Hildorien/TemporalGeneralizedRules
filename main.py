@@ -113,12 +113,12 @@ def func(orders, total_orders, target_orders):
 
 if __name__=="__main__":
 
-    vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single',
-                                 'F:\TesisSyntheticDatasets\Transaction\T100k.tax')
-    start = time.time()
-    frequents, support_dict, taxonomy = vertical_cumulate_frequents(vertical_db, 0.005)
-    end = time.time()
-    print('vertical_cumulate_frequents took ' + str(end-start))
+    # vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single',
+    #                              'F:\TesisSyntheticDatasets\Transaction\T100k.tax')
+    # start = time.time()
+    # frequents, support_dict, taxonomy = vertical_cumulate_frequents(vertical_db, 0.005)
+    # end = time.time()
+    # print('vertical_cumulate_frequents took ' + str(end-start))
     # print('##########################################################')
     # print('##########################################################')
     # start = time.time()
@@ -145,15 +145,19 @@ if __name__=="__main__":
     # end = time.time()
     # print('cumulate_frequents took ' + str(end - start) + ' generated ' + str(len(r2)))
 
-    # database = Parser().parse('F:\TesisSyntheticDatasets\Root\R250.data', 'single')
-    # start = time.time()
-    # r = apriori(database, 0.001, 0.1)
-    # end = time.time()
-    # print('apriori took ' + str(end - start) + ' generated ' + str(len(r)))
+    # database = Parser().parse(r"F:\TesisSyntheticDatasets\RuleGen\NP10k1000I.data", 'single')
+    database = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T1M.data', 'single')
+    print('Parallel:')
+    r = apriori(database, 0.001, 0.5, True, False)
+    print('Generated ' + str(len(r)) + ' rules')
+    print('#######################################')
+    print('Sequential:')
+    r = apriori(database, 0.001, 0.5, False, False)
+    print('Generated ' + str(len(r)) + ' rules')
 
-    # vertical_db = Parser().parse('Datasets\sales_formatted.csv', 'single',
-    #                              'Taxonomies\salesfact_taxonomy_single_2.csv')
-    # rules = vertical_cumulate(vertical_db, 0.01, 0.25, 1.1)
+    # vertical_db = Parser().parse('Datasets/sales_formatted.csv', 'single',
+    #                              'Taxonomies/salesfact_taxonomy_single_2.csv')
+    # rules = vertical_cumulate(vertical_db, 0.001, 0.5, 0, False, False)
     # print('Generated ' + str(len(rules)) + ' rules')
     # rules_sorted = sorted(rules, key=lambda r: r.support, reverse=True)
     # for rule in rules_sorted:
