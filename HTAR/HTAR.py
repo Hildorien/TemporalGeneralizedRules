@@ -82,7 +82,7 @@ def findIndividualTFI(database, pj, lam, parallel_count_in_k_level=False, debugg
         return {"TFI": TFI_j, "supportDict": support_dictionary}
 
 
-def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution = False, paralelExcecutionOnK = False,  debugging = False, debuggingK = False, rsm= 1, HTG = [24, 12, 4, 1]):
+def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution = False, paralelExcecutionOnK = False,  debugging = False, debuggingK = False, rsm= 2, HTG = [24, 12, 4, 1]):
     """
     :param database: The database you are using
     :param min_rsup: minimum support to consider frequent in inner time granules
@@ -100,7 +100,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
     support_dictionary_by_pg = {}
     HTFI_by_pg = {}
 
-    usable_cpu_count = multiprocessing.cpu_count() #//3
+    usable_cpu_count = multiprocessing.cpu_count() // 3
     paralel_processing_on_k = 1
     if paralelExcecutionOnK:
         paralel_processing_on_k = usable_cpu_count

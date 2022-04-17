@@ -281,3 +281,32 @@ def calculate_tid_intersections_HTAR_with_boundaries(candidate, candidate_tids, 
     timeUsage = end-start
     return candidate, len(final_intersection), timeUsage
 
+def calculate_tid_intersections_HTAR_with_boundaries_for_paralel(candidate, items_tids):
+    start = time.time()
+    final_intersection = None
+    for item in candidate:
+        tids = items_tids[item]
+        if final_intersection is None:
+            final_intersection = tids
+        elif len(final_intersection) == 0 or len(tids) == 0:
+            return candidate, 0
+        else:
+            final_intersection = findOrderedIntersection(final_intersection, tids)
+
+    end = time.time()
+    timeUsage = end-start
+    return candidate, len(final_intersection), timeUsage
+
+def create_minimal_items_dic(candidate, all_items_dic):
+    res = {}
+    for item in candidate:
+        res[item] = all_items_dic[item]
+    return candidate, res
+
+def append_tids_for_HTAR_for_single_item(item, items_dic, matrix_data_by_item):
+    itemName = items_dic[item]
+    if itemName in matrix_data_by_item:
+        return matrix_data_by_item[itemName]['tids']
+    else:
+        return []
+

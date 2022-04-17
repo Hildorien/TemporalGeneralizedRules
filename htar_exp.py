@@ -25,6 +25,7 @@ import time
 from Apriori.apriori import apriori
 from DataStructures.Parser import Parser
 from HTAR.HTAR import HTAR_BY_PG, getGranulesFrequentsAndSupports
+from utility import maximal_time_period_interval
 
 synthetic_datasets_filepath = {
     'item': [{"label": "I10K", "path": '../SyntheticalDatabase/TesisSyntheticDatasets/Item/I10k-timestamped.csv'},
@@ -45,6 +46,12 @@ synthetic_datasets_filepath = {
         {"label":"TL25", "path": '../SyntheticalDatabase/TesisSyntheticDatasets/TransactionLength/TL25-timestamped.csv'},
         {"label":"TL50", "path": '../SyntheticalDatabase/TesisSyntheticDatasets/TransactionLength/TL50-timestamped.csv'}
     ]
+}
+
+synthetic_datasets_filepath_2 = {
+    'transaction': [{"label": "T750k", "path": '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T750k-timestamped.csv'}],
+
+    'transactionLength': [{"label": "TL40", "path": '../SyntheticalDatabase/TesisSyntheticDatasets/TransactionLength/TL40-timestamped.csv'}]
 }
 
 #order_id,timestamp,product_name
@@ -83,25 +90,51 @@ def exp_apriori_synthetic():
 
 def exp_HTAR_foodmart():
     database = Parser().parse("Datasets/sales_formatted_1997_sorted_by_timestamp.csv", 'single', None, True)
-    start = time.time()
-    apriori(database, 0.0002, 0.1, False, False)
-    end = time.time()
-    print("Apriori took " + str(end-start))
+    # start = time.time()
+    # apriori(database, 0.0002, 0.1, False, False)
+    # end = time.time()
+    # print("Apriori took " + str(end-start))
+
 
     start = time.time()
-    getGranulesFrequentsAndSupports(database, 0.0002, 0.0002, False, False, False)
+    getGranulesFrequentsAndSupports(database, 0.0002, 0.0002, False, False, True, True)
     end = time.time()
-    print("Frequents in HTAR took " + str(end-start))
+    print("Frequents in HTAR took PARALEL " + str(end-start))
+    #
+    # start = time.time()
+    # getGranulesFrequentsAndSupports(database, 0.0002, 0.0002, False, False, True)
+    # end = time.time()
+    # print("Frequents in HTAR took NOT PARALEL" + str(end-start))
+
+
 
 
 def exp_HTAR_synthetic():
     database = Parser().parse("../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T1M-timestamped.csv", 'single', None, True)
     print("FINISH PARSING. ALGORITHM BEGINS!")
+
+    pi = 1
+    allItems = sorted(database.getPTTValueFromLeafLevelGranule(pi)['itemsSet'])
+    level_0_periods_included_in_pg = [pi, pi]
+    total_transactions = database.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
+    starters_tid = database.getPTTPeriodTIDBoundaryTuples()
+
+    tid_limits = maximal_time_period_interval(starters_tid, 0, 0)
+    #(pi, ai, totalTrans, tidlimits, lam, pOnK, deb, debk, rsm) = param
+
     start = time.time()
-    getGranulesFrequentsAndSupports(database, 0.001, 0.001, False, False, True, False, 2)
+    database.findIndividualTFIForParalel(0, allItems, total_transactions, tid_limits, 0.001, 1, True, False, 2)
     end = time.time()
     print("----------------------")
-    print("Frecuents Per Node took: " + str(end - start))
+    print("SECUENTIAL Frecuents Per Node took: " + str(end - start))
+
+
+    #getGranulesFrequentsAndSupports(database, 0.001, 0.001, False, True, True, False, 2)
+    start = time.time()
+    database.findIndividualTFIForParalel(0, allItems, total_transactions, tid_limits, 0.001, 2, True, False, 2)
+    end = time.time()
+    print("----------------------")
+    print("PARALEL Frecuents Per Node took: " + str(end - start))
 
 #Candidates of size 1 is 30506
 # It lasted 0.001199960708618164
@@ -147,11 +180,6 @@ def exp_HTAR_synthetic():
 # Calculating support of each candidate of size 4
 # Total in K = 4 took 0
 # 1 leaf finished candidate calculation and lasted 9.734647750854492
-
-
-
-
-
 
 
 
@@ -231,22 +259,23 @@ def exp_HTAR_synthetic():
 #     plt.show()
 
 
-algos = [{"name": "Sin Paralelizacion", "paralel_1": False, "paralel_2": False},
-        {"name": "Paralelización nodos", "paralel_1": True, "paralel_2": False},
-        {"name": "Paralelización K", "paralel_1": False, "paralel_2": True}]
+algos = [{"name": "Sin Paralelizacion", "paralel_1": False, "paralel_2": False, "rsc":2},
+        {"name": "Paralelización nodos", "paralel_1": True, "paralel_2": False, "rsc":2},
+         {"name": "RSC 1", "paralel_1": False, "paralel_2": False, "rsc": 1}
+
+         #{"name": "Paralelización K", "paralel_1": False, "paralel_2": True}
+         ]
 
 def exp_FINAL_HTAR_synthetic():
-    for key in synthetic_datasets_filepath:
-        print("****************************************************************")
-        print("NEW DATASET: " + key)
-        for dset in synthetic_datasets_filepath[key]:
-            database = Parser().parse(dset["path"], 'single', None, True)
-            for alg in algos:
-                start = time.time()
-                getGranulesFrequentsAndSupports(database, 0.001, 0.001, alg["paralel_1"], alg["paralel_2"])
-                end = time.time()
-                print("Alg. " + str(alg["name"]) + " of dataset " + dset["label"] +" lasted "+ str(end - start))
-                print("----------------------")
+    for key in synthetic_datasets_filepath_2:
+            for dset in synthetic_datasets_filepath_2[key]:
+                database = Parser().parse(dset["path"], 'single', None, True)
+                for alg in algos:
+                    start = time.time()
+                    getGranulesFrequentsAndSupports(database, 0.001, 0.001, alg["paralel_1"], alg["paralel_2"], False, False, alg["rsc"])
+                    end = time.time()
+                    print("Alg. " + str(alg["name"]) + " of dataset " + dset["label"] +" lasted "+ str(end - start))
+                    print("----------------------")
 
 
     # for dataset in synthetic_datasets_filepath['item']:
