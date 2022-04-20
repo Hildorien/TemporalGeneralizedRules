@@ -215,24 +215,42 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, par
     :return: a set of AssociationRules
     """
     # PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0) AND PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
-
     phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, paralelExcecutionOnK, debugging, debuggingK, rsm, HTG)
 
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
-    HTFS_by_pg = {}
     pgKeys = phase_1_and_2_res['HTFI_by_pg']
     suppDictionaryByPg = phase_1_and_2_res['support_dictionary_by_pg']
-    totalRules = 0
-    for pg in pgKeys.keys():
-        pg_rules = rule_generation(pgKeys[pg], suppDictionaryByPg[pg], min_rconf)
-        totalRules += len(pg_rules)
-        if debugging:
-            print(pg + " RULES")
-            print(str(len(pg_rules)))
-            print("----")
-        if len(pg_rules) > 0:
-            HTFS_by_pg[pg] = pg_rules
+    paralel_rule_generation = False
+    return getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation)
 
-    if debugging:
-        print("Total amount of HTAR rules: " + str(totalRules))
+def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation = False):
+    HTFS_by_pg = {}
+    list_to_parallel = []
+    pool = None
+    if paralel_rule_generation:
+        pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    for pg in pgKeys.keys():
+        list_to_parallel.append((pg, pgKeys[pg], suppDictionaryByPg[pg], min_rconf))
+
+    if paralel_rule_generation:
+        rulesByPg = pool.starmap(rule_generation_paralel, list_to_parallel)
+        for pgRule in rulesByPg:
+            if len(pgRule) > 0:
+                HTFS_by_pg[pgRule[0]] = pgRule[1]
+        pool.close()
+        pool.join()
+    else:
+       for param in list_to_parallel:
+           pg, candidates, supDic, min_rconf = param
+           pg_rules = rule_generation(candidates, supDic, min_rconf)
+           if len(pg_rules) > 0:
+                HTFS_by_pg[pg] = pg_rules
+        # for pg in pgKeys.keys():
+        #     pg_rules = rule_generation(pgKeys[pg], suppDictionaryByPg[pg], min_rconf)
+        #     if len(pg_rules) > 0:
+        #         HTFS_by_pg[pg] = pg_rules
+
     return HTFS_by_pg
+
+def rule_generation_paralel(pg, pgKeys, pgSupDic, min_rconf):
+    return pg, rule_generation(pgKeys, pgSupDic, min_rconf)
