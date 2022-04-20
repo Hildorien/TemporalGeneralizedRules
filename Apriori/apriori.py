@@ -14,7 +14,6 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
     :return: a set of AssociationRules
     """
     # STEP 1: Frequent itemset generation
-    start = time.time()
     all_items = sorted(list(database.items_dic.keys()))
     k = 1
     support_dictionary = {}
@@ -50,8 +49,6 @@ def apriori(database, min_support, min_confidence, parallel_count=False, paralle
         end = time.time()
         # print('Took ' + (str(end - start) + ' seconds in k =' + str(k) + ' with this amount of candidates: ' + str(len(candidates_size_k))))
         k += 1
-    end = time.time()
-    # print('Frequent phase took ' + (str(end - start)))
     # print("Apriori evaluated " + str(totalCandidates) + ' candidates')
     totalFrecuent = 0
     for k in frequent_dictionary:

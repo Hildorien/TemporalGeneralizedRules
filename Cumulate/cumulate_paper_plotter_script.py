@@ -1,6 +1,9 @@
 import os
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.legend import Legend
+from matplotlib.offsetbox import AnchoredText
+from matplotlib.pyplot import figure
 
 
 def parse_and_plot_files(experiment_key, x_label, x_ticks, y_label, y_ticks):
@@ -101,14 +104,44 @@ def scale_y_axis_by_unit(x_axis, y_axis, x_axis_target_unit):
     return y_axis_rescaled
 
 def plot_parallel_count_efectiveness_experiment():
+    """
+    Experiment time log with Syntetic Dataset: Root - R250.data
+    Sequential with min_sup: 0.0005
+    Took 0.04490804672241211 seconds in k =1 with this amount of candidates: 55844
+    Took 200.33265686035156 seconds in k =2 with this amount of candidates: 8522256
+    Took 0.6751060485839844 seconds in k =3 with this amount of candidates: 828
+    Took 0.0039920806884765625 seconds in k =4 with this amount of candidates: 8
+    Took 0.0 seconds in k =5 with this amount of candidates: 1
+    Took 0.0 seconds in k =6 with this amount of candidates: 0
+
+    Parallel with min_sup: 0.0005
+    Took 2.7735891342163086 seconds in k =1 with this amount of candidates: 55844
+    Took 93.6016058921814 seconds in k =2 with this amount of candidates: 8522256
+    Took 2.215111017227173 seconds in k =3 with this amount of candidates: 828
+    Took 0.15401291847229004 seconds in k =4 with this amount of candidates: 8
+    Took 0.031039953231811523 seconds in k =5 with this amount of candidates: 1
+    Took 0.0 seconds in k =6 with this amount of candidates: 0
+    :return:
+    """
+    fig, ax = plt.subplots()
     plt.xlabel('K')
     plt.ylabel('Time (seconds)')
-    plt.xticks([1, 2, 3])
-    plt.plot([1, 2, 3], [0.049, 91.163, 0.067], linestyle='-', marker='o', color='r', label='apriori')
-    plt.plot([1, 2, 3], [2.640, 32.975, 1.615], linestyle='--', marker='s', color='g', label='apriori with parallelization')
+    plt.xticks([1, 2, 3, 4, 5])
+    plt.yticks([0, 10, 50, 100 , 200])
+
+    plt.plot([1, 2, 3, 4, 5], [0.049, 200.332, 0.067, 0.004, 0.0], linestyle='-', marker='o', color='r', label='apriori')
+    plt.plot([1, 2, 3, 4, 5], [2.773, 93.60, 2.21, 0.15, 0.031], linestyle='--', marker='s', color='g', label='apriori with parallelization')
     plt.title('Parallelization')
     plt.legend()
-    plt.savefig('Plots/Parallel_Efectiveness.png', format="png")
+    anchored_text = AnchoredText(
+        'k=1: 55844 candidates \nk=2: 8522256 candidates\nk=3: 828 candidates\nk=4: 8 candidates\nk=5: 1 candidates',
+                                 frameon=True, borderpad=0, pad=0.1,
+                                 loc='upper right', bbox_to_anchor=[1.40, 1.],
+                                 bbox_transform=plt.gca().transAxes,
+                                 prop={'color': 'k'})
+    ax.add_artist(anchored_text)
+
+    plt.savefig('Plots/Parallel_Efectiveness.png', format="png", bbox_inches='tight')
     plt.close()
 
 if __name__ == '__main__':

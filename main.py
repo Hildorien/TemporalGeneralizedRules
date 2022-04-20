@@ -145,15 +145,19 @@ if __name__=="__main__":
     # end = time.time()
     # print('cumulate_frequents took ' + str(end - start) + ' generated ' + str(len(r2)))
 
-    # database = Parser().parse(r"F:\TesisSyntheticDatasets\RuleGen\NP10k1000I.data", 'single')
-    database = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T1M.data', 'single')
-    print('Parallel:')
-    r = apriori(database, 0.001, 0.5, True, False)
-    print('Generated ' + str(len(r)) + ' rules')
-    print('#######################################')
-    print('Sequential:')
-    r = apriori(database, 0.001, 0.5, False, False)
-    print('Generated ' + str(len(r)) + ' rules')
+    database = Parser().parse(r"F:\TesisSyntheticDatasets\RuleGen\NP10k250I.data", 'single')
+    # database = Parser().parse('Datasets/data7.csv', 'basket')
+    min_sups = [0.0002,  0.00015, 0.00013, 0.00012, 0.0001]
+    for min_sup in min_sups:
+        print('Parallel with min_sup: ' + str(min_sup))
+        r = apriori(database, min_sup, 0.5, False, True)
+        print('Generated ' + str(len(r)) + ' rules')
+        print('#######################################')
+        print('Sequential with min_sup: ' + str(min_sup))
+        r = apriori(database, min_sup, 0.5, False, False)
+        print('Generated ' + str(len(r)) + ' rules')
+        print('#######################################')
+
 
     # vertical_db = Parser().parse('Datasets/sales_formatted.csv', 'single',
     #                              'Taxonomies/salesfact_taxonomy_single_2.csv')
@@ -162,6 +166,20 @@ if __name__=="__main__":
     # rules_sorted = sorted(rules, key=lambda r: r.support, reverse=True)
     # for rule in rules_sorted:
     #     print(vertical_db.printAssociationRule(rule))
+
+    # database = Parser().parse('F:\TesisSyntheticDatasets\Root\R250.data', 'single')
+    # min_sups = [0.0005]
+    # for min_supp in min_sups:
+    #     # print('Sequential with min_sup: ' + str(min_supp))
+    #     # apriori(database, min_supp, 0.5, False, False)
+    #     # print('#######################################')
+    #     print('Parallel with min_sup: ' + str(min_supp))
+    #     apriori(database, min_supp, 0.5, True, False)
+    #     print('#######################################')
+
+
+
+
 
 
 

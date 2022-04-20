@@ -18,7 +18,6 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
     frequent_itemsets = [frequent_itemset_values[i] for i in range(1, len(frequent_itemset_values))]
     [explode_frequent_itemset_in_potential_rule(itemset, support_dictionary, min_confidence, potential_rules_dict) for sublist in frequent_itemsets for itemset in sublist]
     end = time.time()
-
     # print('Preparing data took  ' + str(end - start) + ' seconds. Potential rules ' + str(len(potential_rules_dict)))
     if parallel_rule_gen:
         pool = multiprocessing.Pool(os.cpu_count())
@@ -26,7 +25,7 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
         start = time.time()
         results = pool.starmap(check_rule_for_parallel, list_to_parallel)
         end = time.time()
-        # print('Parallel rule_gen took ' + str(end-start) + ' seconds')
+        # print('Parallel rule_gen took ' + str(end-start) + ' seconds to check ' + str(len(potential_rules_dict)) + ' potential rules')
         rules = [generate_rule_for_parallel(r, potential_rules_dict) for r in results if r is not None]
         pool.close()  # Close pools after using them
         pool.join()  # Main process waits after last pool closes
@@ -46,7 +45,7 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
                                                                                           database):
                     rules.append(AssociationRule(antecedent, consequent, rule_support, rule_confidence))
         end = time.time()
-        # print('Sequential rule_gen took ' + str(end-start) + ' seconds')
+        # print('Sequential rule_gen took ' + str(end-start) + ' seconds to check ' + str(len(potential_rules_dict)) + ' portential rules')
 
 
     return rules
@@ -116,5 +115,3 @@ def filter_interesting_rules(rules, min_confidence, min_r, support_dictionary, t
 def generate_rule_for_parallel(key, dict):
     antecedent, consequent, support_all_items, confidence, min_conf = dict[key]  # Unpack data
     return AssociationRule(antecedent, consequent, support_all_items, confidence)
-
-
