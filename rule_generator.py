@@ -3,6 +3,7 @@ import math
 import multiprocessing
 import os
 import time
+import random
 
 from Cumulate.cumulate_utility import calculate_itemset_ancestor, close_ancestor
 from DataStructures.AssociationRule import AssociationRule
@@ -51,12 +52,44 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
     return rules
 
 
-def explode_frequent_itemset_in_potential_rule(itemset, support_dictionary, min_conf, potential_rule_dict):
-    for idx, item in enumerate(itemset):
+def rule_generation_test(random_list_to_parallel, min_confidence, parallel_rule_gen=False):
+
+    if parallel_rule_gen:
+        pool = multiprocessing.Pool(os.cpu_count())
+        start = time.time()
+        results = pool.starmap(check_rule_for_parallel, random_list_to_parallel)
+        end = time.time()
+        # print('Parallel rule_gen took ' + str(end-start) + ' seconds to check ' + str(len(random_list_to_parallel)) + ' potential rules')
+        pool.close()  # Close pools after using them
+        pool.join()  # Main process waits after last pool closes
+    else:
+        start = time.time()
+        rules = []
+        for random_rule in random_list_to_parallel:
+            rnd_number, confidence,  min_conf = random_rule
+            complex_task()
+            if confidence >= min_confidence:
+                rules.append(rnd_number)
+        end = time.time()
+        # print('Sequential rule_gen took ' + str(end-start) + ' seconds to check ' + str(len(random_list_to_parallel)) + ' potential rules')
+
+
+def explode_frequent_itemset_in_potential_rule(frequent_itemset, support_dictionary, min_conf, potential_rule_dict):
+    """
+    Given a frequent_itemset explodes in n potential rules and stores it in potential_rule_dict.
+    Eg: {A,B,C} -> potential_rules { {AB=>C} , {AC=>B}, {BC=>A} }
+    potential_rule_dict[hash(AB=>C)] = (antecedent: AB, consequent: C, support_all_items: sup(ABC), confidence: conf(AB=>C), min_conf)
+    :param frequent_itemset:
+    :param support_dictionary:
+    :param min_conf:
+    :param potential_rule_dict:
+    :return:
+    """
+    for idx, item in enumerate(frequent_itemset):
         consequent = tuple([item])
-        antecedent = tuple([x for i, x in enumerate(itemset) if i != idx])
+        antecedent = tuple([x for i, x in enumerate(frequent_itemset) if i != idx])
         support_antecedent = support_dictionary[hash_candidate(antecedent)]
-        support_all_items = support_dictionary[hash_candidate(itemset)]
+        support_all_items = support_dictionary[hash_candidate(frequent_itemset)]
         confidence = support_all_items / support_antecedent
         rule_data = (antecedent, consequent, support_all_items, confidence, min_conf)
         hashed_rule = hash(tuple(set(rule_data[0] + rule_data[1])))
@@ -96,10 +129,10 @@ def expected_value(min_r, itemset, support_dictionary, taxonomy, database):
     return math.prod(product_list)
 
 
-def check_rule_for_parallel(key, rule_confidence, min_conf):
-    if rule_confidence >= min_conf:
+def check_rule_for_parallel(key, potential_rule_confidence, min_conf):
+    complex_task()
+    if potential_rule_confidence >= min_conf:
         return key
-
 
 def filter_interesting_rules(rules, min_confidence, min_r, support_dictionary, taxonomy, database):
     interesting_rules = []
@@ -115,3 +148,8 @@ def filter_interesting_rules(rules, min_confidence, min_r, support_dictionary, t
 def generate_rule_for_parallel(key, dict):
     antecedent, consequent, support_all_items, confidence, min_conf = dict[key]  # Unpack data
     return AssociationRule(antecedent, consequent, support_all_items, confidence)
+
+def complex_task():
+    h = 0
+    for i in range(1, 10):
+        x = 2

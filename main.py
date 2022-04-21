@@ -1,4 +1,5 @@
 import math
+import random
 import sys
 import time
 import unittest
@@ -13,6 +14,8 @@ from Tests.utility_tests import UtilityTests
 from Apriori.apriori import apriori
 
 # Parse dataset in transaction format
+from rule_generator import rule_generation_test
+
 """
 parser = Parser()
 database = parser.parse("Datasets/sales_formatted.csv")
@@ -105,14 +108,17 @@ print(dfSingle)
 
 #dfSingle.to_csv('Taxonomies/salesfact_taxonomy_single_2.csv', header=False, sep=',', index=False)
 """
-#database = Parser().parse('Datasets/synthetic_dataset_test.csv', 'single')
-#apriori(database, 0.5, 0.5)
+
+
+# database = Parser().parse('Datasets/synthetic_dataset_test.csv', 'single')
+# apriori(database, 0.5, 0.5)
 
 def func(orders, total_orders, target_orders):
     return round((orders / total_orders) * target_orders)
 
-if __name__=="__main__":
 
+if __name__ == "__main__":
+    print('Pepe')
     # vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single',
     #                              'F:\TesisSyntheticDatasets\Transaction\T100k.tax')
     # start = time.time()
@@ -145,19 +151,19 @@ if __name__=="__main__":
     # end = time.time()
     # print('cumulate_frequents took ' + str(end - start) + ' generated ' + str(len(r2)))
 
-    database = Parser().parse(r"F:\TesisSyntheticDatasets\RuleGen\NP10k250I.data", 'single')
-    # database = Parser().parse('Datasets/data7.csv', 'basket')
-    min_sups = [0.0002,  0.00015, 0.00013, 0.00012, 0.0001]
-    for min_sup in min_sups:
-        print('Parallel with min_sup: ' + str(min_sup))
-        r = apriori(database, min_sup, 0.5, False, True)
-        print('Generated ' + str(len(r)) + ' rules')
-        print('#######################################')
-        print('Sequential with min_sup: ' + str(min_sup))
-        r = apriori(database, min_sup, 0.5, False, False)
-        print('Generated ' + str(len(r)) + ' rules')
-        print('#######################################')
-
+    # database = Parser().parse(r"F:\TesisSyntheticDatasets\RuleGen\NP1MT1kI200TL12.data", 'single')
+    # # database = Parser().parse('Datasets/data7.csv', 'basket')
+    # # min_sups = [0.005, 0.001, 0.0008, 0.0005, 0.0003, 0.0001]
+    # min_sups = [0.001]
+    # for min_sup in min_sups:
+    #     print('Parallel with min_sup: ' + str(min_sup))
+    #     r = apriori(database, min_sup, 0.5, True, True)
+    #     print('Generated ' + str(len(r)) + ' rules')
+    #     print('#######################################')
+    #     print('Sequential with min_sup: ' + str(min_sup))
+    #     r = apriori(database, min_sup, 0.5, False, False)
+    #     print('Generated ' + str(len(r)) + ' rules')
+    #     print('#######################################')
 
     # vertical_db = Parser().parse('Datasets/sales_formatted.csv', 'single',
     #                              'Taxonomies/salesfact_taxonomy_single_2.csv')
@@ -176,15 +182,4 @@ if __name__=="__main__":
     #     print('Parallel with min_sup: ' + str(min_supp))
     #     apriori(database, min_supp, 0.5, True, False)
     #     print('#######################################')
-
-
-
-
-
-
-
-
-
-
-
 

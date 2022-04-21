@@ -131,7 +131,7 @@ def plot_parallel_count_efectiveness_experiment():
 
     plt.plot([1, 2, 3, 4, 5], [0.049, 200.332, 0.067, 0.004, 0.0], linestyle='-', marker='o', color='r', label='apriori')
     plt.plot([1, 2, 3, 4, 5], [2.773, 93.60, 2.21, 0.15, 0.031], linestyle='--', marker='s', color='g', label='apriori with parallelization')
-    plt.title('Parallelization')
+    plt.title('Parallel Count')
     plt.legend()
     anchored_text = AnchoredText(
         'k=1: 55844 candidates \nk=2: 8522256 candidates\nk=3: 828 candidates\nk=4: 8 candidates\nk=5: 1 candidates',
@@ -144,6 +144,124 @@ def plot_parallel_count_efectiveness_experiment():
     plt.savefig('Plots/Parallel_Efectiveness.png', format="png", bbox_inches='tight')
     plt.close()
 
+def plot_parallel_rule_gen_efectiveness_experiment():
+    """
+    Experiment time log with Synthetic Dataset: 10k transactions, 250 items
+
+    Parallel with min_sup: 0.001
+    Parallel rule_gen took 0.9892690181732178 seconds to check 11513 potential rules
+    Sequential rule_gen took 0.005987882614135742 seconds to check 11513 potential rules
+    Generated 1624 rules
+
+    Parallel with min_sup: 0.0008
+    Parallel rule_gen took 0.8298518657684326 seconds to check 15234 potential rules
+    Sequential rule_gen took 0.001995086669921875 seconds to check 15234 potential rules
+    Generated 2981 rules
+
+    Parallel with min_sup: 0.0005
+    Parallel rule_gen took 1.0595660209655762 seconds to check 64316 potential rules
+    Sequential rule_gen took 0.02196502685546875 seconds to check 64316 potential rules
+    Generated 31116 rules
+
+    Parallel with min_sup: 0.0003
+    Parallel rule_gen took 1.1898531913757324 seconds to check 122658 potential rules
+    Sequential rule_gen took 0.04088997840881348 seconds to check 122658 potential rules
+    Generated 68487 rules
+
+    Parallel with min_sup: 0.0001
+    Parallel rule_gen took 26.443121194839478 seconds to check 6900406 potential rules
+    Sequential rule_gen took 22.4965500831604 seconds to check 6900406 potential rules
+    Generated 6419499 rules
+
+    :return:
+    """
+    fig, ax = plt.subplots()
+    plt.xlabel('Minimum Support (%)')
+    plt.ylabel('Time (seconds)')
+
+
+    x_axis = list(reversed([0.1, 0.08, 0.05, 0.03, 0.01])) # Expressed in %
+    y_axis_parallel_rule_gen = list(reversed([0.989, 0.829, 1.059, 1.189, 26.44]))
+    y_axis_sequential_rule_gen = list(reversed([0.005, 0.001, 0.021, 0.040, 22.496]))
+
+    plt.plot(x_axis, y_axis_sequential_rule_gen, linestyle='-', marker='o', color='r',
+             label='sequential rule generation')
+    plt.plot(x_axis, y_axis_parallel_rule_gen, linestyle='--', marker='s', color='g',
+             label='parallel rule generation')
+    plt.title('Rule Generation')
+    plt.xlim(max(x_axis),min(x_axis))
+    plt.legend()
+    anchored_text = AnchoredText(
+        'min_sup: 0.1%: 11513 potential rules \nmin_sup 0.08%: 15234 potential rules\nmin_sup 0.05%: 64316 potential rules\nmin_sup 0.03%: 122658 potential rules\nmin_sup 0.01%: 6900406 potential rules',
+        frameon=True, borderpad=0, pad=0.1,
+        loc='upper right', bbox_to_anchor=[1.60, 1.],
+        bbox_transform=plt.gca().transAxes,
+        prop={'color': 'k'})
+    ax.add_artist(anchored_text)
+
+    plt.savefig('Plots/Parallel_Rule_Gen_Efectiveness.png', format="png", bbox_inches='tight')
+    plt.close()
+
+def plot_rule_gen_python():
+    """
+    Generating random list of size 100000
+    Sequential rule_gen took 0.006981372833251953 seconds to check 99999 potential rules
+
+    Parallel rule_gen took 0.5893323421478271 seconds to check 99999 potential rules
+    ---------------------------------------------------------
+    Generating random list of size 500000
+    Sequential rule_gen took 0.03388190269470215 seconds to check 499999 potential rules
+
+    Parallel rule_gen took 0.6871805191040039 seconds to check 499999 potential rules
+    ---------------------------------------------------------
+    Generating random list of size 1000000
+    Sequential rule_gen took 0.07280540466308594 seconds to check 999999 potential rules
+
+    Parallel rule_gen took 0.8906168937683105 seconds to check 999999 potential rules
+    ---------------------------------------------------------
+    Generating random list of size 2000000
+    Sequential rule_gen took 0.13905072212219238 seconds to check 1999999 potential rules
+
+    Parallel rule_gen took 1.1448447704315186 seconds to check 1999999 potential rules
+    ---------------------------------------------------------
+    Generating random list of size 5000000
+    Sequential rule_gen took 0.3480958938598633 seconds to check 4999999 potential rules
+
+    Parallel rule_gen took 2.3328635692596436 seconds to check 4999999 potential rules
+    ---------------------------------------------------------
+    Generating random list of size 10000000
+    Sequential rule_gen took 0.6993837356567383 seconds to check 9999999 potential rules
+
+    Parallel rule_gen took 4.72350811958313 seconds to check 9999999 potential rules
+    ---------------------------------------------------------
+    Generating random list of size 20000000
+    Sequential rule_gen took 1.4111578464508057 seconds to check 19999999 potential rules
+
+    Parallel rule_gen took 9.735824823379517 seconds to check 19999999 potential rules
+    ---------------------------------------------------------
+    Process finished with exit code 0
+
+        :return:
+    """
+    plt.xlabel('Rules')
+    plt.ylabel('Time (seconds)')
+
+    x_axis = [100000, 500000, 1000000, 2000000, 5000000, 10000000, 20000000]
+    y_axis_parallel_rule_gen =  [0.5893, 0.6871, 0.89061, 1.1448, 2.3328,4.7235, 9.7358 ]
+    y_axis_sequential_rule_gen =  [0.0069, 0.0338, 0.0728, 0.1390, 0.3480, 0.6993, 1.4111 ]
+    y_axis_diff = list(np.divide(np.array(y_axis_parallel_rule_gen), np.array(y_axis_sequential_rule_gen)))
+    plt.plot(x_axis, y_axis_sequential_rule_gen, linestyle='-', marker='o', color='r',
+             label='sequential rule generation')
+    plt.plot(x_axis, y_axis_parallel_rule_gen, linestyle='--', marker='s', color='g',
+             label='parallel rule generation')
+    # plt.plot(x_axis, y_axis_diff, linestyle='dashed', marker='d', color='b',
+    #          label='diff')
+    plt.title('Rule Generation')
+    plt.legend()
+    plt.savefig('Plots/Parallel_Rule_Gen_Efectiveness_Test.png', format="png", bbox_inches='tight')
+    plt.close()
+
+
 if __name__ == '__main__':
     #Plot experiments by key
     # parse_and_plot_files('root', 'Number of roots', [250, 500, 750, 1000], 'Time (Minutes)',  [0, 5, 10, 15, 20, 25, 30, 35])
@@ -154,4 +272,6 @@ if __name__ == '__main__':
     # parse_and_plot_files('transaction', 'Number of transactions (millions)',
     #                      [0.1, 1, 2, 5, 10], 'Time / #Transactions (normalized)',
     # [0.6, 0.8, 1, 1.2, 1.4, 1.8, 2])
-    plot_parallel_count_efectiveness_experiment()
+    # plot_parallel_count_efectiveness_experiment()
+    # plot_parallel_rule_gen_efectiveness_experiment()
+    plot_rule_gen_python()
