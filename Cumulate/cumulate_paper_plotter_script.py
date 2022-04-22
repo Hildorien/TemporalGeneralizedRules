@@ -202,7 +202,7 @@ def plot_parallel_rule_gen_efectiveness_experiment():
     plt.savefig('Plots/Parallel_Rule_Gen_Efectiveness.png', format="png", bbox_inches='tight')
     plt.close()
 
-def plot_rule_gen_python():
+def plot_rule_gen_by_potential_rule_size():
     """
     Generating random list of size 100000
     Sequential rule_gen took 0.006981372833251953 seconds to check 99999 potential rules
@@ -243,10 +243,10 @@ def plot_rule_gen_python():
 
         :return:
     """
-    plt.xlabel('Rules')
+    plt.xlabel('Potential Rules (000s)')
     plt.ylabel('Time (seconds)')
 
-    x_axis = [100000, 500000, 1000000, 2000000, 5000000, 10000000, 20000000]
+    x_axis = [100, 500, 1000, 2000, 5000, 10000, 20000]
     y_axis_parallel_rule_gen =  [0.5893, 0.6871, 0.89061, 1.1448, 2.3328,4.7235, 9.7358 ]
     y_axis_sequential_rule_gen =  [0.0069, 0.0338, 0.0728, 0.1390, 0.3480, 0.6993, 1.4111 ]
     y_axis_diff = list(np.divide(np.array(y_axis_parallel_rule_gen), np.array(y_axis_sequential_rule_gen)))
@@ -272,6 +272,6 @@ if __name__ == '__main__':
     # parse_and_plot_files('transaction', 'Number of transactions (millions)',
     #                      [0.1, 1, 2, 5, 10], 'Time / #Transactions (normalized)',
     # [0.6, 0.8, 1, 1.2, 1.4, 1.8, 2])
-    # plot_parallel_count_efectiveness_experiment()
+    plot_parallel_count_efectiveness_experiment()
     # plot_parallel_rule_gen_efectiveness_experiment()
-    plot_rule_gen_python()
+    # plot_rule_gen_by_potential_rule_size()

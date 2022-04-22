@@ -18,7 +18,7 @@ class Parser:
         elif csv_format == 'basket' and taxonomy_filepath is not None:
             return self.parse_basket_with_taxonomy(filepath, taxonomy_filepath)
         elif csv_format == 'single' and taxonomy_filepath is not None:
-            return self.parse_single_with_taxonomy(filepath, taxonomy_filepath)
+            return self.parse_single_with_taxonomy(filepath, taxonomy_filepath, usingTimestamp)
 
     #DELETE WHEN FINISH TESTING FOR HONG
     def parseHONG(self, filepath, csv_format='single', usingTimestamp = True):
@@ -167,16 +167,21 @@ class Parser:
         return dataset
 
     def fit_database(self, dataset, timestamps, taxonomy=None, usingTimestamps=False):
-        if taxonomy is not None:
+        if taxonomy is not None and not usingTimestamps:
             matrix_dictionary_with_tax = self.fit_with_taxonomy(dataset, taxonomy).create_matrix_dictionary_with_taxonomy(dataset, taxonomy)
             indexed_taxonomy = self.create_indexed_taxonomy(self.item_index_by_name, taxonomy)
             return Database(matrix_dictionary_with_tax, timestamps, self.item_name_by_index,
                             len(dataset), indexed_taxonomy)
 
-        elif usingTimestamps:
+        elif usingTimestamps and taxonomy is None:
             matrix_dictionary_and_ptt = self.fit(dataset).create_matrix_dictionary_using_timestamps(dataset, timestamps)
             return Database(matrix_dictionary_and_ptt["md"], timestamps, self.item_name_by_index,
                             len(dataset), {}, matrix_dictionary_and_ptt["ptt"])
+        elif usingTimestamps and taxonomy is not None:
+            matrix_dictionary_and_ptt = self.fit_with_taxonomy(dataset, taxonomy).create_matrix_dictionary_with_taxonomy_and_timestamps(dataset, taxonomy, timestamps)
+            indexed_taxonomy = self.create_indexed_taxonomy(self.item_index_by_name, taxonomy)
+            return Database(matrix_dictionary_and_ptt["md"], timestamps, self.item_name_by_index,
+                            len(dataset), indexed_taxonomy, matrix_dictionary_and_ptt["ptt"])
         else:
             matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)["md"]
             return Database(matrix_dictionary, timestamps, self.item_name_by_index,
@@ -283,19 +288,6 @@ class Parser:
             self.item_name_by_index[col_idx] = item
         return self
 
-    def fit_with_timestamps(self, dataset):
-        self.item_name_by_index = {}
-        unique_items = set()
-        for transaction in dataset:
-            for item in transaction:
-                unique_items.add(item)
-        self.item_names = sorted(unique_items)
-        self.item_index_by_name = {}
-        for col_idx, item in enumerate(self.item_names):
-            self.item_index_by_name[item] = col_idx
-            self.item_name_by_index[col_idx] = item
-        return self
-
     def fit_with_taxonomy(self, dataset, taxonomy):
         """
         :param dataset: [['product_name']]
@@ -319,6 +311,26 @@ class Parser:
             self.item_name_by_index[col_idx] = item
 
         return self
+
+    def fit_with_taxonomy_and_timestamps(self, dataset, taxonomy):
+        self.item_name_by_index = {}
+        unique_items = set()
+        for transaction in dataset:
+            for item in transaction:
+                unique_items.add(item)
+        # Add ancestors to unique items
+        for key in taxonomy:
+            for ancestor in taxonomy[key]:
+                unique_items.add(ancestor)
+
+        self.item_names = sorted(unique_items)
+        self.item_index_by_name = {}
+        for col_idx, item in enumerate(self.item_names):
+            self.item_index_by_name[item] = col_idx
+            self.item_name_by_index[col_idx] = item
+
+        return self
+
 
     def create_matrix_dictionary_with_taxonomy(self, dataset, taxonomy):
         """
@@ -347,10 +359,44 @@ class Parser:
 
         return matrix_dictionary
 
-    def parse_single_with_taxonomy(self, dataset_filepath, taxonomy_filepath):
+
+    def create_matrix_dictionary_with_taxonomy_and_timestamps(self, dataset, taxonomy, timestamps):
+        """
+               :param dataset: [['product_name']]
+               :param taxonomy: { 'product_name': ['ancestor'] }
+               :return:
+               """
+        matrix_dictionary = {}
+        ptt = PTT()
+        for tid, transaction in enumerate(dataset):
+            # Expand transaction
+            expanded_transaction = []
+            transactionHTGLeafGranule = getPeriodStampFromTimestamp(timestamps[tid])[0]
+            itemsToAddToPTT = set(map(lambda x: self.item_index_by_name[x], set(transaction)))
+            ptt.addItemPeriodToPtt(transactionHTGLeafGranule, tid, itemsToAddToPTT)
+            for item in transaction:
+                expanded_transaction.append(item)
+                # Append ancestors of item to expanded_transaction
+                ancestors = taxonomy[item]
+                for ancestor in ancestors:
+                    if ancestor not in expanded_transaction:
+                        expanded_transaction.append(ancestor)
+            # Work with expanded_transaction
+            for item in set(expanded_transaction):
+                if item in matrix_dictionary:
+                    matrix_dictionary[item]['tids'].append(tid)
+                else:
+                    matrix_dictionary[item] = {}
+                    matrix_dictionary[item]['tids'] = [tid]
+
+        return {"md": matrix_dictionary, "ptt": ptt}
+
+
+    def parse_single_with_taxonomy(self, dataset_filepath, taxonomy_filepath, usingTimestamp):
         dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
         taxonomy = self.parse_taxonomy_single(taxonomy_filepath)
-        return self.fit_database(dataset, timestamps, taxonomy)
+        return self.fit_database(dataset, timestamps, taxonomy, usingTimestamp)
+
 
     def parse_basket_with_taxonomy(self, dataset_filepath, taxonomy_filepath):
         dataset = self.build_dataset_from_basket(dataset_filepath)

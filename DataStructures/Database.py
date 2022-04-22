@@ -6,7 +6,7 @@ from utility import findOrderedIntersection, findOrderedIntersectionBetweenBound
     calculate_tid_intersections_HTAR_with_boundaries, generateCanidadtesOfSizeK, hash_candidate, \
     calculate_tid_intersections_HTAR_with_boundaries_for_paralel, create_minimal_items_dic, \
     append_tids_for_HTAR_for_single_item
-
+from Cumulate.cumulate_utility import prune_candidates_in_same_family
 
 class Database:
     timestamp_mapping = {}  # {transactionIndex(int) : timestamp(long)}
@@ -118,7 +118,7 @@ class Database:
     #HTAR
 
     def findIndividualTFIForParalel(self, pi, allItems, total_transactions, tid_limits, lam, paralel_processing_on_k = False,
-                                    debugging=False, debuggingK = False, rsm=2):
+                                    debugging=False, debuggingK = False, rsm=2, generalized_rules=False):
         # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
         start = time.time()
         TFI_j = {}
@@ -135,6 +135,9 @@ class Database:
             #startj = time.time()
 
             C_j = generateCanidadtesOfSizeK(r, old_C_J, frequent_dictionary)
+            if generalized_rules and r == 2:
+                C_j = prune_candidates_in_same_family(C_j, self.ancestor_set)  # Cumulate Optimization 3 in original paper
+
             #endj = time.time()
             # if debuggingK:
             #     totalCandidates += len(C_j)

@@ -71,3 +71,16 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(databases[4].tx_count, 95286)
         self.assertEqual(databases[5].tx_count, 83335)
         self.assertEqual(databases[6].tx_count, 522661)
+
+    def test_timestamp_with_taxonomy_parsing(self):
+        foodmart_97_timestamped_with_taxonomy = Parser().parse('Datasets/sales_formatted_1997_sorted_by_timestamp.csv', 'single',
+                                              'Taxonomies/salesfact_taxonomy_single_2.csv', True)
+        self.assertEqual(foodmart_97_timestamped_with_taxonomy.tx_count, 20522, 'Orders in foodmart 97')
+        self.assertEqual(foodmart_97_timestamped_with_taxonomy.tx_count,
+                         len(foodmart_97_timestamped_with_taxonomy.timestamp_mapping.keys()),
+                         'Orders should be the same as keys in timestamp_mapping')
+        self.assertEqual(len(foodmart_97_timestamped_with_taxonomy.taxonomy),
+                         len(foodmart_97_timestamped_with_taxonomy.items_dic), 'Taxonomy size is equal to items_dic')
+
+
+

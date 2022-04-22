@@ -82,7 +82,8 @@ def findIndividualTFI(database, pj, lam, parallel_count_in_k_level=False, debugg
         return {"TFI": TFI_j, "supportDict": support_dictionary}
 
 
-def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution = False, paralelExcecutionOnK = False,  debugging = False, debuggingK = False, rsm= 2, HTG = [24, 12, 4, 1]):
+def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution = False, paralelExcecutionOnK = False,  debugging = False, debuggingK = False, rsm= 2, HTG = [24, 12, 4, 1],
+                                    generalized_rules=False):
     """
     :param database: The database you are using
     :param min_rsup: minimum support to consider frequent in inner time granules
@@ -115,7 +116,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
         level_0_periods_included_in_pg = [pi, pi]
         total_transactions = database.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
         tid_limits = maximal_time_period_interval(starters_tid, pi_index, pi_index)
-        list_to_parallel.append((pi, allItems, total_transactions, tid_limits, lam, paralel_processing_on_k, debugging, debuggingK, rsm))
+        list_to_parallel.append((pi, allItems, total_transactions, tid_limits, lam, paralel_processing_on_k, debugging, debuggingK, rsm, generalized_rules))
 
     if paralelExcecution:
         pool = NestablePool(usable_cpu_count)
@@ -132,8 +133,8 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
     else:
         for param in list_to_parallel:
             #start = time.time()
-            (pi, ai, totalTrans, tidlimits, lam, pOnK, deb, debk, rsm) = param
-            individualTFI = database.findIndividualTFIForParalel(pi, ai, totalTrans, tidlimits, lam, pOnK, deb, debk, rsm)
+            (pi, ai, totalTrans, tidlimits, lam, pOnK, deb, debk, rsm, generalized_rules) = param
+            individualTFI = database.findIndividualTFIForParalel(pi, ai, totalTrans, tidlimits, lam, pOnK, deb, debk, rsm, generalized_rules)
             pi = individualTFI["pi"]
 
             if len(individualTFI["TFI"]) > 0:
