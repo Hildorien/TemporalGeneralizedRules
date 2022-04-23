@@ -15,16 +15,17 @@ class Database:
 
     ptt = None
 
-    # {item : {tids:int[]}}
+    # {item_id : {tids:int[]}}
     # tids: Array of transaction id, in order, where the item i appears
     matrix_data_by_item = {}
 
     # { item_id : [ancestor_id] }
     taxonomy = {}
     ancestor_set = set()
+    only_ancestors = set()
 
     def __init__(self, matrix_data_by_item,
-                 timestamp_dict, items_dict, row_count, taxonomy_dict, ptt=None):
+                 timestamp_dict, items_dict, row_count, taxonomy_dict, ptt=None, only_ancestors=None):
         self.matrix_data_by_item = matrix_data_by_item
         self.timestamp_mapping = timestamp_dict
         self.items_dic = items_dict
@@ -32,6 +33,7 @@ class Database:
         self.taxonomy = taxonomy_dict
         self.ancestor_set = create_ancestor_set(self.taxonomy)
         self.ptt = ptt
+        self.only_ancestors= only_ancestors
 
     #Methods for debugging purposes
     def getItemDic(self):
@@ -233,3 +235,9 @@ class Database:
         if debugging:
             print(pgStringKey + " finished candidate calculation and lasted " + str(end - start))
         return pgStringKey, HTFI, pg_spupport_dictionary
+
+    def is_ancestral_rule(self, rule_itemset):
+        for item in rule_itemset:
+            if self.items_dic[item] in self.only_ancestors:
+                return True
+        return False

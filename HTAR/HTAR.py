@@ -9,26 +9,6 @@ import multiprocessing
 
 import multiprocessing.pool
 
-class NoDaemonProcess(multiprocessing.Process):
-    @property
-    def daemon(self):
-        return False
-
-    @daemon.setter
-    def daemon(self, value):
-        pass
-
-class NoDaemonContext(type(multiprocessing.get_context())):
-    Process = NoDaemonProcess
-
-
-# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
-# because the latter is only a wrapper function, not a proper class.
-class NestablePool(multiprocessing.pool.Pool):
-    def __init__(self, *args, **kwargs):
-        kwargs['context'] = NoDaemonContext()
-        super(NestablePool, self).__init__(*args, **kwargs)
-
 def findIndividualTFI(database, pj, lam, parallel_count_in_k_level=False, debugging = False, rsm= 2, hong = False):
     # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
     ptt_entry = database.getPTTValueFromLeafLevelGranule(pj)
@@ -100,7 +80,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
     TFI_by_period_in_l_0 = {}
     support_dictionary_by_pg = {}
     HTFI_by_pg = {}
-
+    print('Starting Phase 1')
     usable_cpu_count = multiprocessing.cpu_count() // 3
     paralel_processing_on_k = 1
     if paralelExcecutionOnK:
@@ -119,7 +99,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
         list_to_parallel.append((pi, allItems, total_transactions, tid_limits, lam, paralel_processing_on_k, debugging, debuggingK, rsm, generalized_rules))
 
     if paralelExcecution:
-        pool = NestablePool(usable_cpu_count)
+        pool = multiprocessing.Pool(usable_cpu_count)
         results = pool.starmap(database.findIndividualTFIForParalel, list_to_parallel)
         for a_result in results:
             pi = a_result["pi"]
@@ -154,6 +134,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
             #         print('-------------')
 
     # PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS}
+    print('Starting Phase 2')
     HTFI = {}
     for l_level in range(len(HTG)):
         if l_level != 0:
@@ -171,7 +152,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
                 list_to_parallel.append((possible_itemsets_in_pg, total_transactions, tid_limits, paralel_processing_on_k, rsm, min_rsup, pgStringKey, debugging))
 
             if paralelExcecution:
-                pool = NestablePool(usable_cpu_count)
+                pool = multiprocessing.Pool(usable_cpu_count)
                 results = pool.starmap(database.getIndividualTFIForNotLeafsGranules, list_to_parallel)
                 for a_result in results:
                     pgKey, HTFI_res, sup_dict = a_result
@@ -210,28 +191,29 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
 
 
 
-def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, paralelExcecutionOnK= False, debugging = False, debuggingK= False, rsm= 2, HTG = [24, 12, 4, 1]):
+def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, paralelExcecutionOnK= False, debugging = False, debuggingK= False, rsm= 2, HTG = [24, 12, 4, 1],
+               generalized_rules=False, min_r=None):
     """
     :param database:
     :return: a set of AssociationRules
     """
     # PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0) AND PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
-    phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, paralelExcecutionOnK, debugging, debuggingK, rsm, HTG)
-
+    phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, paralelExcecutionOnK, debugging, debuggingK, rsm, HTG, generalized_rules)
+    print('Starting phase 3')
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
     pgKeys = phase_1_and_2_res['HTFI_by_pg']
     suppDictionaryByPg = phase_1_and_2_res['support_dictionary_by_pg']
     paralel_rule_generation = False
-    return getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation)
+    return getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation, min_r, database)
 
-def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation = False):
+def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation = False, min_r = None, database=None):
     HTFS_by_pg = {}
     list_to_parallel = []
     pool = None
     if paralel_rule_generation:
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
     for pg in pgKeys.keys():
-        list_to_parallel.append((pg, pgKeys[pg], suppDictionaryByPg[pg], min_rconf))
+        list_to_parallel.append((pg, pgKeys[pg], suppDictionaryByPg[pg], min_rconf, min_r))
 
     if paralel_rule_generation:
         rulesByPg = pool.starmap(rule_generation_paralel, list_to_parallel)
@@ -242,16 +224,19 @@ def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging,
         pool.join()
     else:
        for param in list_to_parallel:
-           pg, candidates, supDic, min_rconf = param
-           pg_rules = rule_generation(candidates, supDic, min_rconf)
+           pg, candidates, supDic, min_rconf, min_r = param
+           pg_rules = rule_generation(candidates, supDic, min_rconf, False, min_r, database)
            if len(pg_rules) > 0:
                 HTFS_by_pg[pg] = pg_rules
-        # for pg in pgKeys.keys():
-        #     pg_rules = rule_generation(pgKeys[pg], suppDictionaryByPg[pg], min_rconf)
-        #     if len(pg_rules) > 0:
-        #         HTFS_by_pg[pg] = pg_rules
+                # print('Granule ' + pg + ' generated ' + str(len(pg_rules)) + ' rules')
+                # ancestral_rules = 0
+                # for rule in pg_rules:  # rule : AssociationRule
+                #     itemset_rule = rule.getItemset()  # set(item_id)
+                #     if database.is_ancestral_rule(itemset_rule):
+                #         ancestral_rules += 1
+                # print('Counted ' + str(ancestral_rules) + ' ancestral rules')
 
     return HTFS_by_pg
 
-def rule_generation_paralel(pg, pgKeys, pgSupDic, min_rconf):
-    return pg, rule_generation(pgKeys, pgSupDic, min_rconf)
+def rule_generation_paralel(pg, pgKeys, pgSupDic, min_rconf, min_r):
+    return pg, rule_generation(pgKeys, pgSupDic, min_rconf, min_r)

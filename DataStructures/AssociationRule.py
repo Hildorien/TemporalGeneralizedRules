@@ -25,3 +25,6 @@ class AssociationRule:
 
     def equalsIgnoringSupAndConf(self, other):
         return self.lhs == other.lhs and self.rhs == other.rhs
+
+    def getItemset(self):
+        return self.lhs.union(self.rhs)

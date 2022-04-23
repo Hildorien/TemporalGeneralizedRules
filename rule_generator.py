@@ -11,9 +11,11 @@ from utility import hash_candidate
 
 
 def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
-                    parallel_rule_gen=False, taxonomy=None, min_r=None, database=None):
+                    parallel_rule_gen=False, min_r=None, database=None):
     rules = []
     potential_rules_dict = {}
+    if min_r is None:
+        min_r = 0
     start = time.time()
     frequent_itemset_values = list(frequent_dictionary.values())
     frequent_itemsets = [frequent_itemset_values[i] for i in range(1, len(frequent_itemset_values))]
@@ -30,20 +32,20 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
         rules = [generate_rule_for_parallel(r, potential_rules_dict) for r in results if r is not None]
         pool.close()  # Close pools after using them
         pool.join()  # Main process waits after last pool closes
-        if taxonomy is not None:
-            rules = filter_interesting_rules(rules, min_confidence, min_r, support_dictionary, taxonomy, database)
+        if database is not None and database.taxonomy is not None:
+            rules = filter_interesting_rules(rules, min_confidence, min_r, support_dictionary, database)
     else:
         start = time.time()
         for key in potential_rules_dict:
             antecedent, consequent, rule_support, rule_confidence, min_conf = potential_rules_dict[key]  # Unpack data
-            if taxonomy is None:
-                if rule_confidence >= min_conf:
-                    rules.append(AssociationRule(antecedent, consequent, rule_support, rule_confidence))
-            else:
+            if database is not None and database.taxonomy is not None:
                 itemset = sorted(antecedent + consequent)  # Reconstruct itemset
                 if rule_confidence >= min_conf and rule_support >= min_r * expected_value(min_r, itemset,
-                                                                                          support_dictionary, taxonomy,
+                                                                                          support_dictionary, database.taxonomy,
                                                                                           database):
+                    rules.append(AssociationRule(antecedent, consequent, rule_support, rule_confidence))
+            else:
+                if rule_confidence >= min_conf:
                     rules.append(AssociationRule(antecedent, consequent, rule_support, rule_confidence))
         end = time.time()
         # print('Sequential rule_gen took ' + str(end-start) + ' seconds to check ' + str(len(potential_rules_dict)) + ' portential rules')
@@ -134,12 +136,12 @@ def check_rule_for_parallel(key, potential_rule_confidence, min_conf):
     if potential_rule_confidence >= min_conf:
         return key
 
-def filter_interesting_rules(rules, min_confidence, min_r, support_dictionary, taxonomy, database):
+def filter_interesting_rules(rules, min_confidence, min_r, support_dictionary, database):
     interesting_rules = []
     for rule in rules:
         itemset = sorted(list(rule.lhs) + list(rule.rhs))  # Reconstruct itemset
         if rule.confidence >= min_confidence and rule.support >= min_r * expected_value(min_r, itemset,
-                                                                                        support_dictionary, taxonomy,
+                                                                                        support_dictionary, database.taxonomy,
                                                                                         database):
             interesting_rules.append(rule)
     return interesting_rules

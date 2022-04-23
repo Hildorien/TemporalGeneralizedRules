@@ -33,7 +33,7 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     # Generate Rules
     start = time.time()
     rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
-                            False, taxonomy, min_r, horizontal_database)
+                            False,  min_r, horizontal_database)
     end = time.time()
     loggerA.info('RulePhase,' + str(end-start))
     return rules
@@ -107,7 +107,7 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
     # Generate Rules
     start = time.time()
     rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
-                            parallel_rule_gen, taxonomy, min_r, vertical_database)
+                            parallel_rule_gen, min_r, vertical_database)
     end = time.time()
     loggerRules.info('Rule Generation took ' + str(end-start))
     if parallel_count:
@@ -132,6 +132,7 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
     if parallel_count:
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
     while k == 1 or frequent_dictionary[k - 1] != []:
+        start2 = time.time()
         # Candidate Generation
         candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
         if k == 2:
@@ -153,8 +154,8 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
                 support_dictionary[hash_candidate(a_candidate_size_k)] = support
                 if support >= min_supp:
                     frequent_dictionary[k].append(a_candidate_size_k)
-
-        #print('k =' + str(k) + ' took ' + str(end - start) + ' with candidates '+ str(len(candidates_size_k)))
+        end2 = time.time()
+        # print('k =' + str(k) + ' took ' + str(end2 - start2) + ' with candidates '+ str(len(candidates_size_k)))
         k += 1
     end = time.time()
     if parallel_count:
@@ -165,5 +166,10 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
     else:
         loggerB.info('FrequentPhase,' + str(end - start))
         loggerBPlotter.info('y,' + str(end - start))
+    # totalFrecuent = 0
+    # for k in frequent_dictionary:
+    #     print("Frequents of size " + str(k) + " :" + str(len(frequent_dictionary[k])))
+    #     totalFrecuent += len(frequent_dictionary[k])
+    # # print("Total frequents: " + str(totalFrecuent))
     return frequent_dictionary, support_dictionary, taxonomy
 

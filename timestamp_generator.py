@@ -83,7 +83,8 @@ if __name__=="__main__":
                  usecols=['order_id', 'timestamp']).drop_duplicates(subset=None, keep='first', inplace=False)
 
     #Generates timestamped data from sourcefile_filepath and writes a csv to output_filepath
-    generate_timestamped_data(df, '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T750k.data', '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T750-timestamped.csv')
-
+    # generate_timestamped_data(df, '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T750k.data', '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T750-timestamped.csv')
+    generate_timestamped_data(df, 'F:\TesisSyntheticDatasets\Root\R1000T250k.data',
+                              'F:\TesisSyntheticDatasets\Root\R1000T250k-timestamped.csv')
     #Prints daily sales distribution of new synthetic timestamped dataset
     #print_distribution('F:\TesisSyntheticDatasets\Transaction\T100k-timestamped.data')

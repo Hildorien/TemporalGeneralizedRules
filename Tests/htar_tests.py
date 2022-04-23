@@ -202,11 +202,9 @@ class HTARTests(unittest.TestCase):
 
         paralelRun = {}
         for paralel_running in [False, True]:
-            for paralel_running_on_k in [False, True]:
-                for rsc in [1, 2]:
-                    for i in range(0, 3):
-                        rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], paralel_running, paralel_running_on_k, False, False, rsc)
-                        strJoin = str(paralel_running)+"-"+str(paralel_running_on_k)+"-"+str(rsc)
+                    for i in range(0, 2):
+                        rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], paralel_running, False, False, False, 2)
+                        strJoin = str(paralel_running)+"-"+str(False)+"-"+str(2)
                         paralelRun[strJoin] = rules_by_pg
                         apriori_rules = apriori(database, sups[i], confs[i])
                         self.testCorrectnessAndCompletness(rules_by_pg, apriori_rules)

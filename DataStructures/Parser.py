@@ -181,7 +181,7 @@ class Parser:
             matrix_dictionary_and_ptt = self.fit_with_taxonomy(dataset, taxonomy).create_matrix_dictionary_with_taxonomy_and_timestamps(dataset, taxonomy, timestamps)
             indexed_taxonomy = self.create_indexed_taxonomy(self.item_index_by_name, taxonomy)
             return Database(matrix_dictionary_and_ptt["md"], timestamps, self.item_name_by_index,
-                            len(dataset), indexed_taxonomy, matrix_dictionary_and_ptt["ptt"])
+                            len(dataset), indexed_taxonomy, matrix_dictionary_and_ptt["ptt"],self.only_ancestors)
         else:
             matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)["md"]
             return Database(matrix_dictionary, timestamps, self.item_name_by_index,
@@ -295,6 +295,7 @@ class Parser:
         :return:
         """
         self.item_name_by_index = {}
+        self.only_ancestors = set()
         unique_items = set()
         for transaction in dataset:
             for item in transaction:
@@ -303,6 +304,7 @@ class Parser:
         for key in taxonomy:
             for ancestor in taxonomy[key]:
                 unique_items.add(ancestor)
+                self.only_ancestors.add(ancestor)
 
         self.item_names = sorted(unique_items)
         self.item_index_by_name = {}
@@ -371,9 +373,6 @@ class Parser:
         for tid, transaction in enumerate(dataset):
             # Expand transaction
             expanded_transaction = []
-            transactionHTGLeafGranule = getPeriodStampFromTimestamp(timestamps[tid])[0]
-            itemsToAddToPTT = set(map(lambda x: self.item_index_by_name[x], set(transaction)))
-            ptt.addItemPeriodToPtt(transactionHTGLeafGranule, tid, itemsToAddToPTT)
             for item in transaction:
                 expanded_transaction.append(item)
                 # Append ancestors of item to expanded_transaction
@@ -381,7 +380,11 @@ class Parser:
                 for ancestor in ancestors:
                     if ancestor not in expanded_transaction:
                         expanded_transaction.append(ancestor)
+
             # Work with expanded_transaction
+            transactionHTGLeafGranule = getPeriodStampFromTimestamp(timestamps[tid])[0]
+            itemsToAddToPTT = set(map(lambda x: self.item_index_by_name[x], set(expanded_transaction)))
+            ptt.addItemPeriodToPtt(transactionHTGLeafGranule, tid, itemsToAddToPTT)
             for item in set(expanded_transaction):
                 if item in matrix_dictionary:
                     matrix_dictionary[item]['tids'].append(tid)
