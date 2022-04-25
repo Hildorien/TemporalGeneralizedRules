@@ -2,7 +2,7 @@ from datetime import datetime
 import itertools
 import time
 
-from utility import flatten, hash_candidate, getValidJoin, allSubsetofSizeKMinus1
+from utility import flatten_list, hash_candidate, getValidJoin, allSubsetofSizeKMinus1
 
 def getFortnight(day, month):
     firstHalf = day < 16

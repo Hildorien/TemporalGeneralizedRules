@@ -159,7 +159,7 @@ def stringifyPg(l_level, period):
     return str(l_level) + '-' + str(period)
 
 
-def flatten(t):
+def flatten_list(t):
     return [item for sublist in t for item in sublist]
 
 
@@ -206,7 +206,7 @@ def generateCanidadtesOfSizeK(k, all_items, frequent_dictionary):
         return list(map(lambda x: [x], all_items))
     elif k == 2:
         return list(
-            map(list, combinations(flatten(frequent_dictionary[1]), 2)))  # Treat k = 2 as a special case
+            map(list, combinations(flatten_list(frequent_dictionary[1]), 2)))  # Treat k = 2 as a special case
     else:
         return apriori_gen(frequent_dictionary[k - 1], frequent_dictionary)
 

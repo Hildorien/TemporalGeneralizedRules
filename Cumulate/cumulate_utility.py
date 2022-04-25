@@ -1,7 +1,7 @@
 import itertools
 import time
 
-from utility import flatten, hash_candidate, getValidJoin, allSubsetofSizeKMinus1
+from utility import flatten_list, hash_candidate, getValidJoin, allSubsetofSizeKMinus1
 
 
 def close_ancestor(item, taxonomy):
@@ -51,7 +51,7 @@ def calculate_Ck(frequent_dictionary, k):
 def calculate_C2(frequent_dictionary, k):
     candidate_hashmap = {}
     [add_candidate_to_hashmap(list(x), candidate_hashmap) for x in
-     itertools.combinations(flatten(frequent_dictionary[1]), 2)]
+     itertools.combinations(flatten_list(frequent_dictionary[1]), 2)]
     return candidate_hashmap
 
 

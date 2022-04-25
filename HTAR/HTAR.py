@@ -80,7 +80,6 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
     TFI_by_period_in_l_0 = {}
     support_dictionary_by_pg = {}
     HTFI_by_pg = {}
-    print('Starting Phase 1')
     usable_cpu_count = multiprocessing.cpu_count() // 3
     paralel_processing_on_k = 1
     if paralelExcecutionOnK:
@@ -134,7 +133,6 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
             #         print('-------------')
 
     # PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS}
-    print('Starting Phase 2')
     HTFI = {}
     for l_level in range(len(HTG)):
         if l_level != 0:
@@ -199,7 +197,6 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, par
     """
     # PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0) AND PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
     phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, paralelExcecutionOnK, debugging, debuggingK, rsm, HTG, generalized_rules)
-    print('Starting phase 3')
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
     pgKeys = phase_1_and_2_res['HTFI_by_pg']
     suppDictionaryByPg = phase_1_and_2_res['support_dictionary_by_pg']
