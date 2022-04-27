@@ -279,7 +279,7 @@ def main():
     # run_r_interesting_experiment(0.01, 0.5, 1.1)
 
     # Rule Generation experiment
-    run_rule_gen_experiment()
+    # run_rule_gen_experiment()
 
 
 if __name__ == '__main__':

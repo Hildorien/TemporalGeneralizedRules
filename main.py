@@ -183,19 +183,27 @@ if __name__ == "__main__":
     #     apriori(database, min_supp, 0.5, True, False)
     #     print('#######################################')
 
-    synthetic_database_2 = Parser().parse("F:\TesisSyntheticDatasets\Root\R1000T250k-timestamped.csv",
-                                             'single',
-                                             "F:\TesisSyntheticDatasets\Root\R1000T250k.tax", True)
+    # synthetic_database_2 = Parser().parse("F:\TesisSyntheticDatasets\Root\R1000T250k-timestamped.csv",
+    #                                          'single',
+    #                                          "F:\TesisSyntheticDatasets\Root\R1000T250k.tax", True)
+    #
+    # synthetic_database = Parser().parse("Datasets/sales_formatted_for_test.csv",
+    #                                          'single',
+    #                                          "Taxonomies/sales_formatted_for_test_taxonomy.csv")
+    # rules_cumulate = vertical_cumulate(synthetic_database_2, 0.005, 0.5, 1.1, False, False)
+    # print('Generated ' + str(len(rules_cumulate)) + ' rules')
 
-    synthetic_database = Parser().parse("Datasets/sales_formatted_for_test.csv",
-                                             'single',
-                                             "Taxonomies/sales_formatted_for_test_taxonomy.csv")
-    rules_cumulate = vertical_cumulate(synthetic_database_2, 0.005, 0.5, 1.1, False, False)
-    print('Generated ' + str(len(rules_cumulate)) + ' rules')
 
-    # synthetic_database_apriori = Parser().parse("Datasets/sales_formatted_for_test.csv",'single')
-    # rules_apriori = apriori(synthetic_database_apriori, 0.3, 0.5)
+    # synthetic_database_apriori = Parser().parse("F:\TesisSyntheticDatasets\Root\R1000T250k-timestamped.csv",'single')
+    # rules_apriori = apriori(synthetic_database_apriori, 0.002, 0.5)
     # print('Generated ' + str(len(rules_apriori)) + ' rules')
+    vertical_db = Parser().parse('Datasets/sales_formatted_1998_sorted_by_timestamp.csv', 'single',
+                                 'Taxonomies/salesfact_taxonomy_single_2.csv',
+                                 True)
+
+    print('Foodmart has 1559 leaf items')
+    print('Foodmart has ' + str(len(vertical_db.only_ancestors)) + ' ancestors')
+    print('Total items is ' + str(1559 + len(vertical_db.only_ancestors)))
 
 
 
