@@ -133,6 +133,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
             #         print('-------------')
 
     # PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS}
+    print('Starting Phase 2')
     HTFI = {}
     for l_level in range(len(HTG)):
         if l_level != 0:
@@ -189,21 +190,23 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
 
 
 
-def HTAR_BY_PG(database, min_rsup, min_rconf, lam, paralelExecution = False, paralelExcecutionOnK= False, debugging = False, debuggingK= False, rsm= 2, HTG = [24, 12, 4, 1],
-               generalized_rules=False, min_r=None):
+def HTAR_BY_PG(database, min_rsup, min_rconf, lam, generalized_rules=False, min_r=None, paralelExecution=False,
+               paralelExcecutionOnK=False, debugging=False, debuggingK=False, rsm=2, HTG=[24, 12, 4, 1]):
     """
     :param database:
     :return: a set of AssociationRules
     """
     # PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0) AND PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
+    print('Starting Phase 1')
     phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, paralelExcecutionOnK, debugging, debuggingK, rsm, HTG, generalized_rules)
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
     pgKeys = phase_1_and_2_res['HTFI_by_pg']
     suppDictionaryByPg = phase_1_and_2_res['support_dictionary_by_pg']
     paralel_rule_generation = False
-    return getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation, min_r, database)
+    print('Starting Phase 3')
+    return getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation, min_r, database, generalized_rules)
 
-def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation = False, min_r = None, database=None):
+def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation = False, min_r = None, database=None, generalized_rules = False):
     HTFS_by_pg = {}
     list_to_parallel = []
     pool = None
@@ -220,18 +223,21 @@ def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging,
         pool.close()
         pool.join()
     else:
+       total_rules = 0
        for param in list_to_parallel:
            pg, candidates, supDic, min_rconf, min_r = param
            pg_rules = rule_generation(candidates, supDic, min_rconf, False, min_r, database)
            if len(pg_rules) > 0:
                 HTFS_by_pg[pg] = pg_rules
-                # print('Granule ' + pg + ' generated ' + str(len(pg_rules)) + ' rules')
-                # ancestral_rules = 0
-                # for rule in pg_rules:  # rule : AssociationRule
-                #     itemset_rule = rule.getItemset()  # set(item_id)
-                #     if database.is_ancestral_rule(itemset_rule):
-                #         ancestral_rules += 1
-                # print('Counted ' + str(ancestral_rules) + ' ancestral rules')
+                print('Granule ' + pg + ' generated ' + str(len(pg_rules)) + ' rules')
+                ancestral_rules = 0
+                total_rules += len(pg_rules)
+                for rule in pg_rules:  # rule : AssociationRule
+                    itemset_rule = rule.getItemset()  # set(item_id)
+                    if generalized_rules and database.is_ancestral_rule(itemset_rule):
+                        ancestral_rules += 1
+                print('Counted ' + str(ancestral_rules) + ' ancestral rules')
+       print('Total rules generated: ' + str(total_rules))
 
     return HTFS_by_pg
 

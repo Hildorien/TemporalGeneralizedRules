@@ -1,0 +1,247 @@
+Dataset: F:\TesisSyntheticDatasets\Root\R1000T250k-timestamped.csv
+MinSupp: 0.0025, MinConf: 0.5, MinR: 1.1
+HTAR
+Starting Phase 1
+Starting Phase 2
+Starting Phase 3
+Granule 0-2 generated 2 rules
+Counted 0 ancestral rules
+Granule 0-3 generated 1 rules
+Counted 0 ancestral rules
+Granule 0-4 generated 2 rules
+Counted 0 ancestral rules
+Granule 0-5 generated 2 rules
+Counted 0 ancestral rules
+Granule 0-6 generated 9 rules
+Counted 0 ancestral rules
+Granule 0-7 generated 2 rules
+Counted 0 ancestral rules
+Granule 0-8 generated 2 rules
+Counted 0 ancestral rules
+Granule 0-9 generated 3 rules
+Counted 0 ancestral rules
+Granule 0-10 generated 1 rules
+Counted 0 ancestral rules
+Granule 0-11 generated 7 rules
+Counted 0 ancestral rules
+Granule 0-12 generated 4 rules
+Counted 0 ancestral rules
+Granule 0-13 generated 1 rules
+Counted 0 ancestral rules
+Granule 0-14 generated 1 rules
+Counted 0 ancestral rules
+Granule 0-15 generated 2 rules
+Counted 0 ancestral rules
+Granule 0-16 generated 8 rules
+Counted 0 ancestral rules
+Granule 0-17 generated 2 rules
+Counted 0 ancestral rules
+Granule 0-18 generated 1 rules
+Counted 0 ancestral rules
+Granule 0-19 generated 2 rules
+Counted 0 ancestral rules
+Granule 0-20 generated 1 rules
+Counted 0 ancestral rules
+Granule 0-21 generated 7 rules
+Counted 0 ancestral rules
+Granule 0-22 generated 2 rules
+Counted 0 ancestral rules
+Granule 0-23 generated 2 rules
+Counted 0 ancestral rules
+Granule 1-1 generated 1 rules
+Counted 0 ancestral rules
+Granule 1-2 generated 2 rules
+Counted 0 ancestral rules
+Granule 1-3 generated 2 rules
+Counted 0 ancestral rules
+Granule 1-4 generated 2 rules
+Counted 0 ancestral rules
+Granule 1-5 generated 2 rules
+Counted 0 ancestral rules
+Granule 1-6 generated 2 rules
+Counted 0 ancestral rules
+Granule 1-7 generated 1 rules
+Counted 0 ancestral rules
+Granule 1-8 generated 2 rules
+Counted 0 ancestral rules
+Granule 1-9 generated 1 rules
+Counted 0 ancestral rules
+Granule 1-10 generated 1 rules
+Counted 0 ancestral rules
+Granule 1-11 generated 2 rules
+Counted 0 ancestral rules
+Granule 2-1 generated 2 rules
+Counted 0 ancestral rules
+Granule 2-2 generated 2 rules
+Counted 0 ancestral rules
+Granule 2-3 generated 1 rules
+Counted 0 ancestral rules
+Granule 2-4 generated 2 rules
+Counted 0 ancestral rules
+Granule 3-1 generated 2 rules
+Counted 0 ancestral rules
+Total rules generated: 91
+##############################################################
+HTGAR
+Starting Phase 1
+Starting Phase 2
+Starting Phase 3
+Granule 0-2 generated 6012 rules
+Counted 6010 ancestral rules
+Granule 0-3 generated 7971 rules
+Counted 7970 ancestral rules
+Granule 0-4 generated 5510 rules
+Counted 5508 ancestral rules
+Granule 0-5 generated 12339 rules
+Counted 12337 ancestral rules
+Granule 0-6 generated 18274 rules
+Counted 18265 ancestral rules
+Granule 0-7 generated 11749 rules
+Counted 11747 ancestral rules
+Granule 0-8 generated 9033 rules
+Counted 9031 ancestral rules
+Granule 0-9 generated 15034 rules
+Counted 15031 ancestral rules
+Granule 0-10 generated 3759 rules
+Counted 3758 ancestral rules
+Granule 0-11 generated 16751 rules
+Counted 16744 ancestral rules
+Granule 0-12 generated 7052 rules
+Counted 7048 ancestral rules
+Granule 0-13 generated 4456 rules
+Counted 4455 ancestral rules
+Granule 0-14 generated 11572 rules
+Counted 11571 ancestral rules
+Granule 0-15 generated 4930 rules
+Counted 4928 ancestral rules
+Granule 0-16 generated 13091 rules
+Counted 13083 ancestral rules
+Granule 0-17 generated 6989 rules
+Counted 6987 ancestral rules
+Granule 0-18 generated 13391 rules
+Counted 13390 ancestral rules
+Granule 0-19 generated 7241 rules
+Counted 7239 ancestral rules
+Granule 0-20 generated 5526 rules
+Counted 5525 ancestral rules
+Granule 0-21 generated 16663 rules
+Counted 16656 ancestral rules
+Granule 0-22 generated 7891 rules
+Counted 7889 ancestral rules
+Granule 0-23 generated 11006 rules
+Counted 11004 ancestral rules
+Granule 1-1 generated 3870 rules
+Counted 3869 ancestral rules
+Granule 1-2 generated 5444 rules
+Counted 5442 ancestral rules
+Granule 1-3 generated 15227 rules
+Counted 15225 ancestral rules
+Granule 1-4 generated 8371 rules
+Counted 8369 ancestral rules
+Granule 1-5 generated 4850 rules
+Counted 4848 ancestral rules
+Granule 1-6 generated 4003 rules
+Counted 4001 ancestral rules
+Granule 1-7 generated 4038 rules
+Counted 4037 ancestral rules
+Granule 1-8 generated 4256 rules
+Counted 4254 ancestral rules
+Granule 1-9 generated 5109 rules
+Counted 5108 ancestral rules
+Granule 1-10 generated 4336 rules
+Counted 4335 ancestral rules
+Granule 1-11 generated 7231 rules
+Counted 7229 ancestral rules
+Granule 2-1 generated 7591 rules
+Counted 7589 ancestral rules
+Granule 2-2 generated 5336 rules
+Counted 5334 ancestral rules
+Granule 2-3 generated 3930 rules
+Counted 3929 ancestral rules
+Granule 2-4 generated 5398 rules
+Counted 5396 ancestral rules
+Granule 3-1 generated 4795 rules
+Counted 4793 ancestral rules
+Total rules generated: 310025
+################################################
+HTGAR with Rinteresting
+Starting Phase 1
+Starting Phase 2
+Starting Phase 3
+Granule 0-2 generated 4014 rules
+Counted 4013 ancestral rules
+Granule 0-3 generated 5741 rules
+Counted 5740 ancestral rules
+Granule 0-4 generated 3688 rules
+Counted 3687 ancestral rules
+Granule 0-5 generated 9917 rules
+Counted 9916 ancestral rules
+Granule 0-6 generated 14537 rules
+Counted 14530 ancestral rules
+Granule 0-7 generated 8866 rules
+Counted 8865 ancestral rules
+Granule 0-8 generated 6815 rules
+Counted 6814 ancestral rules
+Granule 0-9 generated 11466 rules
+Counted 11464 ancestral rules
+Granule 0-10 generated 2401 rules
+Counted 2400 ancestral rules
+Granule 0-11 generated 13646 rules
+Counted 13640 ancestral rules
+Granule 0-12 generated 4851 rules
+Counted 4849 ancestral rules
+Granule 0-13 generated 2816 rules
+Counted 2815 ancestral rules
+Granule 0-14 generated 8561 rules
+Counted 8560 ancestral rules
+Granule 0-15 generated 3298 rules
+Counted 3296 ancestral rules
+Granule 0-16 generated 10236 rules
+Counted 10229 ancestral rules
+Granule 0-17 generated 5029 rules
+Counted 5028 ancestral rules
+Granule 0-18 generated 10073 rules
+Counted 10072 ancestral rules
+Granule 0-19 generated 5185 rules
+Counted 5184 ancestral rules
+Granule 0-20 generated 3546 rules
+Counted 3545 ancestral rules
+Granule 0-21 generated 13870 rules
+Counted 13864 ancestral rules
+Granule 0-22 generated 5726 rules
+Counted 5724 ancestral rules
+Granule 0-23 generated 8149 rules
+Counted 8148 ancestral rules
+Granule 1-1 generated 2401 rules
+Counted 2400 ancestral rules
+Granule 1-2 generated 3662 rules
+Counted 3660 ancestral rules
+Granule 1-3 generated 12148 rules
+Counted 12147 ancestral rules
+Granule 1-4 generated 6328 rules
+Counted 6327 ancestral rules
+Granule 1-5 generated 3150 rules
+Counted 3149 ancestral rules
+Granule 1-6 generated 2468 rules
+Counted 2467 ancestral rules
+Granule 1-7 generated 2600 rules
+Counted 2599 ancestral rules
+Granule 1-8 generated 2595 rules
+Counted 2593 ancestral rules
+Granule 1-9 generated 3359 rules
+Counted 3358 ancestral rules
+Granule 1-10 generated 2656 rules
+Counted 2655 ancestral rules
+Granule 1-11 generated 5134 rules
+Counted 5133 ancestral rules
+Granule 2-1 generated 5361 rules
+Counted 5360 ancestral rules
+Granule 2-2 generated 3522 rules
+Counted 3521 ancestral rules
+Granule 2-3 generated 2367 rules
+Counted 2366 ancestral rules
+Granule 2-4 generated 3611 rules
+Counted 3610 ancestral rules
+Granule 3-1 generated 3064 rules
+Counted 3063 ancestral rules
+Total rules generated: 226857

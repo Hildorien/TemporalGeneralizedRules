@@ -203,7 +203,8 @@ class HTARTests(unittest.TestCase):
         paralelRun = {}
         for paralel_running in [False, True]:
                     for i in range(0, 2):
-                        rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], paralel_running, False, False, False, 2)
+                        rules_by_pg = HTAR_BY_PG(database, sups[i], confs[i], sups[i], paralelExecution=paralel_running,
+                                                 paralelExcecutionOnK=False, debugging=False, debuggingK=False, rsm=2)
                         strJoin = str(paralel_running)+"-"+str(False)+"-"+str(2)
                         paralelRun[strJoin] = rules_by_pg
                         apriori_rules = apriori(database, sups[i], confs[i])
