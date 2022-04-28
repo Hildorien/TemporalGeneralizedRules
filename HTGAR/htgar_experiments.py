@@ -1,5 +1,8 @@
+import time
+
+from Cumulate.cumulate import vertical_cumulate_frequents
 from DataStructures.Parser import Parser
-from HTAR.HTAR import HTAR_BY_PG
+from HTAR.HTAR import HTAR_BY_PG, getGranulesFrequentsAndSupports
 
 
 def htgar_experiment(min_sup, min_conf, min_r):
@@ -40,6 +43,41 @@ def htgar_foodmart_experiment(min_sup, min_conf, min_r):
     print('########################################')
     HTAR_BY_PG(foodmart_98_with_taxonomy, min_sup, min_conf, min_sup, True, min_r)
 
+def htgar_experiment_roots(min_supp):
+    database_filepath_timestamped = ['F:\TesisSyntheticDatasets\Root\R250T250k-timestamped.csv',
+                         'F:\TesisSyntheticDatasets\Root\R500T250k-timestamped.csv',
+                         'F:\TesisSyntheticDatasets\Root\R750T250k-timestamped.csv',
+                         'F:\TesisSyntheticDatasets\Root\R1000T250k-timestamped.csv']
+
+    database_filepath = ['F:\TesisSyntheticDatasets\Root\R250T250k.data',
+                         'F:\TesisSyntheticDatasets\Root\R500T250k.data',
+                         'F:\TesisSyntheticDatasets\Root\R750T250k.data',
+                         'F:\TesisSyntheticDatasets\Root\R1000T250k.data']
+
+    database_taxonomy_filepath = ['F:\TesisSyntheticDatasets\Root\R250T250k.tax',
+                         'F:\TesisSyntheticDatasets\Root\R500T250k.tax',
+                         'F:\TesisSyntheticDatasets\Root\R750T250k.tax',
+                         'F:\TesisSyntheticDatasets\Root\R1000T250k.tax']
+    # Run HTGAR
+    # for i, filepath in enumerate(database_filepath_timestamped):
+    #     database = Parser().parse(filepath, 'single', database_taxonomy_filepath[i], True)
+    #     print('Parsed database ' + str(filepath))
+    #     start = time.time()
+    #     getGranulesFrequentsAndSupports(database, min_supp, min_supp, False, False, False, False, 2, [24, 12, 4, 1], True)
+    #     end = time.time()
+    #     print('HTGAR in ' + filepath + ' took ' + str(end-start) + ' seconds')
+    #     print('#############################################################')
+    # Run Vertical Cumulate
+    for i, filepath in enumerate(database_filepath):
+        database = Parser().parse(filepath, 'single', database_taxonomy_filepath[i])
+        print('Parsed database ' + str(filepath))
+        start = time.time()
+        vertical_cumulate_frequents(database, min_supp)
+        end = time.time()
+        print('Vertical Cumulate in ' + filepath + ' took ' + str(end - start) + ' seconds')
+        print('#############################################################')
+
+
 
 
 if __name__ == "__main__":
@@ -47,6 +85,8 @@ if __name__ == "__main__":
     # htgar_experiment(0.002, 0.5, 1.1)  # Second Run
 
     #Foodmart experiments
-    htgar_experiment(0.005, 0.5, 1.1)
+    # htgar_experiment(0.005, 0.5, 1.1)
 
+    #HTGAR Roots experiment
+    htgar_experiment_roots(0.005)
 

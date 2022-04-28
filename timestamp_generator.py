@@ -86,5 +86,14 @@ if __name__=="__main__":
     # generate_timestamped_data(df, '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T750k.data', '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T750-timestamped.csv')
     generate_timestamped_data(df, 'F:\TesisSyntheticDatasets\Root\R1000T250k.data',
                               'F:\TesisSyntheticDatasets\Root\R1000T250k-timestamped.csv')
+
+    generate_timestamped_data(df, 'F:\TesisSyntheticDatasets\Root\R750T250k.data',
+                              'F:\TesisSyntheticDatasets\Root\R750T250k-timestamped.csv')
+
+    generate_timestamped_data(df, 'F:\TesisSyntheticDatasets\Root\R500T250k.data',
+                              'F:\TesisSyntheticDatasets\Root\R500T250k-timestamped.csv')
+
+    generate_timestamped_data(df, 'F:\TesisSyntheticDatasets\Root\R250T250k.data',
+                              'F:\TesisSyntheticDatasets\Root\R250T250k-timestamped.csv')
     #Prints daily sales distribution of new synthetic timestamped dataset
     #print_distribution('F:\TesisSyntheticDatasets\Transaction\T100k-timestamped.data')

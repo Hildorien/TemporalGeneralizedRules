@@ -261,6 +261,48 @@ def plot_rule_gen_by_potential_rule_size():
     plt.savefig('Plots/Parallel_Rule_Gen_Efectiveness_Test.png', format="png", bbox_inches='tight')
     plt.close()
 
+def plot_htgar_roots_experiment():
+    """
+    F:\TesisSyntheticDatasets\Root\R250T250k-timestamped.csv
+    HTGAR took 295.95133996009827 seconds
+
+    F:\TesisSyntheticDatasets\Root\R500T250k-timestamped.csv
+    HTGAR took 158.4546139240265 seconds
+
+    F:\TesisSyntheticDatasets\Root\R750T250k-timestamped.csv
+    HTGAR took 136.51410102844238 seconds
+
+    F:\TesisSyntheticDatasets\Root\R1000T250k-timestamped.csv
+    HTGAR took 116.14133787155151 seconds
+    ----------------------------------------------------------------
+    F:\TesisSyntheticDatasets\Root\R250T250k.data
+    Vertical Cumulate took 144.1433389186859 seconds
+
+    F:\TesisSyntheticDatasets\Root\R500T250k.data
+    Vertical Cumulate took 69.22877907752991 seconds
+
+    F:\TesisSyntheticDatasets\Root\R750T250k.data
+    Vertical Cumulate took 59.64191699028015 seconds
+
+    F:\TesisSyntheticDatasets\Root\R1000T250k.data
+    Vertical Cumulate took 50.66124200820923 seconds
+
+    :return:
+    """
+    plt.xlabel('Number of Roots')
+    plt.ylabel('Time (seconds)')
+    x_axis = [250, 500, 750, 1000]
+
+    htgar_y_axis = [295.95, 158.45, 136.51, 116.14]
+    cumulate_y_axis = [144.14, 69.22, 59.64, 50.66]
+
+    plt.plot(x_axis, cumulate_y_axis, linestyle='-', marker='o', color='r', label='vertical_cumulate')
+    plt.plot(x_axis, htgar_y_axis, linestyle='--', marker='o', color='g', label='HTGAR')
+
+    plt.title('ROOTS')
+    plt.legend()
+    plt.savefig('Plots/htgar_roots.png', format="png",)
+    plt.close()
 
 if __name__ == '__main__':
     #Plot experiments by key
@@ -272,6 +314,7 @@ if __name__ == '__main__':
     # parse_and_plot_files('transaction', 'Number of transactions (millions)',
     #                      [0.1, 1, 2, 5, 10], 'Time / #Transactions (normalized)',
     # [0.6, 0.8, 1, 1.2, 1.4, 1.8, 2])
-    plot_parallel_count_efectiveness_experiment()
+    # plot_parallel_count_efectiveness_experiment()
     # plot_parallel_rule_gen_efectiveness_experiment()
     # plot_rule_gen_by_potential_rule_size()
+    plot_htgar_roots_experiment()

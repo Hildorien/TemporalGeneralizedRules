@@ -37,3 +37,15 @@ class HTGARTests(unittest.TestCase):
         self.assertGreater(len(flatten_list(list(rules.values()))),
                            len(flatten_list(list(rules_pruned.values()))))
 
+    def test_HTGAR_prunes_candidates_of_same_family(self):
+        taxonomy = self.sales_formatted_for_test.taxonomy
+        results = getGranulesFrequentsAndSupports(self.sales_formatted_for_test,
+                                        0.001, 0.001,
+                                        False, False, False, False, 2, [24, 12, 4, 1], True)
+        suppDictionaryByPg = results['support_dictionary_by_pg']
+        for pg in suppDictionaryByPg:
+            for key in suppDictionaryByPg[pg]:
+                if len(key) == 2:
+                    item_1 = key[0]
+                    item_2 = key[1]
+                    self.assertTrue(item_2 not in taxonomy[item_1] and item_1 not in taxonomy[item_2])
