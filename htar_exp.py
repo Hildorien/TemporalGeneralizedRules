@@ -18,9 +18,11 @@
     #     self.printRulesDebugging(database, rules_by_pg, {})
 import time
 #
-# import seaborn as sns
+import seaborn as sns
 # import pandas as pd
 # from matplotlib import pyplot as plt
+import pandas as pd
+from matplotlib import pyplot as plt
 
 from Apriori.apriori import apriori
 from DataStructures.Parser import Parser
@@ -258,6 +260,50 @@ def exp_HTAR_synthetic():
 #
 #     plt.show()
 
+#
+# def create_heatmap():
+#     # HTAR RULES
+#     df = pd.read_csv('../Experiments/htar_heatmap.csv')
+#     #df['candidates'] = df['candidates'].apply(lambda x: x / 1000000)
+#     df = df.pivot(index="period", columns="level", values="rules")
+#     #print(df)
+#     fig, ax = plt.subplots(figsize=(11, 9))
+#     sns.heatmap(df, cmap="Blues", linewidth=0.3, cbar_kws={"shrink": .8}, annot=True)
+#     ax.invert_yaxis()
+#     plt.yticks(rotation=0)
+#     plt.xlabel('Nivel')
+#     plt.ylabel('Período')
+#     plt.title("Cantidad de reglas por gránulo temporal con HTAR")
+#     plt.show()
+#
+#     #HTGAR RULES
+#     df = pd.read_csv('../Experiments/htgar_heatmap.csv')
+#     #df['frequents'] = df['frequents'].apply(lambda x: x / 1000000)
+#     df = df.pivot(index="period", columns="level", values="rules")
+#     fig, ax = plt.subplots(figsize=(11, 9))
+#     sns.heatmap(df, cmap="Greens", vmax=80000, linewidth=0.3, cbar_kws={"shrink": .8}, annot=True)
+#     ax.invert_yaxis()
+#     plt.yticks(rotation=0)
+#     plt.xlabel('Nivel')
+#     plt.ylabel('Período')
+#     plt.title("Cantidad de reglas por gránulo temporal con Cumulate")
+#     plt.show()
+#
+#
+#     #HTGAR RULES WITH R INTERESTING
+#     df = pd.read_csv('../Experiments/htgar_with_r_interesting_heatmap.csv')
+#     #df['rules'] = df['rules'].apply(lambda x: x / 1000000)
+#     df = df.pivot(index="period", columns="level", values="rules")
+#     #print(df)
+#     fig, ax = plt.subplots(figsize=(11, 9))
+#     sns.heatmap(df, cmap="Greens", vmax=80000, linewidth=0.3, cbar_kws={"shrink": .8}, annot=True)
+#     ax.invert_yaxis()
+#     plt.yticks(rotation=0)
+#
+#     plt.xlabel('Nivel')
+#     plt.ylabel('Período')
+#     plt.title('Cantidad de reglas generadas por gránulo temporal con Cumulate y R interesante')
+#     plt.show()
 
 algos = [{"name": "Sin Paralelizacion", "paralel_1": False, "paralel_2": False, "rsc":2},
         {"name": "Paralelización nodos", "paralel_1": True, "paralel_2": False, "rsc":2},
@@ -290,9 +336,9 @@ def exp_FINAL_HTAR_synthetic():
 
 if __name__=="__main__":
     #run_HTAR_foodmart_data_1997_correctness_and_completness()
-    exp_HTAR_synthetic()
+    #exp_HTAR_synthetic()
     #exp_apriori_synthetic()
     #exp_HTAR_foodmart()
-    #create_heatmap()
+    create_heatmap()
 
     #exp_FINAL_HTAR_synthetic()
