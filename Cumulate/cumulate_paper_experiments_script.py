@@ -1,5 +1,7 @@
 import logging
 import time
+
+from Apriori.apriori import apriori
 from Cumulate.cumulate import cumulate_frequents, vertical_cumulate_frequents, vertical_cumulate
 from DataStructures.Parser import Parser
 
@@ -247,6 +249,35 @@ def run_rule_gen_experiment():
         loggerRules.info('vertical_cumulate_parallel_rule generated ' + str(len(rules)) + ' seconds')
         loggerRules.info('-------------------------------------------------------------')
 
+def run_apriori_vs_cumulate_experiment():
+    database = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single')
+    database_expanded = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single',
+                                       'F:\TesisSyntheticDatasets\Transaction\T100k.tax')
+    min_supp = 0.002
+    min_conf = 0.5
+
+    rules_apriori = apriori(database, min_supp, min_conf)
+    print('Apriori generated ' + str(len(rules_apriori)) + ' rules')
+
+    rules = vertical_cumulate(database_expanded, min_supp, min_conf, 0)
+    print('Cumulate generated ' + str(len(rules)) + ' rules')
+
+    min_r = 1.1
+    rules = vertical_cumulate(database_expanded, min_supp, min_conf, min_r)
+    print('Cumulate with r-interesting ' + str(min_r) + ' generated ' + str(len(rules)) + ' rules')
+
+    min_r = 1.2
+    rules = vertical_cumulate(database_expanded, min_supp, min_conf, min_r)
+    print('Cumulate with r-interesting ' + str(min_r) + ' generated ' + str(len(rules)) + ' rules')
+
+    min_r = 1.3
+    rules = vertical_cumulate(database_expanded, min_supp, min_conf, min_r)
+    print('Cumulate with r-interesting ' + str(min_r) + ' generated ' + str(len(rules)) + ' rules')
+
+    min_r = 1.4
+    rules = vertical_cumulate(database_expanded, min_supp, min_conf, min_r)
+    print('Cumulate with r-interesting ' + str(min_r) + ' generated ' + str(len(rules)) + ' rules')
+
 
 def main():
     loggerError = setup_logger('Experiment.ErrorLogger', 'Experiments/error_log.txt', logging.ERROR)
@@ -280,7 +311,7 @@ def main():
 
     # Rule Generation experiment
     # run_rule_gen_experiment()
-
+    run_apriori_vs_cumulate_experiment()
 
 if __name__ == '__main__':
     main()

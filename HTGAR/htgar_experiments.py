@@ -59,14 +59,14 @@ def htgar_experiment_roots(min_supp):
                          'F:\TesisSyntheticDatasets\Root\R750T250k.tax',
                          'F:\TesisSyntheticDatasets\Root\R1000T250k.tax']
     # Run HTGAR
-    # for i, filepath in enumerate(database_filepath_timestamped):
-    #     database = Parser().parse(filepath, 'single', database_taxonomy_filepath[i], True)
-    #     print('Parsed database ' + str(filepath))
-    #     start = time.time()
-    #     getGranulesFrequentsAndSupports(database, min_supp, min_supp, False, False, False, False, 2, [24, 12, 4, 1], True)
-    #     end = time.time()
-    #     print('HTGAR in ' + filepath + ' took ' + str(end-start) + ' seconds')
-    #     print('#############################################################')
+    for i, filepath in enumerate(database_filepath_timestamped):
+        database = Parser().parse(filepath, 'single', database_taxonomy_filepath[i], True)
+        print('Parsed database ' + str(filepath))
+        start = time.time()
+        getGranulesFrequentsAndSupports(database, min_supp, min_supp, False, False, False, False, 2, [24, 12, 4, 1], True)
+        end = time.time()
+        print('HTGAR in ' + filepath + ' took ' + str(end-start) + ' seconds')
+        print('#############################################################')
     # Run Vertical Cumulate
     for i, filepath in enumerate(database_filepath):
         database = Parser().parse(filepath, 'single', database_taxonomy_filepath[i])
@@ -77,7 +77,16 @@ def htgar_experiment_roots(min_supp):
         print('Vertical Cumulate in ' + filepath + ' took ' + str(end - start) + ' seconds')
         print('#############################################################')
 
-
+def htgar_foodmart_experiment_with_r_interesting():
+    foodmart_97 = Parser().parse("../Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
+                              'single', None, True)
+    # foodmart_97_with_taxonomy = Parser().parse("../Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
+    #                                            'single',
+    #                                            '../Taxonomies/salesfact_taxonomy_single_2.csv', True)
+    min_conf = 0.5
+    minsupps = [0.00022, 0.00021,  0.00023, 0.00024, 0.00025]
+    for min_sup in minsupps:
+        HTAR_BY_PG(foodmart_97, min_sup, min_conf, min_sup)
 
 
 if __name__ == "__main__":
@@ -88,5 +97,8 @@ if __name__ == "__main__":
     # htgar_experiment(0.005, 0.5, 1.1)
 
     #HTGAR Roots experiment
-    htgar_experiment_roots(0.005)
+    # htgar_experiment_roots(0.005)
+
+    #HTGAR Foodmart experiment r interesting
+    htgar_foodmart_experiment_with_r_interesting()
 
