@@ -132,7 +132,7 @@ def expected_value(min_r, itemset, support_dictionary, taxonomy, database, pg=No
             product_list.append(database.supportOf(itemset_ancestor))  # P(Z') needs to be calculated
         else:
             l_level, period = pg.split('-')
-            product_list.append(database.supportOf(itemset_ancestor, l_level, period))
+            product_list.append(database.supportOf(itemset_ancestor, int(l_level), int(period)))
     return math.prod(product_list)
 
 

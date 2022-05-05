@@ -226,7 +226,7 @@ def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging,
        total_rules = 0
        for param in list_to_parallel:
            pg, candidates, supDic, min_rconf, min_r = param
-           pg_rules = rule_generation(candidates, supDic, min_rconf, False, min_r, database)
+           pg_rules = rule_generation(candidates, supDic, min_rconf, False, min_r, database, pg)
            if len(pg_rules) > 0:
                 HTFS_by_pg[pg] = pg_rules
                 print('Granule ' + pg + ' generated ' + str(len(pg_rules)) + ' rules')
