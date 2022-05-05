@@ -228,7 +228,7 @@ def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging,
            pg, candidates, supDic, min_rconf, min_r = param
            pg_rules = rule_generation(candidates, supDic, min_rconf, False, min_r, database)
            if len(pg_rules) > 0:
-                # HTFS_by_pg[pg] = pg_rules
+                HTFS_by_pg[pg] = pg_rules
                 print('Granule ' + pg + ' generated ' + str(len(pg_rules)) + ' rules')
                 ancestral_rules = 0
                 total_rules += len(pg_rules)
@@ -242,4 +242,4 @@ def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging,
     return HTFS_by_pg
 
 def rule_generation_paralel(pg, pgKeys, pgSupDic, min_rconf, min_r):
-    return pg, rule_generation(pgKeys, pgSupDic, min_rconf, min_r)
+    return pg, rule_generation(pgKeys, pgSupDic, min_rconf, min_r, pg)

@@ -249,34 +249,17 @@ def run_rule_gen_experiment():
         loggerRules.info('vertical_cumulate_parallel_rule generated ' + str(len(rules)) + ' seconds')
         loggerRules.info('-------------------------------------------------------------')
 
-def run_apriori_vs_cumulate_experiment():
-    database = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single')
-    database_expanded = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single',
-                                       'F:\TesisSyntheticDatasets\Transaction\T100k.tax')
+def run_cumulate_r_interesting_experiment():
+    database_expanded = Parser().parse('../Datasets/sales_formatted_1997_sorted_by_timestamp.csv', 'single',
+                                       '../Taxonomies/salesfact_taxonomy_single_2.csv')
     min_supp = 0.002
-    min_conf = 0.5
+    min_conf = 0.75
+    min_r = [0, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1]
+    for r in min_r:
+        rules = vertical_cumulate(database_expanded, min_supp, min_conf, r)
+        print('Cumulate generated ' + str(len(rules)) + ' rules with ' + str(r) + ' r-interesting')
 
-    rules_apriori = apriori(database, min_supp, min_conf)
-    print('Apriori generated ' + str(len(rules_apriori)) + ' rules')
 
-    rules = vertical_cumulate(database_expanded, min_supp, min_conf, 0)
-    print('Cumulate generated ' + str(len(rules)) + ' rules')
-
-    min_r = 1.1
-    rules = vertical_cumulate(database_expanded, min_supp, min_conf, min_r)
-    print('Cumulate with r-interesting ' + str(min_r) + ' generated ' + str(len(rules)) + ' rules')
-
-    min_r = 1.2
-    rules = vertical_cumulate(database_expanded, min_supp, min_conf, min_r)
-    print('Cumulate with r-interesting ' + str(min_r) + ' generated ' + str(len(rules)) + ' rules')
-
-    min_r = 1.3
-    rules = vertical_cumulate(database_expanded, min_supp, min_conf, min_r)
-    print('Cumulate with r-interesting ' + str(min_r) + ' generated ' + str(len(rules)) + ' rules')
-
-    min_r = 1.4
-    rules = vertical_cumulate(database_expanded, min_supp, min_conf, min_r)
-    print('Cumulate with r-interesting ' + str(min_r) + ' generated ' + str(len(rules)) + ' rules')
 
 
 def main():
@@ -311,7 +294,7 @@ def main():
 
     # Rule Generation experiment
     # run_rule_gen_experiment()
-    run_apriori_vs_cumulate_experiment()
+    run_cumulate_r_interesting_experiment()
 
 if __name__ == '__main__':
     main()

@@ -78,15 +78,16 @@ def htgar_experiment_roots(min_supp):
         print('#############################################################')
 
 def htgar_foodmart_experiment_with_r_interesting():
-    foodmart_97 = Parser().parse("../Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
-                              'single', None, True)
-    # foodmart_97_with_taxonomy = Parser().parse("../Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
-    #                                            'single',
-    #                                            '../Taxonomies/salesfact_taxonomy_single_2.csv', True)
+    # foodmart_97 = Parser().parse("../Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
+    #                           'single', None, True)
+    foodmart_97_with_taxonomy = Parser().parse("../Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
+                                               'single',
+                                               '../Taxonomies/salesfact_taxonomy_single_2.csv', True)
     min_conf = 0.5
-    minsupps = [0.00022, 0.00021,  0.00023, 0.00024, 0.00025]
-    for min_sup in minsupps:
-        HTAR_BY_PG(foodmart_97, min_sup, min_conf, min_sup)
+    minsupp = 0.0002
+    min_r = [0, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1]
+    for r in min_r:
+        HTAR_BY_PG(foodmart_97_with_taxonomy, minsupp, min_conf, minsupp, True, r)
 
 
 if __name__ == "__main__":

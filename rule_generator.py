@@ -11,7 +11,7 @@ from utility import hash_candidate
 
 
 def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
-                    parallel_rule_gen=False, min_r=None, database=None):
+                    parallel_rule_gen=False, min_r=None, database=None, pg=None):
     rules = []
     potential_rules_dict = {}
     if min_r is None:
@@ -42,7 +42,7 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
                 itemset = sorted(antecedent + consequent)  # Reconstruct itemset
                 if rule_confidence >= min_conf and rule_support >= min_r * expected_value(min_r, itemset,
                                                                                           support_dictionary, database.taxonomy,
-                                                                                          database):
+                                                                                          database, pg):
                     rules.append(AssociationRule(antecedent, consequent, rule_support, rule_confidence))
             else:
                 if rule_confidence >= min_conf:
@@ -98,13 +98,14 @@ def explode_frequent_itemset_in_potential_rule(frequent_itemset, support_diction
         potential_rule_dict[hashed_rule] = rule_data
 
 
-def expected_value(min_r, itemset, support_dictionary, taxonomy, database):
+def expected_value(min_r, itemset, support_dictionary, taxonomy, database, pg=None):
     """
     :param min_r: Minimum interesting measure
     :param itemset: And itemset Z = XUY that represents the rule X=>Y
     :param support_dictionary: Auxiliary structure to obtain the supports of individual items in the itemset
     :param taxonomy: Auxiliary structure to get the close ancestor of items
     :param database: Database (horizontal or vertical) to count the support of Z'
+    :param pg: String that represents the time granule
     :return: The expected value of itemset Z based on Z' where Z' is an ancestor of Z
     """
     if min_r == 0:
@@ -127,7 +128,11 @@ def expected_value(min_r, itemset, support_dictionary, taxonomy, database):
     if hashed_ancestor in support_dictionary:
         product_list.append(support_dictionary[hashed_ancestor])
     else:
-        product_list.append(database.supportOf(itemset_ancestor))  # P(Z') needs to be calculated
+        if pg is None:
+            product_list.append(database.supportOf(itemset_ancestor))  # P(Z') needs to be calculated
+        else:
+            l_level, period = pg.split('-')
+            product_list.append(database.supportOf(itemset_ancestor, l_level, period))
     return math.prod(product_list)
 
 
