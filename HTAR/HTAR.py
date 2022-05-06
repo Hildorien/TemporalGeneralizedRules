@@ -104,7 +104,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
             pi = a_result["pi"]
             if len(a_result["TFI"]) > 0:
                 TFI_by_period_in_l_0[pi + 1] = a_result["TFI"]
-                pgStringKey = stringifyPg(0, pi + 1)
+                pgStringKey = stringifyPg(0, pi)
                 support_dictionary_by_pg[pgStringKey] = a_result["supportDict"]
                 HTFI_by_pg[pgStringKey] = TFI_by_period_in_l_0[pi + 1]
         pool.close()
@@ -118,7 +118,7 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
 
             if len(individualTFI["TFI"]) > 0:
                 TFI_by_period_in_l_0[pi + 1] = individualTFI["TFI"]
-                pgStringKey = stringifyPg(0, pi + 1)
+                pgStringKey = stringifyPg(0, pi)
                 support_dictionary_by_pg[pgStringKey] = individualTFI["supportDict"]
                 HTFI_by_pg[pgStringKey] = TFI_by_period_in_l_0[pi + 1]
 
@@ -204,7 +204,12 @@ def HTAR_BY_PG(database, min_rsup, min_rconf, lam, generalized_rules=False, min_
     suppDictionaryByPg = phase_1_and_2_res['support_dictionary_by_pg']
     paralel_rule_generation = False
     print('Starting Phase 3')
-    return getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation, min_r, database, generalized_rules)
+
+    a = getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation, min_r, database, generalized_rules)
+
+    print("THAT WAS WITH SUP: " + str(min_rsup) + "and R: " + str(min_r))
+    print("##################################")
+    return a
 
 def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation = False, min_r = None, database=None, generalized_rules = False):
     HTFS_by_pg = {}
