@@ -286,15 +286,15 @@ def main():
     # run_experiments('support')
 
     # R-Interesting experiments
-    # run_r_interesting_experiment(0.01, 0.25, 0)
-    # run_r_interesting_experiment(0.01, 0.25, 1.1)
+    run_r_interesting_experiment(0.01, 0.25, 0)
+    run_r_interesting_experiment(0.01, 0.25, 1.1)
 
-    # run_r_interesting_experiment(0.01, 0.5, 0)
-    # run_r_interesting_experiment(0.01, 0.5, 1.1)
+    run_r_interesting_experiment(0.01, 0.5, 0)
+    run_r_interesting_experiment(0.01, 0.5, 1.1)
 
     # Rule Generation experiment
     # run_rule_gen_experiment()
-    run_cumulate_r_interesting_experiment()
+    # run_cumulate_r_interesting_experiment()
 
 if __name__ == '__main__':
     main()

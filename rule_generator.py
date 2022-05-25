@@ -111,6 +111,11 @@ def expected_value(min_r, itemset, support_dictionary, taxonomy, database, pg=No
     if min_r == 0:
         return 0
     itemset_ancestor = calculate_itemset_ancestor(itemset, taxonomy)  # This is Z'
+
+    hashed_ancestor = hash_candidate(itemset_ancestor)
+    if hashed_ancestor == hash_candidate(itemset):  # Edge Case: Itemset has no ancestor, therefore is interesting
+        return 0
+
     product_list = []  # This is P(z_1) / P(z'_1) * ...
     for item in itemset:
         item_ancestor = close_ancestor(item, taxonomy)
@@ -124,7 +129,7 @@ def expected_value(min_r, itemset, support_dictionary, taxonomy, database, pg=No
         else:
             raise Exception("Division by zero in expected_value function")
         product_list.append(fraction)
-    hashed_ancestor = hash_candidate(itemset_ancestor)
+
     if hashed_ancestor in support_dictionary:
         product_list.append(support_dictionary[hashed_ancestor])
     else:
