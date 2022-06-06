@@ -118,7 +118,6 @@ def func(orders, total_orders, target_orders):
 
 
 if __name__ == "__main__":
-    print('Pepe')
     # vertical_db = Parser().parse('F:\TesisSyntheticDatasets\Transaction\T100k.data', 'single',
     #                              'F:\TesisSyntheticDatasets\Transaction\T100k.tax')
     # start = time.time()
