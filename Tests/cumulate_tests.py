@@ -1,6 +1,7 @@
 import unittest
 
 from Cumulate.cumulate import cumulate, vertical_cumulate
+from DataStructures.AssociationRule import AssociationRule
 from DataStructures.Parser import Parser
 
 
@@ -53,10 +54,19 @@ class CumulateTests(unittest.TestCase):
         self.assertEqual(foodmart_cumulate_rules, foodmart_vertical_cumulate_rules, 'Output of vertical_cumulate is the same as cumulate')
         self.assertEqual(synthetic_cumulate_rules, synthetic_verticial_cumulate_rules, 'Output of vertical_cumulate is the same as cumulate')
 
-
     def test_r_interesting_measure_prunes_rules(self):
-        rules_without_pruning = cumulate(self.retail_horizontal_db, 0.3, 0.6, 0)
+
+        # Items_dictionary: { 0: Clothes,
+        #   1: Footwear,
+        #   2: Hiking Boots,
+        #   3: Jacket,
+        #   4: Outwear,
+        #   5: Shirt,
+        #   6: Shoes,
+        #   7: Ski Pants
+
         rule_with_pruning = cumulate(self.retail_horizontal_db, 0.3, 0.6, 1.4)
+        rules_without_pruning = cumulate(self.retail_horizontal_db, 0.3, 0.6, 0)
         self.assertLess(len(rule_with_pruning), len(rules_without_pruning), 'Rules are pruned with R-interesting > 1')
 
     def test_vertical_cumulate_vs_parallel_count_vertical_cumulate_output_is_equal(self):
@@ -85,4 +95,3 @@ class CumulateTests(unittest.TestCase):
         self.assertEqual(taxonomy_retail_horizontal_db_basket_format, taxonomy_retail_horizontal_db_single_format)
         self.assertEqual(taxonomy_retail_vertical_db_single_format, taxonomy_retail_horizontal_db_single_format)
         self.assertEqual(taxonomy_foodmart_horizontal_db_single_format, taxonomy_foodmart_vertical_db_single_format)
-

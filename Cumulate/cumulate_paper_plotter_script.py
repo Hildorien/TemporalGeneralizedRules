@@ -1,9 +1,12 @@
 import os
+
+import matplotlib
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.legend import Legend
 from matplotlib.offsetbox import AnchoredText
 from matplotlib.pyplot import figure
+from matplotlib.ticker import StrMethodFormatter
 
 
 def parse_and_plot_files(experiment_key, x_label, x_ticks, y_label, y_ticks):
@@ -243,6 +246,10 @@ def plot_rule_gen_by_potential_rule_size():
 
         :return:
     """
+    fig, ax = plt.subplots()
+    # ax.get_xaxis().set_major_formatter(matplotlib.ticker.FuncFormatter(lambda x, p: format(int(x), '{:.f}')))
+    # ax.xaxis.set_major_formatter(StrMethodFormatter('{:>12,.2f}'))
+
     plt.xlabel('Potential Rules (000s)')
     plt.ylabel('Time (seconds)')
 
@@ -304,6 +311,76 @@ def plot_htgar_roots_experiment():
     plt.savefig('Plots/htgar_roots.png', format="png",)
     plt.close()
 
+def htgar_r_interesting_experiment_plot():
+
+    x_axis_1 = ['0-1', '0-2', '0-3', '0-4', '0-5', '0-6', '0-7', '0-8', '0-9', '0-10', '0-11', '0-12', '0-13',
+                '0-14', '0-15', '0-16', '0-17', '0-18', '0-19', '0-20', '0-21', '0-22', '0-23', '0-24']
+    x_axis_2 = ['1-1', '1-2', '1-3', '1-4', '1-5', '1-6', '1-7', '1-8', '1-9', '1-10', '1-11', '1-12', '2-1', '2-2',
+                '2-3', '2-4', '3-1']
+
+
+    y_axis_11_1 = [96.87, 96.26, 95.81, 96.23, 97.07, 97.30, 97.88, 97.33, 97.09, 95.07, 97.20, 97.74, 96.73, 98.95, 94.39, 97.43, 98.00, 96.84, 95.02, 96.48, 97.84, 96.77, 97.60, 95.22 ]
+    y_axis_11_2 = [87.14, 86.49, 88.13, 90.91, 88.46, 89.73, 91.37, 86.12, 90.18, 84.89, 88.16, 92.01, 81.66, 85.35, 85.88, 85.27, 84.50]
+
+    y_axis_13_1 = [94.90, 94.07, 93.36, 93.76, 95.23, 95.62, 96.53, 95.55, 95.15, 92.00, 95.33, 96.20, 94.82, 98.21, 91.12, 95.83, 96.69, 94.80, 92.06, 94.19, 96.60, 94.65, 95.92, 91.64]
+    y_axis_13_2 =[78.51, 77.00, 79.81, 84.02, 79.63, 81.42, 84.79, 76.64, 82.97, 74.77, 80.33, 85.29, 65.38, 71.95, 72.75, 71.23, 65.83]
+
+    y_axis_15_1 = [92.64, 91.64, 90.67, 90.99, 93.08, 93.58, 94.98, 93.49, 92.86, 88.60, 93.00, 94.44, 92.68, 97.26, 87.65, 93.89, 95.19, 92.46, 88.79, 91.53, 95.21, 92.18, 93.90, 87.39]
+    y_axis_15_2 =[68.97, 66.54, 70.46, 76.22, 70.17, 71.71, 76.71, 66.39, 74.52, 64.39, 71.56, 76.41, 49.01, 56.65, 58.54, 54.69, 46.13]
+
+    y_axis_17_1 = [90.30, 89.16, 87.91, 88.12, 90.90, 91.44, 93.38, 91.20, 90.43, 85.12, 90.59, 92.56, 90.52, 96.18, 84.25, 91.98, 93.58, 90.02, 85.57, 88.77, 93.76, 89.59, 91.69, 82.95]
+    y_axis_17_2 =[60.48, 56.96, 61.13, 68.63, 60.77, 62.47, 68.59, 57.30, 66.08, 54.93, 63.01, 67.32, 36.15, 43.28, 46.06, 41.90, 32.10]
+
+    y_axis_19_1 = [87.97, 86.68, 85.21, 85.30, 88.63, 89.24, 91.81, 88.95, 88.07, 81.70, 88.21, 90.70, 88.30, 95.02, 80.89, 90.04, 91.89, 87.54, 82.45, 86.11, 92.31, 86.94, 89.38, 78.50]
+    y_axis_19_2 =[52.75, 48.60, 52.55, 61.56, 52.40, 53.71, 60.80, 49.37, 58.27, 46.47, 55.20, 58.95, 25.31, 32.17, 35.10, 31.47, 21.39]
+
+    y_axis_21_1 = [85.69, 84.37, 82.61, 82.69, 86.44, 87.15, 90.31, 86.69, 85.76, 78.56, 85.88, 88.88, 86.23, 93.85, 77.68, 88.10, 90.27, 85.06, 79.49, 83.53, 90.96, 84.41, 87.19, 74.33]
+    y_axis_21_2 =[45.73, 41.51, 45.22, 55.26, 45.01, 46.14, 53.69, 42.35, 51.24, 39.12, 48.44, 51.16, 16.86, 23.45, 25.63, 22.30, 12.06]
+
+
+
+    fig, ax = plt.subplots()
+    plt.xlabel('Granulo Temporal')
+    plt.ylabel('% de reglas obtenidas con respecto a R=0')
+    #plt.tick_params(axis='x', which='major', labelsize=8)
+    ax.set_xticklabels(x_axis_1, rotation='vertical', fontsize=8)
+    plt.yticks([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+
+    plt.plot(x_axis_1, y_axis_11_1,marker='o', linestyle='None', color='r', label='R=1.1')
+    plt.plot(x_axis_1, y_axis_13_1, marker='o', linestyle='None', color='g', label='R=1.3')
+    plt.plot(x_axis_1, y_axis_15_1, marker='o', linestyle='None', color='b', label='R=1.5')
+    plt.plot(x_axis_1, y_axis_17_1, marker='o', linestyle='None', color='c', label='R=1.7')
+    plt.plot(x_axis_1, y_axis_19_1, marker='o', linestyle='None', color='m', label='R=1.9')
+    plt.plot(x_axis_1, y_axis_21_1, marker='o', linestyle='None', color='y', label='R=2.1')
+
+
+    plt.title('Reglas obtenidas por granulo temporal')
+    plt.legend(loc='lower left')
+
+    plt.savefig('Plots/HTGAR_R_interesting_rules_1.png', format="png", bbox_inches='tight')
+    plt.close()
+
+    fig, ax = plt.subplots()
+    plt.xlabel('Granulo Temporal')
+    plt.ylabel('% de reglas obtenidas con respecto a R=0')
+    ax.set_xticklabels(x_axis_2, rotation='vertical', fontsize=8)
+    plt.yticks([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+
+    plt.plot(x_axis_2, y_axis_11_2, marker='o', linestyle='None', color='r', label='R=1.1')
+    plt.plot(x_axis_2, y_axis_13_2, marker='o', linestyle='None', color='g', label='R=1.3')
+    plt.plot(x_axis_2, y_axis_15_2, marker='o', linestyle='None', color='b', label='R=1.5')
+    plt.plot(x_axis_2, y_axis_17_2, marker='o', linestyle='None', color='c', label='R=1.7')
+    plt.plot(x_axis_2, y_axis_19_2, marker='o', linestyle='None', color='m', label='R=1.9')
+    plt.plot(x_axis_2, y_axis_21_2, marker='o', linestyle='None', color='y', label='R=2.1')
+
+    plt.title('Reglas obtenidas por granulo temporal')
+    plt.legend(loc='lower left')
+
+    plt.savefig('Plots/HTGAR_R_interesting_rules_2.png', format="png", bbox_inches='tight')
+    plt.close()
+
+
+
 if __name__ == '__main__':
     #Plot experiments by key
     # parse_and_plot_files('root', 'Number of roots', [250, 500, 750, 1000], 'Time (Minutes)',  [0, 5, 10, 15, 20, 25, 30, 35])
@@ -317,4 +394,5 @@ if __name__ == '__main__':
     # plot_parallel_count_efectiveness_experiment()
     # plot_parallel_rule_gen_efectiveness_experiment()
     # plot_rule_gen_by_potential_rule_size()
-    plot_htgar_roots_experiment()
+    #plot_htgar_roots_experiment()
+    htgar_r_interesting_experiment_plot()
