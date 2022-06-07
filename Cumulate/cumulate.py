@@ -1,24 +1,9 @@
 import multiprocessing
 import time
-import itertools
-import numpy as np
-from Cumulate.cumulate_utility import calculate_C1, calculate_C2, calculate_Ck, prune_candidates_in_same_family, \
-    count_candidates_in_transaction, calculate_support
+from Cumulate.cumulate_utility import prune_candidates_in_same_family, count_candidates_in_transaction
 from rule_generator import rule_generation
-from utility import hash_candidate, generateCanidadtesOfSizeK, findOrderedIntersection, append_tids, \
-    calculate_support_for_parallel
+from utility import hash_candidate, generateCanidadtesOfSizeK, append_tids, calculate_support_for_parallel
 
-import logging
-
-loggerA = logging.getLogger(__name__ + '_vanilla')
-loggerB = logging.getLogger(__name__ + '_vertical')
-loggerC = logging.getLogger(__name__ + '_vertical_with_parallel_count')
-
-loggerAPlotter = logging.getLogger(__name__ + '_vanilla_plot')
-loggerBPlotter = logging.getLogger(__name__ + '_vertical_plot')
-loggerCPlotter = logging.getLogger(__name__ + '_vertical_with_parallel_count_plot')
-
-loggerRules = logging.getLogger('rule_gen')
 
 def cumulate(horizontal_database, min_supp, min_conf, min_r):
     """
@@ -29,18 +14,11 @@ def cumulate(horizontal_database, min_supp, min_conf, min_r):
     :return: Set of association rules
     """
     frequent_dictionary, support_dictionary, taxonomy = cumulate_frequents(horizontal_database, min_supp)
-
-    # Generate Rules
-    start = time.time()
-    rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
-                            False,  min_r, horizontal_database)
-    end = time.time()
-    loggerA.info('RulePhase,' + str(end-start))
+    rules = rule_generation(frequent_dictionary, support_dictionary, min_conf, False,  min_r, horizontal_database)
     return rules
 
 
 def cumulate_frequents(horizontal_database, min_supp):
-    start = time.time()
     # Instantiate local variables
     frequent_dictionary = {}
     k = 1
@@ -50,27 +28,24 @@ def cumulate_frequents(horizontal_database, min_supp):
     all_items = sorted(list(horizontal_database.items_dic.keys()))
     support_dictionary = {}  # Auxiliary structure for rule-generation
     while k == 1 or frequent_dictionary[k - 1] != []:
-
-        # if k == 1:
-        #     candidate_hashmap = calculate_C1(all_items, k)
-        # elif k == 2:
-        #     candidate_hashmap = calculate_C2(frequent_dictionary, k)
-        # else:
-        #     candidate_hashmap = calculate_Ck(frequent_dictionary, k)
+        # Candidate Generation
         candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
         if k == 2:
-            candidates_size_k = prune_candidates_in_same_family(candidates_size_k, horizontal_database.ancestor_set)  # Cumulate Optimization 3 in original paper
+            # Cumulate Optimization 3 in original paper
+            candidates_size_k = prune_candidates_in_same_family(candidates_size_k, horizontal_database.ancestor_set)
         candidate_hashmap = set(map(tuple, candidates_size_k))
         frequent_dictionary[k] = []
         if len(candidates_size_k) == 0:
             break
         if k > 1:
-            taxonomy_pruned = horizontal_database.prune_ancestors(set(map(tuple, frequent_dictionary[1])))  # Cumulate Optimization 1 in original paper
+            # Cumulate Optimization 1 in original paper
+            taxonomy_pruned = horizontal_database.prune_ancestors(set(map(tuple, frequent_dictionary[1])))
         else:
-            taxonomy_pruned = horizontal_database.prune_ancestors(candidate_hashmap)  # Cumulate Optimization 1 in original paper
+            # Cumulate Optimization 1 in original paper
+            taxonomy_pruned = horizontal_database.prune_ancestors(candidate_hashmap)
 
-
-        candidate_support_dictionary = dict.fromkeys(candidate_hashmap, 0)  # Auxiliary structure for counting supports of size k
+        # Auxiliary structure for counting supports of size k
+        candidate_support_dictionary = dict.fromkeys(candidate_hashmap, 0)
         # Count Candidates of size k in transactions
         i = 0
         for a_transaction in transactions:
@@ -86,9 +61,7 @@ def cumulate_frequents(horizontal_database, min_supp):
                 frequent_dictionary[k].append(list(hashed_itemset))
 
         k += 1
-    end = time.time()
-    loggerA.info('FrequentPhase,' + str(end - start))
-    loggerAPlotter.info('y,' + str(end - start))
+
     return frequent_dictionary, support_dictionary, taxonomy
 
 
@@ -104,21 +77,12 @@ def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_cou
     """
     frequent_dictionary, support_dictionary, taxonomy = vertical_cumulate_frequents(vertical_database, min_supp,
                                                                                     parallel_count)
-    # Generate Rules
-    start = time.time()
-    rules = rule_generation(frequent_dictionary, support_dictionary, min_conf,
-                            parallel_rule_gen, min_r, vertical_database)
-    end = time.time()
-    loggerRules.info('Rule Generation took ' + str(end-start))
-    if parallel_count:
-        loggerC.info('RulePhase,' + str(end-start))
-    else:
-        loggerB.info('RulePhase,' + str(end - start))
+    rules = rule_generation(frequent_dictionary, support_dictionary, min_conf, parallel_rule_gen, min_r,
+                            vertical_database)
     return rules
 
 
 def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=False):
-    start = time.time()
     # Instantiate local variables
     frequent_dictionary = {}
     support_dictionary = {}
@@ -132,11 +96,11 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
     if parallel_count:
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
     while k == 1 or frequent_dictionary[k - 1] != []:
-        start2 = time.time()
         # Candidate Generation
         candidates_size_k = generateCanidadtesOfSizeK(k, all_items, frequent_dictionary)
         if k == 2:
-            candidates_size_k = prune_candidates_in_same_family(candidates_size_k, vertical_database.ancestor_set)  # Cumulate Optimization 3 in original paper
+            # Cumulate Optimization 3 in original paper
+            candidates_size_k = prune_candidates_in_same_family(candidates_size_k, vertical_database.ancestor_set)
         frequent_dictionary[k] = []
         if len(candidates_size_k) == 0:
             break
@@ -154,22 +118,7 @@ def vertical_cumulate_frequents(vertical_database, min_supp, parallel_count=Fals
                 support_dictionary[hash_candidate(a_candidate_size_k)] = support
                 if support >= min_supp:
                     frequent_dictionary[k].append(a_candidate_size_k)
-        end2 = time.time()
-        # print('k =' + str(k) + ' took ' + str(end2 - start2) + ' with candidates '+ str(len(candidates_size_k)))
         k += 1
-    end = time.time()
-    if parallel_count:
-        pool.close()  # Close pools after using them
-        pool.join()  # Main process waits after last pool closes
-        loggerC.info('FrequentPhase,' + str(end - start))
-        loggerCPlotter.info('y,' + str(end - start))
-    else:
-        loggerB.info('FrequentPhase,' + str(end - start))
-        loggerBPlotter.info('y,' + str(end - start))
-    # totalFrecuent = 0
-    # for k in frequent_dictionary:
-    #     print("Frequents of size " + str(k) + " :" + str(len(frequent_dictionary[k])))
-    #     totalFrecuent += len(frequent_dictionary[k])
-    # # print("Total frequents: " + str(totalFrecuent))
+
     return frequent_dictionary, support_dictionary, taxonomy
 
