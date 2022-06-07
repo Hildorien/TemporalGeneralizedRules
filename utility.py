@@ -69,32 +69,22 @@ def findOrderedIntersection(arr1, arr2):
 
     return result_array
 
-def getFilteredTIDSThatBelongToPeriod(arr, lb=None, ub=None, relativeSupportCalculationType = 2):
+def getFilteredTIDSThatBelongToPeriod(arr, lb=None, ub=None):
     """
     :param arr: array to get sublist of
     :param lb: lowerbound value
     :param ub: upperbound value
-    :param relativeSupportCalculationType: {#1: Pointer starts from the beggining of the array. #2: Pointer starts from
-    first value apparition (or next), position found by binary search. #3: Same as 2, but instead of binary search,
-    access inmediatly}
     :return: sublist of arr delimeted between lb and ub
     """
     if lb is None or ub is None:
         return arr
     res = []
-    pointer = 0
-    if relativeSupportCalculationType == 1:
-        while pointer < len(arr) and arr[pointer] <= ub:
-            if arr[pointer] < lb:
-                pointer += 1
-            elif lb <= arr[pointer] <= ub:
-                res.append(arr[pointer])
-                pointer += 1
-    elif relativeSupportCalculationType == 2:
-        pointer = binary_search_or_first_higher_value(arr, lb, 0, len(arr) - 1)
-        while pointer < len(arr) and arr[pointer] <= ub:
-            res.append(arr[pointer])
-            pointer += 1
+
+    #Pointer starts from first value apparition (or next), position found by binary search.
+    pointer = binary_search_or_first_higher_value(arr, lb, 0, len(arr) - 1)
+    while pointer < len(arr) and arr[pointer] <= ub:
+        res.append(arr[pointer])
+        pointer += 1
 
     return res
 
@@ -106,8 +96,8 @@ def findOrderedIntersectionBetweenBoundaries(arr1, arr2, lb, ub):
     :param: upper and lowerbound VALUES
     :return: ordered int array
     """
-    cutted_arr_1 = getFilteredTIDSThatBelongToPeriod(arr1, lb, ub, 2)
-    cutted_arr_2 = getFilteredTIDSThatBelongToPeriod(arr2, lb, ub, 2)
+    cutted_arr_1 = getFilteredTIDSThatBelongToPeriod(arr1, lb, ub)
+    cutted_arr_2 = getFilteredTIDSThatBelongToPeriod(arr2, lb, ub)
     if lb > ub:
         print('ERROR. UPPERBOUND IS NOT HIGHER OR EQUAL LOWERBOUND')
         return None
@@ -263,13 +253,13 @@ def append_tids_for_HTAR(candidate, items_dic, matrix_data_by_item):
 
     return candidate_tids_dict
 
-def calculate_tid_intersections_HTAR_with_boundaries(candidate, candidate_tids, tidLimits, relative_support_calculation_type):
+def calculate_tid_intersections_HTAR_with_boundaries(candidate, candidate_tids, tidLimits):
     start = time.time()
     lb = tidLimits[0]
     ub = tidLimits[1]
     final_intersection = None
     for item in candidate:
-        tids = getFilteredTIDSThatBelongToPeriod(candidate_tids[item], lb, ub, relative_support_calculation_type)
+        tids = getFilteredTIDSThatBelongToPeriod(candidate_tids[item], lb, ub)
         if final_intersection is None:
             final_intersection = tids
         elif len(final_intersection) == 0 or len(tids) == 0:

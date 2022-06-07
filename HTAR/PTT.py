@@ -7,17 +7,13 @@ class PTT:  # Periodical Total Transaction
 
     # UPDATE: PTT is only saving data for 0-level time granules
 
-    def __init__(self, hong = False):
+    def __init__(self):
         hardcoded_htg = [24, 12, 4, 1]
 
-        if hong:
-            self.ptt = []
-            for x in range(10):
-                self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'FirstAndLastTID': None})
-        else:
-            self.ptt = []
-            for x in range(hardcoded_htg[0]):
-                self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'FirstAndLastTID': None})
+
+        self.ptt = []
+        for x in range(hardcoded_htg[0]):
+            self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'FirstAndLastTID': None})
 
     def addMultiplePeriods(self, periods):
         for period in periods:
@@ -27,8 +23,8 @@ class PTT:  # Periodical Total Transaction
         return sum(list(map(lambda pi: self.getPTTValueFromLeafLevelGranule(pi)['totalTransactions'],
                             range(boundaries[0], boundaries[1] + 1))))
 
-    def getEveryItemInPTTInPG(self, l_level, period, hong= False):
-        level_0_periods_included = getPeriodsIncluded(l_level, period, hong)
+    def getEveryItemInPTTInPG(self, l_level, period):
+        level_0_periods_included = getPeriodsIncluded(l_level, period)
         finalItems = set()
         for pj in range(level_0_periods_included[0], level_0_periods_included[1]+1):
             leafSet = self.getPTTValueFromLeafLevelGranule(pj)['itemsSet']
@@ -54,8 +50,8 @@ class PTT:  # Periodical Total Transaction
         else:
             print('ERROR AL OBTENER ELEMENTO EN LA PTT. EL NIVEL O PERIODO ASOCIADO NO EXISTE')
 
-    def getPTTValueFromNonLeafLevelGranule(self, level, pi, hong= False):
-        level_0_periods_included = getPeriodsIncluded(level, pi, hong)
+    def getPTTValueFromNonLeafLevelGranule(self, level, pi):
+        level_0_periods_included = getPeriodsIncluded(level, pi)
         return self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included)
 
     def getPTTPeriodTIDBoundaryTuples(self):

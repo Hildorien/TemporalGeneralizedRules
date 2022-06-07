@@ -62,7 +62,7 @@ class Database:
 
         return final_intersection
 
-    def supportOf(self, itemset, l_level=None, period=None, relativeSupportCalculationType = 2, hong = False):
+    def supportOf(self, itemset, l_level=None, period=None):
         """
         :param itemset: set/list of integers
         :param l_level: L_level of HTG of the period
@@ -72,7 +72,7 @@ class Database:
 
         if l_level is not None and period is not None:
             #For Testing only. Try to use calculate_tid_intersections_HTAR_with_boundaries and precalculate other parameters instead.
-            level_0_periods_included_in_pg = getPeriodsIncluded(l_level, period, hong)
+            level_0_periods_included_in_pg = getPeriodsIncluded(l_level, period)
             starters_tid = self.getPTTPeriodTIDBoundaryTuples()
             tidLimits = maximal_time_period_interval(starters_tid, level_0_periods_included_in_pg[0] - 1,
                                                      level_0_periods_included_in_pg[1] - 1)
@@ -80,7 +80,7 @@ class Database:
             candidates_tid = append_tids_for_HTAR(itemset,
                                  self.items_dic,
                                  self.matrix_data_by_item)
-            transaction_id_intersection = calculate_tid_intersections_HTAR_with_boundaries(itemset, candidates_tid, tidLimits, relativeSupportCalculationType)[1]
+            transaction_id_intersection = calculate_tid_intersections_HTAR_with_boundaries(itemset, candidates_tid, tidLimits)[1]
             PTT_total_sum_with_boundaries = self.getTotalPTTSumWithinPeriodsInLevel0(level_0_periods_included_in_pg)
             if PTT_total_sum_with_boundaries != 0:
                 return transaction_id_intersection / PTT_total_sum_with_boundaries
@@ -90,8 +90,8 @@ class Database:
             final_intersection = self.transaction_ids_intersection(itemset)
             return len(final_intersection) / self.tx_count
 
-    def getItemsByDepthAndPeriod(self, l_level, period, hong=False):
-        return self.ptt.getEveryItemInPTTInPG(l_level, period, hong)
+    def getItemsByDepthAndPeriod(self, l_level, period):
+        return self.ptt.getEveryItemInPTTInPG(l_level, period)
 
     def getPTTValueFromLeafLevelGranule(self, pi):
         return self.ptt.getPTTValueFromLeafLevelGranule(pi)
@@ -119,33 +119,23 @@ class Database:
 
     #HTAR
 
-    def findIndividualTFIForParalel(self, pi, allItems, total_transactions, tid_limits, lam, paralel_processing_on_k = False,
-                                    debugging=False, debuggingK = False, rsm=2, generalized_rules=False):
+    def findIndividualTFIForParalel(self, pi, allItems, total_transactions, tid_limits, lam, paralel_processing_on_k = False, generalized_rules=False):
         # Returns every Temporal Frequent Itemsets (of every length) TFI_j, for the j-th time period p_j of llevel-period.
-        start = time.time()
         TFI_j = {}
         r = 1
         C_j = allItems
         TFI_r = list()
         frequent_dictionary = {}
         support_dictionary = {}
-        timeWastedInStuff = 0
 
         while (r == 1 or frequent_dictionary[r - 1] != []) and r <= len(allItems):
             frequent_dictionary[r] = []
             old_C_J = C_j
-            #startj = time.time()
 
             C_j = generateCanidadtesOfSizeK(r, old_C_J, frequent_dictionary)
             if generalized_rules and r == 2:
                 C_j = prune_candidates_in_same_family(C_j, self.ancestor_set)  # Cumulate Optimization 3 in original paper
 
-            #endj = time.time()
-            # if debuggingK:
-            #     totalCandidates += len(C_j)
-            #     print('Candidates of size ' + str(r) + ' is ' + str(len(C_j)))
-            #     print('It lasted '+ str(endj-startj))
-            #     print('Calculating support of each candidate of size ' + str(r))
             timeUsagePerk = 0
 
             if paralel_processing_on_k > 1:
@@ -154,7 +144,7 @@ class Database:
                 for candidate_size_k in C_j:
                     for item in candidate_size_k:
                         if item not in items_transactions_that_belong_to_perdiod:
-                            item_filtered_tids = getFilteredTIDSThatBelongToPeriod(append_tids_for_HTAR_for_single_item(item, self.items_dic, self.matrix_data_by_item), tid_limits[0], tid_limits[1], rsm)
+                            item_filtered_tids = getFilteredTIDSThatBelongToPeriod(append_tids_for_HTAR_for_single_item(item, self.items_dic, self.matrix_data_by_item), tid_limits[0], tid_limits[1])
                             items_transactions_that_belong_to_perdiod[item] = item_filtered_tids
 
                 list_to_parallel = [create_minimal_items_dic(x, items_transactions_that_belong_to_perdiod) for x in C_j]
@@ -172,7 +162,7 @@ class Database:
                 pool.join()
             else:
                 for k_size_itemset in C_j:
-                    a_result = calculate_tid_intersections_HTAR_with_boundaries(k_size_itemset, append_tids_for_HTAR(k_size_itemset, self.items_dic, self.matrix_data_by_item), tid_limits, rsm)
+                    a_result = calculate_tid_intersections_HTAR_with_boundaries(k_size_itemset, append_tids_for_HTAR(k_size_itemset, self.items_dic, self.matrix_data_by_item), tid_limits)
                     timeUsagePerk += a_result[2]
                     support = a_result[1] / total_transactions
                     if support >= lam:
@@ -180,24 +170,16 @@ class Database:
                         support_dictionary[hash_candidate(k_size_itemset)] = support
                         frequent_dictionary[r].append(k_size_itemset)
 
-            if debugging:
-                print("Total in K = " + str(r) + " took " + str(timeUsagePerk))
             if len(TFI_r) > 0:
                 TFI_j[r] = set(TFI_r)
             TFI_r = list()
             r += 1
 
-        end = time.time()
-        if debugging:
-            print(str(pi) + " leaf finished candidate calculation and lasted " + str(end - start))
-            #print("Wasted " + str(timeWastedInStuff) + " preparing for PARALELISING")
-            print("---------------------------------------------------------------")
         return {"pi": pi, "TFI": TFI_j, "supportDict": support_dictionary}
 
     def getIndividualTFIForNotLeafsGranules(self, possible_itemsets_in_pg, total_transactions,
-                                            tid_limits, paralel_processing_on_k, rsm, min_rsup, pgStringKey, debugging):
+                                            tid_limits, paralel_processing_on_k, min_rsup, pgStringKey):
         HTFI = {}
-        start = time.time()
         pg_spupport_dictionary = {}
         if total_transactions == 0:
             return pgStringKey, HTFI, pg_spupport_dictionary
@@ -207,7 +189,7 @@ class Database:
             if paralel_processing_on_k > 1:
                 pool = multiprocessing.Pool(paralel_processing_on_k)
                 list_to_parallel = [
-                    (x, append_tids_for_HTAR(x, self.items_dic, self.matrix_data_by_item), tid_limits, rsm) for x
+                    (x, append_tids_for_HTAR(x, self.items_dic, self.matrix_data_by_item), tid_limits) for x
                     in itemsets_length_k]
                 results = pool.starmap(calculate_tid_intersections_HTAR_with_boundaries, list_to_parallel)
                 for a_result in results:
@@ -223,7 +205,7 @@ class Database:
                                                                                     append_tids_for_HTAR(itemset,
                                                                                                          self.items_dic,
                                                                                                          self.matrix_data_by_item),
-                                                                                    tid_limits, rsm)
+                                                                                    tid_limits)
                     itemsetSupport = a_result[1] / total_transactions
                     if itemsetSupport >= min_rsup:
                         frequent_itemsets_length_k.add(itemset)
@@ -231,9 +213,6 @@ class Database:
 
             if len(frequent_itemsets_length_k) > 0:
                 HTFI[k] = frequent_itemsets_length_k
-        end = time.time()
-        if debugging:
-            print(pgStringKey + " finished candidate calculation and lasted " + str(end - start))
         return pgStringKey, HTFI, pg_spupport_dictionary
 
     def is_ancestral_rule(self, rule_itemset):

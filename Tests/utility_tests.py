@@ -52,13 +52,11 @@ class UtilityTests(unittest.TestCase):
 
     def test_getFiltered_TIDS_between_periods(self):
         tids = [2, 4, 5, 7, 8, 10, 14, 35, 66]
-        mods = [1, 2]
-        for m in mods:
-            self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 3, 6, m), [4, 5], 'filter_tids_between_bounds')
-            self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 5, 14, m), [5, 7, 8, 10, 14], 'filter_tids_between_bounds_2')
-            self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 0, 1, m), [], 'filter_tids_between_bounds_3')
-            self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 100, 101, m), [], 'filter_tids_between_bounds_4')
-            self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 35, 35, m), [35], 'filter_tids_between_bounds_5')
+        self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 3, 6), [4, 5], 'filter_tids_between_bounds')
+        self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 5, 14), [5, 7, 8, 10, 14], 'filter_tids_between_bounds_2')
+        self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 0, 1), [], 'filter_tids_between_bounds_3')
+        self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 100, 101), [], 'filter_tids_between_bounds_4')
+        self.assertEqual(getFilteredTIDSThatBelongToPeriod(tids, 35, 35), [35], 'filter_tids_between_bounds_5')
 
 
 

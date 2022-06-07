@@ -103,7 +103,6 @@ def exp_HTAR_synthetic():
     starters_tid = database.getPTTPeriodTIDBoundaryTuples()
 
     tid_limits = maximal_time_period_interval(starters_tid, 0, 0)
-    #(pi, ai, totalTrans, tidlimits, lam, pOnK, deb, debk, rsm) = param
 
     start = time.time()
     database.findIndividualTFIForParalel(0, allItems, total_transactions, tid_limits, 0.001, 1, True, False, 2)

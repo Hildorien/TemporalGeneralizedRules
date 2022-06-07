@@ -20,14 +20,6 @@ class Parser:
         elif csv_format == 'single' and taxonomy_filepath is not None:
             return self.parse_single_with_taxonomy(filepath, taxonomy_filepath, usingTimestamp)
 
-    #DELETE WHEN FINISH TESTING FOR HONG
-    def parseHONG(self, filepath, csv_format='single', usingTimestamp = True):
-        #self.parse_single_file(filepath, usingTimestamp)
-        dataset, timestamps = self.build_dataset_timestamp_from_file(filepath)
-        matrix_dictionary_and_ptt = self.fit(dataset).create_matrix_dictionary_using_timestamps_HONG(dataset, timestamps)
-        return Database(matrix_dictionary_and_ptt["md"], timestamps, self.item_name_by_index,
-                        len(dataset), {}, matrix_dictionary_and_ptt["ptt"])
-
     def parse_single_file(self, filepath, usingTimestamp=False):
         dataset, timestamps = self.build_dataset_timestamp_from_file(filepath)
         return self.fit_database(dataset, timestamps, None, usingTimestamp)

@@ -23,25 +23,35 @@ class HTGARTests(unittest.TestCase):
                                                        True)
 
     def test_HTGAR_correctness(self):
-        rules = HTAR_BY_PG(self.sales_formatted_for_test, 0.001, 0.5, 0.001, True, 1.1, False, False, False, False, 2,
-                           [24, 12, 4, 1])
+        rules = HTAR_BY_PG(database=self.sales_formatted_for_test,
+                           min_rsup=0.001,
+                           min_rconf=0.5,
+                           lam=0.001,
+                           generalized_rules=True,
+                           min_r=1.1,
+                           )
         all_rules = flatten_list(list(rules.values()))
         self.assertTrue(any(self.sales_formatted_for_test.is_ancestral_rule(
             rule.getItemset()) for rule in all_rules))
 
     def test_HTGAR_R_interesting_prunes_rules(self):
-        rules_pruned = HTAR_BY_PG(self.sales_formatted_for_test, 0.001, 0.5, 0.001, True, 1.1, False, False, False,
-                                  False, 2, [24, 12, 4, 1])
+        rules_pruned = HTAR_BY_PG(database=self.sales_formatted_for_test,
+                                  min_rsup=0.001,
+                                  min_rconf=0.5,
+                                  lam=0.001,
+                                  generalized_rules=True,
+                                  min_r=1.1)
         rules = HTAR_BY_PG(self.sales_formatted_for_test, 0.1, 0.5, 0.1, True, paralelExecution=False,
-                           paralelExcecutionOnK=False, debugging=False, debuggingK=False, rsm=2, HTG=[24, 12, 4, 1])
+                           paralelExcecutionOnK=False, HTG=[24, 12, 4, 1])
         self.assertGreater(len(flatten_list(list(rules.values()))),
                            len(flatten_list(list(rules_pruned.values()))))
 
     def test_HTGAR_prunes_candidates_of_same_family(self):
         taxonomy = self.sales_formatted_for_test.taxonomy
-        results = getGranulesFrequentsAndSupports(self.sales_formatted_for_test,
-                                        0.001, 0.001,
-                                        False, False, False, False, 2, [24, 12, 4, 1], True)
+        results = getGranulesFrequentsAndSupports(database=self.sales_formatted_for_test,
+                                        min_rsup=0.001, lam=0.001,
+                                        paralelExcecution=False, paralelExcecutionOnK=False,
+                                        generalized_rules=True)
         suppDictionaryByPg = results['support_dictionary_by_pg']
         for pg in suppDictionaryByPg:
             for key in suppDictionaryByPg[pg]:

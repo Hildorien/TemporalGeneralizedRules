@@ -206,7 +206,7 @@ class HTARTests(unittest.TestCase):
                     for i in range(0, 2):
                         rules_by_pg = HTAR_BY_PG(database=database, min_rsup=sups[i], min_rconf=confs[i], lam=sups[i],
                                                  paralelExecution=paralel_running,
-                                                 paralelExcecutionOnK=False, debugging=False, debuggingK=False, rsm=2,
+                                                 paralelExcecutionOnK=False,
                                                  paralel_rule_generation=paralel_running_rules_generation)
                         strJoin = str(paralel_running)+"-"+str(paralel_running_rules_generation)+"-"+str(2)
                         paralelRun[strJoin] = rules_by_pg
@@ -224,18 +224,6 @@ class HTARTests(unittest.TestCase):
         self.assertEqual(starters_tid[11], [4, 4], 'test_starters_tid_3')
         self.assertEqual(starters_tid[17], [5, 6], 'test_starters_tid_4')
         self.assertEqual(starters_tid[22], [7, 7], 'test_starters_tid_5')
-
-    def test_get_period_stamp_from_timestamp_HONG(self):
-        t1 = 852076800  # 1/1/1997
-        t2 = 883526400  # 12/12/1997
-        t3 = 859248000  # 25/3/1997
-        t4 = 866332800  # 15/6/1997
-
-        self.assertEqual(getPeriodStampFromTimestampHONG(t1), [1, 1, 1], 'Periodstamp HONG 1')
-        self.assertEqual(getPeriodStampFromTimestampHONG(t2), [10, 5, 1], 'Periodstamp HONG 2')
-        self.assertEqual(getPeriodStampFromTimestampHONG(t3), [3, 2, 1], 'Periodstamp HONG 3')
-        self.assertEqual(getPeriodStampFromTimestampHONG(t4), [5, 3, 1], 'Periodstamp HONG 4')
-
 
 
 

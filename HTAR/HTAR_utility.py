@@ -57,55 +57,17 @@ def getTFIUnion(TFI_by_period, bounderies):
 
     return finalTFI
 
-def getPeriodsIncluded(l_length, period, hong = False):
-    # Note: This method does only works for any period in level above 0 with hardcoded HTG = [24,12,4, 1]
-    if hong:
-        return getPeriodsIncludedInHONG(l_length, period)
-    else:
-        if l_length == 0:
-            return [period, period]
-        elif l_length == 1:
-            later_fortnight = period * 2
-            return [later_fortnight - 1, later_fortnight]
-        elif l_length == 2:
-            later_fortnight = period * 6
-            return [later_fortnight - 5, later_fortnight]
-        elif l_length == 3:
-            return [1, 24]
-        else:
-            print("ERROR: L_LENGTH NOT AVAILABLE FOR DEFAULT HTG")
-
-def getPeriodsIncludedInHONG(l_length, period):
-    # Note: This method does only works for any period in level above 0 with hardcoded HTG = [10, 5, 1]
+def getPeriodsIncluded(l_length, period):
+    # Note: This method does only works with hardcoded HTG = [24,12,4, 1]
     if l_length == 0:
         return [period, period]
     elif l_length == 1:
-        ub = period*2
-        return [ub-1, ub]
+        later_fortnight = period * 2
+        return [later_fortnight - 1, later_fortnight]
     elif l_length == 2:
-        return [1, 10]
+        later_fortnight = period * 6
+        return [later_fortnight - 5, later_fortnight]
+    elif l_length == 3:
+        return [1, 24]
     else:
         print("ERROR: L_LENGTH NOT AVAILABLE FOR DEFAULT HTG")
-
-
-# Depracated. MCP won't be used
-# def getMCPOfItemsetBetweenBoundaries(faps_period_of_level_0, boundaries):
-#     maximum_period_available = max(faps_period_of_level_0)
-#     lower_boundary = max(maximum_period_available, boundaries[0])
-#     upper_boundary = boundaries[1] #TODO: REFACTOR THIS UPPER BOUNDARY IF LAP IS IMPLEMENTED
-#     if maximum_period_available > upper_boundary:
-#         # If maximum common appearance occurs after the upper_boundary, MCP bounded is NONE.
-#         return None
-#     else:
-#         return [lower_boundary, upper_boundary]
-
-
-# This method gets the maximal time period between all HTG with their respective l-length
-# def getMTPFromHTGArrays(faps):
-#     l_length = 3  # Hardcoded HTG length
-#     res = []
-#     for i in range(l_length):
-#         lth_level_values = map(lambda fap: fap[i], faps)
-#         max_period = max(lth_level_values)
-#         res.append(max_period)
-#     return res
