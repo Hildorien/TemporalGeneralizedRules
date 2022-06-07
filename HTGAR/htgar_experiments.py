@@ -103,7 +103,7 @@ if __name__ == "__main__":
     # htgar_experiment_roots(0.005)
 
     #HTGAR Foodmart experiment r interesting
-    #htgar_foodmart_experiment_with_r_interesting()
+    htgar_foodmart_experiment_with_r_interesting()
 
     #htgar_foodmart_experiment()
 

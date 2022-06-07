@@ -69,7 +69,6 @@ def rule_generation_test(random_list_to_parallel, min_confidence, parallel_rule_
         rules = []
         for random_rule in random_list_to_parallel:
             rnd_number, confidence,  min_conf = random_rule
-            complex_task()
             if confidence >= min_confidence:
                 rules.append(rnd_number)
         end = time.time()
@@ -142,7 +141,6 @@ def expected_value(min_r, itemset, support_dictionary, taxonomy, database, pg=No
 
 
 def check_rule_for_parallel(key, potential_rule_confidence, min_conf):
-    complex_task()
     if potential_rule_confidence >= min_conf:
         return key
 
@@ -160,8 +158,3 @@ def filter_interesting_rules(rules, min_confidence, min_r, support_dictionary, d
 def generate_rule_for_parallel(key, dict):
     antecedent, consequent, support_all_items, confidence, min_conf = dict[key]  # Unpack data
     return AssociationRule(antecedent, consequent, support_all_items, confidence)
-
-def complex_task():
-    h = 0
-    for i in range(1, 10):
-        x = 2

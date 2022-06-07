@@ -1,21 +1,3 @@
-
-
-# def test_HONG_apriori(self):
-    #     database = Parser().parseHONG("Datasets/sales_formatted_1997_sorted_by_timestamp.csv", 'single', True)
-    #     print('---')
-    #     start = time.time()
-    #     apriori_rules = apriori(database, 0.006, 0.2)
-    #     print(str(len(apriori_rules)) + ' rules')
-    #
-    #     end = time.time()
-    #     print('Apriori Took ' + (str(end - start) + ' seconds'))
-    #     start = time.time()
-    #     rules_by_pg = HTAR_BY_PG(database, 0.006, 0.2, 0.006, [10, 5, 1])
-    #     end = time.time()
-    #     print('HONG Took ' + (str(end - start) + ' seconds'))
-    #     print(str(len(rules_by_pg)) + ' rules')
-    #
-    #     self.printRulesDebugging(database, rules_by_pg, {})
 import time
 #
 import seaborn as sns
@@ -52,7 +34,6 @@ synthetic_datasets_filepath = {
 
 synthetic_datasets_filepath_2 = {
     'transaction': [{"label": "T750k", "path": '../SyntheticalDatabase/TesisSyntheticDatasets/Transaction/T750k-timestamped.csv'}],
-
     'transactionLength': [{"label": "TL40", "path": '../SyntheticalDatabase/TesisSyntheticDatasets/TransactionLength/TL40-timestamped.csv'}]
 }
 
@@ -339,6 +320,6 @@ if __name__=="__main__":
     #exp_HTAR_synthetic()
     #exp_apriori_synthetic()
     #exp_HTAR_foodmart()
-    create_heatmap()
-
+    #create_heatmap()
+    print("exp_test")
     #exp_FINAL_HTAR_synthetic()

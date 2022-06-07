@@ -122,18 +122,8 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
                 support_dictionary_by_pg[pgStringKey] = individualTFI["supportDict"]
                 HTFI_by_pg[pgStringKey] = TFI_by_period_in_l_0[pi + 1]
 
-            # end = time.time()
-            # if debugging:
-            #     totalFrequent = 0
-            #     if pi + 1 in TFI_by_period_in_l_0:
-            #         for k in TFI_by_period_in_l_0[pi + 1]:
-            #             totalFrequent += len(TFI_by_period_in_l_0[pi + 1][k])
-            #         print(str(pi) + ' leaf-TFI took ' + (str(end - start) + ' seconds'))
-            #         print('(' + str(totalFrequent) + ' frecuent itemsets )')
-            #         print('-------------')
 
     # PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS}
-    print('Starting Phase 2')
     HTFI = {}
     for l_level in range(len(HTG)):
         if l_level != 0:
@@ -170,81 +160,57 @@ def getGranulesFrequentsAndSupports(database, min_rsup,  lam, paralelExcecution 
                         support_dictionary_by_pg[pgKey] = sup_dict
                     else:
                         del support_dictionary_by_pg[pgKey]
-                # if debugging:
-                #     end = time.time()
-                #     if pgStringKey in HTFI_by_pg:
-                #         totalFrequent = 0
-                #         for k in HTFI_by_pg[pgStringKey]:
-                #             totalFrequent += len(HTFI_by_pg[pgStringKey][k])
-                #
-                #         print(pgStringKey + ' took ' + (str(end - start) + ' seconds'))
-                #         print('(' + str(totalCandidates) + ' candidates itemsets )')
-                #         print('(' + str(totalFrequent) + ' frecuent itemsets )')
-                #         print('-------------')
-                #     else:
-                #         print('(no frecuent itemsets)')
-                #         print('-------------')
-
 
     return {'HTFI_by_pg': HTFI_by_pg, 'support_dictionary_by_pg': support_dictionary_by_pg}
 
 
 
 def HTAR_BY_PG(database, min_rsup, min_rconf, lam, generalized_rules=False, min_r=None, paralelExecution=False,
-               paralelExcecutionOnK=False, debugging=False, debuggingK=False, rsm=2, HTG=[24, 12, 4, 1]):
+               paralelExcecutionOnK=False, debugging=False, debuggingK=False, rsm=2, HTG=[24, 12, 4, 1], paralel_rule_generation = False):
     """
     :param database:
     :return: a set of AssociationRules
     """
     # PHASE 1: FIND TEMPORAL FREQUENT ITEMSETS (l_level = 0) AND PHASE 2: FIND ALL HIERARCHICAL TEMPORAL FREQUENT ITEMSETS
-    print('Starting Phase 1')
     phase_1_and_2_res = getGranulesFrequentsAndSupports(database, min_rsup, lam, paralelExecution, paralelExcecutionOnK, debugging, debuggingK, rsm, HTG, generalized_rules)
     # PHASE 3: FIND ALL HIERARCHICAL TEMPORAL ASSOCIATION RULES
     pgKeys = phase_1_and_2_res['HTFI_by_pg']
     suppDictionaryByPg = phase_1_and_2_res['support_dictionary_by_pg']
-    paralel_rule_generation = False
-    print('Starting Phase 3')
 
-    a = getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation, min_r, database, generalized_rules)
+    a = getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, paralel_rule_generation, min_r, database, generalized_rules)
 
-    print("THAT WAS WITH SUP: " + str(min_rsup) + "and R: " + str(min_r))
-    print("##################################")
     return a
 
-def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, debugging, paralel_rule_generation = False, min_r = None, database=None, generalized_rules = False):
+def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, paralel_rule_generation = False, min_r = None, database=None, generalized_rules = False):
     HTFS_by_pg = {}
     list_to_parallel = []
     pool = None
     if paralel_rule_generation:
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
     for pg in pgKeys.keys():
-        list_to_parallel.append((pg, pgKeys[pg], suppDictionaryByPg[pg], min_rconf, min_r))
+        list_to_parallel.append((pg, pgKeys[pg], suppDictionaryByPg[pg], min_rconf, database, min_r))
 
     if paralel_rule_generation:
         rulesByPg = pool.starmap(rule_generation_paralel, list_to_parallel)
         for pgRule in rulesByPg:
-            if len(pgRule) > 0:
+            if len(pgRule[1]) > 0:
                 HTFS_by_pg[pgRule[0]] = pgRule[1]
         pool.close()
         pool.join()
     else:
        total_rules = 0
        for param in list_to_parallel:
-           pg, candidates, supDic, min_rconf, min_r = param
-           pg_rules = rule_generation(candidates, supDic, min_rconf, False, min_r, database, pg)
+           pg, candidates, supDic, min_rconf, database, min_r = param
+           pg_rules = rule_generation(frequent_dictionary=candidates, support_dictionary=supDic, min_confidence=min_rconf, parallel_rule_gen=False, min_r=min_r, database=database, pg=pg)
            if len(pg_rules) > 0:
                 HTFS_by_pg[pg] = pg_rules
-                print('Granule ' + pg + ' generated ' + str(len(pg_rules)) + ' rules')
                 ancestral_rules = 0
                 total_rules += len(pg_rules)
                 for rule in pg_rules:  # rule : AssociationRule
                     itemset_rule = rule.getItemset()  # set(item_id)
                     if generalized_rules and database.is_ancestral_rule(itemset_rule):
                         ancestral_rules += 1
-                print('Counted ' + str(ancestral_rules) + ' ancestral rules')
-       print('Total rules generated: ' + str(total_rules))
-
     return HTFS_by_pg
 
-def rule_generation_paralel(pg, pgKeys, pgSupDic, min_rconf, min_r):
-    return pg, rule_generation(pgKeys, pgSupDic, min_rconf, min_r, pg)
+def rule_generation_paralel(pg, pgKeys, pgSupDic, min_rconf, database, min_r):
+    return pg, rule_generation(frequent_dictionary=pgKeys, support_dictionary=pgSupDic, min_confidence=min_rconf, parallel_rule_gen=False, min_r=min_r, database=database, pg=pg)
