@@ -11,13 +11,7 @@ from utility import flatten_list
 class HTGARTests(unittest.TestCase):
 
     def setUp(self) -> None:
-        # self.foodmart_97 = Parser().parse("Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
-        #                                            'single',
-        #                                            'Taxonomies/salesfact_taxonomy_single_2.csv', True)
-        # self.foodmart_98 = Parser().parse("Datasets/sales_formatted_1998_sorted_by_timestamp.csv",
-        #                                            'single',
-        #                                            'Taxonomies/salesfact_taxonomy_single_2.csv', True)
-        self.sales_formatted_for_test = Parser().parse("Datasets/sales_formatted_for_test.csv",
+         self.sales_formatted_for_test = Parser().parse("Datasets/sales_formatted_for_test.csv",
                                                        'single',
                                                         "Taxonomies/sales_formatted_for_test_taxonomy.csv",
                                                        True)

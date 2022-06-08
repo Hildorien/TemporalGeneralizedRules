@@ -68,81 +68,6 @@ class Parser:
 
         return dataset, timestamp
 
-    # def build_dataset_timestamp_from_file(self, filepath):
-    #     header_with_timestamp = {'order_id', 'timestamp', 'product_name'}
-    #     header_without_timestamp = {'order_id', 'product_name'}
-    #     with open(filepath) as f:
-    #         firstline = set(f.readline().rstrip().split(','))
-    #
-    #     if firstline == header_with_timestamp:
-    #         df = pd.read_csv(filepath, dtype={'order_id': int, 'timestamp': int, 'product_name': "string"})
-    #         df = df.sort_values(by=['timestamp', 'order_id'])
-    #         df['product_name'].replace(',', '.', inplace=True)
-    #         dfG = df.groupby(['timestamp', 'order_id'])['product_name'].apply(lambda x: list(x)).reset_index()
-    #         timestamps = dfG['timestamp']
-    #         dataset = list(dfG['product_name'])
-    #         return dataset, timestamps
-    #     elif firstline == header_without_timestamp:
-    #         df = pd.read_csv(filepath, dtype={'order_id': int, 'product_name': "string"})
-    #         df['product_name'].replace(',', '.', inplace=True)
-    #         dataset, timestamps =self.groupby_multikey_dataframe_fast(df, ['order_id'])
-    #         return dataset, timestamps
-    #     elif len(firstline) == 2:   # No header but we assume format is order_id,product_name
-    #         df = pd.read_csv(filepath, names=['order_id', 'product_name'], header=None,
-    #                          dtype={'order_id': int, 'product_name': "string"})
-    #         df['product_name'].replace(',', '.', inplace=True)
-    #         dataset, timestamps =self.groupby_multikey_dataframe_fast(df, ['order_id'])
-    #         return dataset, timestamps.to_dict()
-
-    # def groupby_multikey_dataframe_fast(self, df, key_cols):
-    #     #pandas.groupby is slow.
-    #     #Explanation: https://stackoverflow.com/questions/60028836/combination-of-columns-for-aggregation-after-groupby/60029108#60029108
-    #     #Performance can be improved using numpy arrays https://stackoverflow.com/a/56525582
-    #     if not isinstance(key_cols, list):
-    #         key_cols = [key_cols]
-    #
-    #     values = df.sort_values(key_cols).values.T
-    #
-    #     col_idcs = [df.columns.get_loc(cn) for cn in key_cols]
-    #     other_col_names = [name for idx, name in enumerate(df.columns) if idx not in col_idcs]
-    #     other_col_idcs = [df.columns.get_loc(cn) for cn in other_col_names]
-    #
-    #     # split df into indexing colums(=keys) and data colums(=vals)
-    #     keys = values[col_idcs, :]
-    #     vals = values[other_col_idcs, :]
-    #
-    #     # list of tuple of key pairs
-    #     multikeys = list(zip(*keys))
-    #     # remember unique key pairs and ther indices
-    #     ukeys, index = np.unique(multikeys, return_index=True, axis=0)
-    #
-    #     # split data columns according to those indices
-    #     arrays = np.split(vals, index[1:], axis=1)
-    #
-    #     # resulting list of subarrays has same number of subarrays as unique key pairs
-    #     # each subarray has the following shape:
-    #     #    rows = number of non-grouped data columns
-    #     #    cols = number of data points grouped into that unique key pair
-    #
-    #     # prepare multi index
-    #     idx = pd.MultiIndex.from_arrays(ukeys.T, names=key_cols)
-    #
-    #     list_agg_vals = dict()
-    #     for tup in zip(*arrays, other_col_names):
-    #         col_vals = tup[:-1]  # first entries are the subarrays from above
-    #         col_name = tup[-1]  # last entry is data-column name
-    #
-    #         list_agg_vals[col_name] = col_vals
-    #
-    #
-    #     #df2 = pd.DataFrame(data=list_agg_vals, index=idx)
-    #     if len(key_cols) > 1:
-    #         timestamps = pd.Series(data=list(dict.fromkeys(list(keys[1, :]))))
-    #     else:
-    #         timestamps = pd.DataFrame(columns=['timestamp'])  # Empty pandas series -> no timestamps used
-    #     dataset = [x.tolist() for x in list(list(list_agg_vals.values())[0])]
-    #     return dataset, timestamps
-
     def parse_basket_file(self, filepath):
         return self.fit_database(self.build_dataset_from_basket(filepath), {})
 
@@ -249,23 +174,6 @@ class Parser:
 
         return {"md": matrix_dictionary, "ptt": ptt}
 
-
-    #DELETE WHEN FINISH TESTING
-    def create_matrix_dictionary_using_timestamps_HONG(self, dataset, timestamps):
-        matrix_dictionary = {}
-        ptt = PTT(True)
-        for tid, transaction in enumerate(dataset):
-            transactionHTGLeafGranule = getPeriodStampFromTimestampHONG(timestamps[tid])[0]
-            itemsToAddToPTT = set(map(lambda x: self.item_index_by_name[x], set(transaction)))
-            ptt.addItemPeriodToPtt(transactionHTGLeafGranule, tid, itemsToAddToPTT)
-            for item in set(transaction):
-                if item in matrix_dictionary:
-                    matrix_dictionary[item]['tids'].append(tid)
-                else:
-                    matrix_dictionary[item] = {}
-                    matrix_dictionary[item]['tids'] = [tid]
-
-        return {"md": matrix_dictionary, "ptt": ptt}
 
     def fit(self, dataset):
         self.item_name_by_index = {}

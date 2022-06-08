@@ -210,7 +210,7 @@ def getRulesForEachTimeGranule(min_rconf, pgKeys, suppDictionaryByPg, paralel_ru
     if paralel_rule_generation:
         pool = multiprocessing.Pool(multiprocessing.cpu_count())
     for pg in pgKeys.keys():
-        list_to_parallel.append((pg, pgKeys[pg], suppDictionaryByPg[pg], min_rconf, database, min_r))
+        list_to_parallel.append((pg, pgKeys[pg], suppDictionaryByPg[pg], min_rconf,database, min_r))
 
     if paralel_rule_generation:
         rulesByPg = pool.starmap(rule_generation_paralel, list_to_parallel)

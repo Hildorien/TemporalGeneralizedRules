@@ -5,12 +5,10 @@ class PTT:  # Periodical Total Transaction
     # A list of lists. Outer list is l-levels (Hardcoded in 3 elements). Inner lists are the amount of transactions contained in each time period contained in each level.
     # They are initialized in 0. So if your HTG is [4,2,5] the ptt created will be [0,0,0,0]
 
-    # UPDATE: PTT is only saving data for 0-level time granules
+    # PTT is only saving data for 0-level time granules
 
     def __init__(self):
         hardcoded_htg = [24, 12, 4, 1]
-
-
         self.ptt = []
         for x in range(hardcoded_htg[0]):
             self.ptt.append({'itemsSet': set(), 'totalTransactions': 0, 'FirstAndLastTID': None})

@@ -1,7 +1,6 @@
 import multiprocessing
-import time
-from HTAR.HTAR_utility import getPeriodsIncluded, getPeriodStampFromTimestamp
-from utility import findOrderedIntersection, findOrderedIntersectionBetweenBoundaries, maximal_time_period_interval, \
+from HTAR.HTAR_utility import getPeriodsIncluded
+from utility import findOrderedIntersection, maximal_time_period_interval, \
     getFilteredTIDSThatBelongToPeriod, create_ancestor_set, append_tids_for_HTAR, \
     calculate_tid_intersections_HTAR_with_boundaries, generateCanidadtesOfSizeK, hash_candidate, \
     calculate_tid_intersections_HTAR_with_boundaries_for_paralel, create_minimal_items_dic, \
