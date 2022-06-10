@@ -1,7 +1,4 @@
 import itertools
-import time
-
-from utility import flatten_list, hash_candidate, getValidJoin, allSubsetofSizeKMinus1
 
 
 def close_ancestor(item, taxonomy):

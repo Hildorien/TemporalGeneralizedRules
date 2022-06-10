@@ -1,8 +1,7 @@
-import time
-
 from rule_generator import rule_generation
 from utility import generateCanidadtesOfSizeK, hash_candidate, append_tids, calculate_support_for_parallel
 import multiprocessing
+
 
 def apriori(database, min_support, min_confidence, parallel_count=False, parallel_rule_gen=False):
     """

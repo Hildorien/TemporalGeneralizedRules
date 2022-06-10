@@ -1,6 +1,3 @@
-import itertools
-import time
-
 from HTAR.HTAR_utility import getPeriodsIncluded, getTFIUnion
 from rule_generator import rule_generation
 from utility import generateCanidadtesOfSizeK, stringifyPg, hash_candidate, maximal_time_period_interval, \

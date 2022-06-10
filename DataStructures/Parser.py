@@ -1,26 +1,18 @@
 import csv
-
-import numpy as np
-#import pandas as pd
 from DataStructures.Database import Database
-from DataStructures.HorizontalDatabase import HorizontalDatabase
-from HTAR.HTAR_utility import getPeriodStampFromTimestamp, getPeriodStampFromTimestampHONG
+from HTAR.HTAR_utility import getPeriodStampFromTimestamp
 from HTAR.PTT import PTT
-from DataStructures.Transaction import Transaction
+
 
 class Parser:
 
-    def parse(self, filepath, csv_format='single', taxonomy_filepath=None, usingTimestamp=False):
-        if csv_format == 'basket' and taxonomy_filepath is None:
-            return self.parse_basket_file(filepath)
-        elif csv_format == 'single' and taxonomy_filepath is None:
-            return self.parse_single_file(filepath, usingTimestamp)
-        elif csv_format == 'basket' and taxonomy_filepath is not None:
-            return self.parse_basket_with_taxonomy(filepath, taxonomy_filepath)
-        elif csv_format == 'single' and taxonomy_filepath is not None:
-            return self.parse_single_with_taxonomy(filepath, taxonomy_filepath, usingTimestamp)
+    def parse(self, filepath, taxonomy_filepath=None, usingTimestamp=False):
+        if taxonomy_filepath is None:
+            return self.parse_file(filepath, usingTimestamp)
+        else:
+            return self.parse_file_with_taxonomy(filepath, taxonomy_filepath, usingTimestamp)
 
-    def parse_single_file(self, filepath, usingTimestamp=False):
+    def parse_file(self, filepath, usingTimestamp=False):
         dataset, timestamps = self.build_dataset_timestamp_from_file(filepath)
         return self.fit_database(dataset, timestamps, None, usingTimestamp)
 
@@ -32,9 +24,9 @@ class Parser:
             pos = csv_file.tell()
             line = csv_file.readline()
             csv_file.seek(pos)
-            firstline = set(line.rstrip().split(','))
+            firstline = set(map(lambda x: x.strip(), line.split(',')))
             if firstline == header_with_timestamp:
-                csv_file.readline() # skips header
+                csv_file.readline()  # skips header
                 return self.read_csv_and_build_dataset_timestamps(csv_reader, True)
             elif firstline == header_without_timestamp:
                 csv_file.readline()  # skips header
@@ -43,8 +35,8 @@ class Parser:
                 return self.read_csv_and_build_dataset_timestamps(csv_reader)
 
     def read_csv_and_build_dataset_timestamps(self, csv_reader, parse_timestamp=False):
-        dataset = [] # [[product_name]]
-        timestamp = {} # dict { order_id: timestamp }
+        dataset = []  # [[product_name]]
+        timestamp = {}  # dict { order_id: timestamp }
         transactions = {}
         for row in csv_reader:
             id = int(row[0])
@@ -68,24 +60,11 @@ class Parser:
 
         return dataset, timestamp
 
-    def parse_basket_file(self, filepath):
-        return self.fit_database(self.build_dataset_from_basket(filepath), {})
-
-    def build_dataset_from_basket(self, filepath):
-        dataset = []
-        with open(filepath) as file:
-            lines = file.readlines()
-        for line in lines:
-            a_transaction = []
-            string_split = line.rstrip().split(",")
-            for item in string_split:
-                a_transaction.append(item)
-            dataset.append(a_transaction)
-        return dataset
-
     def fit_database(self, dataset, timestamps, taxonomy=None, usingTimestamps=False):
         if taxonomy is not None and not usingTimestamps:
-            matrix_dictionary_with_tax = self.fit_with_taxonomy(dataset, taxonomy).create_matrix_dictionary_with_taxonomy(dataset, taxonomy)
+            matrix_dictionary_with_tax = self.fit_with_taxonomy(dataset,
+                                                                taxonomy).create_matrix_dictionary_with_taxonomy(
+                dataset, taxonomy)
             indexed_taxonomy = self.create_indexed_taxonomy(self.item_index_by_name, taxonomy)
             return Database(matrix_dictionary_with_tax, timestamps, self.item_name_by_index,
                             len(dataset), indexed_taxonomy)
@@ -95,30 +74,20 @@ class Parser:
             return Database(matrix_dictionary_and_ptt["md"], timestamps, self.item_name_by_index,
                             len(dataset), {}, matrix_dictionary_and_ptt["ptt"])
         elif usingTimestamps and taxonomy is not None:
-            matrix_dictionary_and_ptt = self.fit_with_taxonomy(dataset, taxonomy).create_matrix_dictionary_with_taxonomy_and_timestamps(dataset, taxonomy, timestamps)
+            matrix_dictionary_and_ptt = self.fit_with_taxonomy(dataset,
+                                                               taxonomy).create_matrix_dictionary_with_taxonomy_and_timestamps(
+                dataset, taxonomy, timestamps)
             indexed_taxonomy = self.create_indexed_taxonomy(self.item_index_by_name, taxonomy)
             return Database(matrix_dictionary_and_ptt["md"], timestamps, self.item_name_by_index,
-                            len(dataset), indexed_taxonomy, matrix_dictionary_and_ptt["ptt"],self.only_ancestors)
+                            len(dataset), indexed_taxonomy, matrix_dictionary_and_ptt["ptt"], self.only_ancestors)
         else:
             matrix_dictionary = self.fit(dataset).create_matrix_dictionary(dataset)["md"]
             return Database(matrix_dictionary, timestamps, self.item_name_by_index,
                             len(dataset), {})
 
-    def parse_taxonomy_basket(self, taxonomy_filepath):
-        taxonomy = {}
-        with open(taxonomy_filepath) as file:
-            lines = file.readlines()
-        for line in lines:
-            products = line.rstrip().split(",")
-            for i, a_product in enumerate(products):
-                if a_product not in taxonomy:
-                    taxonomy[a_product] = []
-                    taxonomy[a_product].extend(products[i + 1:len(products)])
-        return taxonomy
-
     def parse_taxonomy_single(self, taxonomy_filepath):
         taxonomy = {}
-        with open(taxonomy_filepath) as file: #Learn all close ancestors of taxonomy
+        with open(taxonomy_filepath) as file:  # Learn all close ancestors of taxonomy
             lines = file.readlines()
             for line in lines:
                 products = line.rstrip().split(",")
@@ -133,7 +102,7 @@ class Parser:
 
         old_lens = [len(x) for x in list(taxonomy.values())]
         new_lens = []
-        while old_lens != new_lens: #Loop until values don't change
+        while old_lens != new_lens:  # Loop until values don't change
             for key in taxonomy:
                 ancestors = taxonomy[key]
                 if ancestors:
@@ -145,7 +114,6 @@ class Parser:
             old_lens = new_lens
             new_lens = [len(x) for x in list(taxonomy.values())]
         return taxonomy
-
 
     def create_matrix_dictionary(self, dataset):
         matrix_dictionary = {}
@@ -173,7 +141,6 @@ class Parser:
                     matrix_dictionary[item]['tids'] = [tid]
 
         return {"md": matrix_dictionary, "ptt": ptt}
-
 
     def fit(self, dataset):
         self.item_name_by_index = {}
@@ -233,7 +200,6 @@ class Parser:
 
         return self
 
-
     def create_matrix_dictionary_with_taxonomy(self, dataset, taxonomy):
         """
         :param dataset: [['product_name']]
@@ -260,7 +226,6 @@ class Parser:
                     matrix_dictionary[item]['tids'] = [tid]
 
         return matrix_dictionary
-
 
     def create_matrix_dictionary_with_taxonomy_and_timestamps(self, dataset, taxonomy, timestamps):
         """
@@ -294,18 +259,10 @@ class Parser:
 
         return {"md": matrix_dictionary, "ptt": ptt}
 
-
-    def parse_single_with_taxonomy(self, dataset_filepath, taxonomy_filepath, usingTimestamp):
+    def parse_file_with_taxonomy(self, dataset_filepath, taxonomy_filepath, usingTimestamp):
         dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
         taxonomy = self.parse_taxonomy_single(taxonomy_filepath)
         return self.fit_database(dataset, timestamps, taxonomy, usingTimestamp)
-
-
-    def parse_basket_with_taxonomy(self, dataset_filepath, taxonomy_filepath):
-        dataset = self.build_dataset_from_basket(dataset_filepath)
-        taxonomy = self.parse_taxonomy_basket(taxonomy_filepath)
-        return self.fit_database(dataset, {}, taxonomy)
-
 
     def create_indexed_taxonomy(self, index_items_dic, taxonomy):
         indexed_taxonomy = {}
@@ -316,46 +273,3 @@ class Parser:
                 for an_ancestor in ancestors:
                     indexed_taxonomy[index_items_dic[an_item]].append(index_items_dic[an_ancestor])
         return indexed_taxonomy
-
-    def parse_single_file_for_horizontal_database(self, dataset_filepath, taxonomy_filepath):
-        dataset, timestamps = self.build_dataset_timestamp_from_file(dataset_filepath)
-        taxonomy = self.parse_taxonomy_single(taxonomy_filepath)
-        return self.fit_horizontal_database(dataset, timestamps, taxonomy)
-
-    def parse_basket_file_for_horizontal_database(self, dataset_filepath, taxonomy_filepath):
-        dataset = self.build_dataset_from_basket(dataset_filepath)
-        taxonomy = self.parse_taxonomy_basket(taxonomy_filepath)
-        return self.fit_horizontal_database(dataset, {}, taxonomy)
-
-    def parse_horizontal_database(self, dataset_filepath, taxonomy_filepath, csv_format='single'):
-        if csv_format == 'single':
-            return self.parse_single_file_for_horizontal_database(dataset_filepath, taxonomy_filepath)
-        elif csv_format == 'basket':
-            return self.parse_basket_file_for_horizontal_database(dataset_filepath, taxonomy_filepath)
-
-    def fit_horizontal_database(self, dataset, timestamps, taxonomy):
-        transactions = []
-        unique_items = set()
-        items_dic = {}
-        index_items_dic = {}
-        for a_transaction in dataset:
-            for item in a_transaction:
-                unique_items.add(item)
-        # Add ancestors to unique items
-        for key in taxonomy:
-            for ancestor in taxonomy[key]:
-                unique_items.add(ancestor)
-        sorted_items = sorted(unique_items)
-        for id_item, item in enumerate(sorted_items):
-            items_dic[id_item] = item
-            index_items_dic[item] = id_item
-
-        for tid, a_transaction in enumerate(dataset):
-            indexed_transaction = []
-            for an_item in a_transaction:
-                indexed_transaction.append(index_items_dic[an_item])
-            transactions.append(Transaction(tid, timestamps.get(tid, 0), sorted(indexed_transaction)))
-
-        indexed_taxonomy = self.create_indexed_taxonomy(index_items_dic, taxonomy)
-
-        return HorizontalDatabase(transactions, indexed_taxonomy, items_dic, index_items_dic)

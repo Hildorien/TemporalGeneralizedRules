@@ -1,19 +1,14 @@
-import time
 import unittest
-
-from Apriori.apriori import apriori
 from DataStructures.Parser import Parser
 from HTAR.HTAR import HTAR_BY_PG, getGranulesFrequentsAndSupports
-from Tests.htar_tests import HTARTests
 from utility import flatten_list
 
 
 class HTGARTests(unittest.TestCase):
 
     def setUp(self) -> None:
-         self.sales_formatted_for_test = Parser().parse("Datasets/sales_formatted_for_test.csv",
-                                                       'single',
-                                                        "Taxonomies/sales_formatted_for_test_taxonomy.csv",
+        self.sales_formatted_for_test = Parser().parse("Datasets/sales_formatted_for_test.csv",
+                                                       "Taxonomies/sales_formatted_for_test_taxonomy.csv",
                                                        True)
 
     def test_HTGAR_correctness(self):
@@ -43,9 +38,9 @@ class HTGARTests(unittest.TestCase):
     def test_HTGAR_prunes_candidates_of_same_family(self):
         taxonomy = self.sales_formatted_for_test.taxonomy
         results = getGranulesFrequentsAndSupports(database=self.sales_formatted_for_test,
-                                        min_rsup=0.001, lam=0.001,
-                                        paralelExcecution=False, paralelExcecutionOnK=False,
-                                        generalized_rules=True)
+                                                  min_rsup=0.001, lam=0.001,
+                                                  paralelExcecution=False, paralelExcecutionOnK=False,
+                                                  generalized_rules=True)
         suppDictionaryByPg = results['support_dictionary_by_pg']
         for pg in suppDictionaryByPg:
             for key in suppDictionaryByPg[pg]:

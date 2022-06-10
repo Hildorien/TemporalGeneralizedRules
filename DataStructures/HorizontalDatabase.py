@@ -1,6 +1,4 @@
-import numpy as np
-
-from utility import hash_candidate, create_ancestor_set
+from utility import create_ancestor_set
 
 
 class HorizontalDatabase:

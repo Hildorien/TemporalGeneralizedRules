@@ -1,10 +1,6 @@
-import itertools
 import math
 import multiprocessing
 import os
-import time
-import random
-
 from Cumulate.cumulate_utility import calculate_itemset_ancestor, close_ancestor
 from DataStructures.AssociationRule import AssociationRule
 from utility import hash_candidate
@@ -18,10 +14,12 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
         min_r = 0
     frequent_itemset_values = list(frequent_dictionary.values())
     frequent_itemsets = [frequent_itemset_values[i] for i in range(1, len(frequent_itemset_values))]
-    [explode_frequent_itemset_in_potential_rule(itemset, support_dictionary, min_confidence, potential_rules_dict) for sublist in frequent_itemsets for itemset in sublist]
+    [explode_frequent_itemset_in_potential_rule(itemset, support_dictionary, min_confidence, potential_rules_dict) for
+     sublist in frequent_itemsets for itemset in sublist]
     if parallel_rule_gen:
         pool = multiprocessing.Pool(os.cpu_count())
-        list_to_parallel = [(key, potential_rules_dict[key][3], potential_rules_dict[key][4]) for key in potential_rules_dict]
+        list_to_parallel = [(key, potential_rules_dict[key][3], potential_rules_dict[key][4]) for key in
+                            potential_rules_dict]
         results = pool.starmap(check_rule_for_parallel, list_to_parallel)
         rules = [generate_rule_for_parallel(r, potential_rules_dict) for r in results if r is not None]
         pool.close()  # Close pools after using them
@@ -34,7 +32,8 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
             if database is not None and database.taxonomy is not None:
                 itemset = sorted(antecedent + consequent)  # Reconstruct itemset
                 if rule_confidence >= min_conf and rule_support >= min_r * expected_value(min_r, itemset,
-                                                                                          support_dictionary, database.taxonomy,
+                                                                                          support_dictionary,
+                                                                                          database.taxonomy,
                                                                                           database, pg):
                     rules.append(AssociationRule(antecedent, consequent, rule_support, rule_confidence))
             else:
@@ -42,20 +41,6 @@ def rule_generation(frequent_dictionary, support_dictionary, min_confidence,
                     rules.append(AssociationRule(antecedent, consequent, rule_support, rule_confidence))
     return rules
 
-
-def rule_generation_test(random_list_to_parallel, min_confidence, parallel_rule_gen=False):
-
-    if parallel_rule_gen:
-        pool = multiprocessing.Pool(os.cpu_count())
-        results = pool.starmap(check_rule_for_parallel, random_list_to_parallel)
-        pool.close()  # Close pools after using them
-        pool.join()  # Main process waits after last pool closes
-    else:
-        rules = []
-        for random_rule in random_list_to_parallel:
-            rnd_number, confidence,  min_conf = random_rule
-            if confidence >= min_confidence:
-                rules.append(rnd_number)
 
 def explode_frequent_itemset_in_potential_rule(frequent_itemset, support_dictionary, min_conf, potential_rule_dict):
     """
@@ -126,12 +111,14 @@ def check_rule_for_parallel(key, potential_rule_confidence, min_conf):
     if potential_rule_confidence >= min_conf:
         return key
 
+
 def filter_interesting_rules(rules, min_confidence, min_r, support_dictionary, database):
     interesting_rules = []
     for rule in rules:
         itemset = sorted(list(rule.lhs) + list(rule.rhs))  # Reconstruct itemset
         if rule.confidence >= min_confidence and rule.support >= min_r * expected_value(min_r, itemset,
-                                                                                        support_dictionary, database.taxonomy,
+                                                                                        support_dictionary,
+                                                                                        database.taxonomy,
                                                                                         database):
             interesting_rules.append(rule)
     return interesting_rules

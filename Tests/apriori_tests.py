@@ -5,14 +5,14 @@ from DataStructures.Parser import Parser
 
 class AprioriTests(unittest.TestCase):
     def setUp(self):
-        self.databases = list(map(lambda dataset: Parser().parse(dataset, 'basket'),
-                                  ["Datasets/data.csv",   # 29 item(s), 5 transaction(s)
-                                   "Datasets/data2.csv",  # 9 item(s), 274 transaction(s)
-                                   "Datasets/data3.csv",  # 9 item(s), 502 transaction(s)
-                                   "Datasets/data4.csv",  # 89 item(s), 9903 transaction(s)
-                                   "Datasets/data5.csv",  # 2261 item(s), 95286 transaction(s)
-                                   "Datasets/data6.csv",  # 1787 item(s), 83335 transaction(s)
-                                   "Datasets/data7.csv"]  # 154 item(s), 522661 transaction(s)
+        self.databases = list(map(lambda dataset: Parser().parse(dataset),
+                                  ["Datasets/data_1.csv",   # 29 item(s), 5 transaction(s)
+                                   "Datasets/data_2.csv",  # 9 item(s), 274 transaction(s)
+                                   "Datasets/data_3.csv",  # 9 item(s), 502 transaction(s)
+                                   "Datasets/data_4.csv",  # 89 item(s), 9903 transaction(s)
+                                   "Datasets/data_5.csv",  # 2261 item(s), 95286 transaction(s)
+                                   "Datasets/data_6.csv",  # 1787 item(s), 83335 transaction(s)
+                                   "Datasets/data_7.csv"]  # 154 item(s), 522661 transaction(s)
                                   ))
 
     def test_apriori_correctness(self):
