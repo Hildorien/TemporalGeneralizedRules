@@ -35,7 +35,9 @@ Each field is separated by ","
 This is the main class that must be instantiated once. 
 
 ### Usage 
-tgar = TGAR()
+import TemporalGeneralizedRules
+
+tgar = TemporalGeneralizedRules.TGAR()
 
 
 ## Vertical Apriori
@@ -81,7 +83,16 @@ This algorithm has five parameters:
 - parallel_count: Optional parameter that enables parallelization in candidate count phase of the algorithm. It can make execution faster.
 
 ### Usage
+
 tgar.htgar("dataset.csv", 0.05, 0.5, 1.1)
+
+
+## Pypy
+
+For a faster performance we recommend using this package with Pypy, a faster implementation of python.
+https://www.pypy.org/
+
+
 
 ## Bibliography
 

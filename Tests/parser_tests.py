@@ -7,19 +7,19 @@ class ParserTests(unittest.TestCase):
 
     def test_foodmart_parsing(self):
 
-        sales_formatted_test = Parser().parse('Datasets/sales_formatted_for_test.csv')
+        sales_formatted_test = Parser().parse('Tests/Datasets/sales_formatted_for_test.csv')
         self.assertEqual(sales_formatted_test.tx_count, 8)
         self.assertEqual(sales_formatted_test.tx_count, len(sales_formatted_test.timestamp_mapping.keys()))
 
-        foodmart_97_with_taxonomy_vertical = Parser().parse('Datasets/sales_formatted_1997.csv', 'Taxonomies/salesfact_taxonomy_single_2.csv')
-        foodmart_98_with_taxonomy_vertical = Parser().parse('Datasets/sales_formatted_1998.csv',  'Taxonomies/salesfact_taxonomy_single_2.csv')
-        foodmart_97_without_taxonomy_vertical = Parser().parse('Datasets/sales_formatted_1997.csv')
-        foodmart_98_without_taxonomy_vertical = Parser().parse('Datasets/sales_formatted_1998.csv')
+        foodmart_97_with_taxonomy_vertical = Parser().parse('Tests/Datasets/sales_formatted_1997.csv', 'Tests/Taxonomies/salesfact_taxonomy_single_2.csv')
+        foodmart_98_with_taxonomy_vertical = Parser().parse('Tests/Datasets/sales_formatted_1998.csv',  'Tests/Taxonomies/salesfact_taxonomy_single_2.csv')
+        foodmart_97_without_taxonomy_vertical = Parser().parse('Tests/Datasets/sales_formatted_1997.csv')
+        foodmart_98_without_taxonomy_vertical = Parser().parse('Tests/Datasets/sales_formatted_1998.csv')
 
-        foodmart_97_with_taxonomy_and_timestamps = Parser().parse("Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
-                                          'Taxonomies/salesfact_taxonomy_single_2.csv', True)
-        foodmart_98_with_taxonomy_and_timestamps = Parser().parse("Datasets/sales_formatted_1998_sorted_by_timestamp.csv",
-                                          'Taxonomies/salesfact_taxonomy_single_2.csv', True)
+        foodmart_97_with_taxonomy_and_timestamps = Parser().parse("Tests/Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
+                                          'Tests/Taxonomies/salesfact_taxonomy_single_2.csv', True)
+        foodmart_98_with_taxonomy_and_timestamps = Parser().parse("Tests/Datasets/sales_formatted_1998_sorted_by_timestamp.csv",
+                                          'Tests/Taxonomies/salesfact_taxonomy_single_2.csv', True)
 
         self.assertEqual(foodmart_97_with_taxonomy_vertical.tx_count, 20522, 'Orders in foodmart 97')
         self.assertEqual(foodmart_97_with_taxonomy_vertical.tx_count,
@@ -46,14 +46,14 @@ class ParserTests(unittest.TestCase):
                          'Inventory should be equal in taxonomy and items_dic')
 
     def test_synthetic_parsing(self):
-        synthetic_with_header = Parser().parse('Datasets/synthetic_dataset_test.csv')
-        synthetic_without_header = Parser().parse('Datasets/synthetic_dataset_test_2.csv')
+        synthetic_with_header = Parser().parse('Tests/Datasets/synthetic_dataset_test.csv')
+        synthetic_without_header = Parser().parse('Tests/Datasets/synthetic_dataset_test_2.csv')
         self.assertEqual(synthetic_with_header.tx_count, 6)
         self.assertEqual(synthetic_without_header.tx_count, 100)
 
     def test_timestamp_with_taxonomy_parsing(self):
-        foodmart_97_timestamped_with_taxonomy = Parser().parse('Datasets/sales_formatted_1997_sorted_by_timestamp.csv',
-                                                                'Taxonomies/salesfact_taxonomy_single_2.csv', True)
+        foodmart_97_timestamped_with_taxonomy = Parser().parse('Tests/Datasets/sales_formatted_1997_sorted_by_timestamp.csv',
+                                                                'Tests/Taxonomies/salesfact_taxonomy_single_2.csv', True)
         self.assertEqual(foodmart_97_timestamped_with_taxonomy.tx_count, 20522, 'Orders in foodmart 97')
         self.assertEqual(foodmart_97_timestamped_with_taxonomy.tx_count,
                          len(foodmart_97_timestamped_with_taxonomy.timestamp_mapping.keys()),
@@ -62,8 +62,8 @@ class ParserTests(unittest.TestCase):
                          len(foodmart_97_timestamped_with_taxonomy.items_dic), 'Taxonomy size is equal to items_dic')
 
     def tests_only_ancestors_are_contained_in_taxonomy(self):
-        foodmart_97_with_taxonomy_and_timestamps = Parser().parse("Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
-                                                                    'Taxonomies/salesfact_taxonomy_single_2.csv', True)
+        foodmart_97_with_taxonomy_and_timestamps = Parser().parse("Tests/Datasets/sales_formatted_1997_sorted_by_timestamp.csv",
+                                                                    'Tests/Taxonomies/salesfact_taxonomy_single_2.csv', True)
         self.ancestors_are_contained_in_taxonomy(foodmart_97_with_taxonomy_and_timestamps)
 
 
