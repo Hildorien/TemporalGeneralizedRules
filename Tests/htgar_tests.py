@@ -1,7 +1,7 @@
 import unittest
-from DataStructures.Parser import Parser
-from HTAR.HTAR import HTAR_BY_PG, getGranulesFrequentsAndSupports
-from utility import flatten_list
+from TemporalGeneralizedRules.Parser import Parser
+from TemporalGeneralizedRules.HTAR import HTAR_BY_PG, getGranulesFrequentsAndSupports
+from TemporalGeneralizedRules.utility import flatten_list
 
 
 class HTGARTests(unittest.TestCase):

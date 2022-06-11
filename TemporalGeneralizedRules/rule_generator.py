@@ -1,9 +1,9 @@
 import math
 import multiprocessing
 import os
-from Cumulate.cumulate_utility import calculate_itemset_ancestor, close_ancestor
-from DataStructures.AssociationRule import AssociationRule
-from utility import hash_candidate
+from .cumulate_utility import calculate_itemset_ancestor, close_ancestor
+from .AssociationRule import AssociationRule
+from .utility import hash_candidate
 
 
 def rule_generation(frequent_dictionary, support_dictionary, min_confidence,

@@ -1,8 +1,6 @@
 import time
 from itertools import combinations
 
-import numpy as np
-
 
 def maximal_time_period_interval(list_of_tuples, period1, period2):
     if period1 > period2 or len(list_of_tuples) < period2 or period1 < 0:

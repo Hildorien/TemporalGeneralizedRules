@@ -1,10 +1,10 @@
 import unittest
 
-from Apriori.apriori import apriori
-from HTAR.PTT import PTT
-from DataStructures.Parser import Parser
-from HTAR.HTAR import findIndividualTFI, HTAR_BY_PG
-from HTAR.HTAR_utility import getPeriodStampFromTimestamp, getTFIUnion, getPeriodsIncluded
+from TemporalGeneralizedRules.apriori import apriori
+from TemporalGeneralizedRules.Parser import Parser
+from TemporalGeneralizedRules.HTAR import findIndividualTFI, HTAR_BY_PG
+from TemporalGeneralizedRules.src import getPeriodStampFromTimestamp, getTFIUnion, getPeriodsIncluded
+from TemporalGeneralizedRules import PTT
 
 
 class HTARTests(unittest.TestCase):

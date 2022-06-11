@@ -1,6 +1,6 @@
 import unittest
-from Apriori.apriori import apriori
-from DataStructures.Parser import Parser
+from TemporalGeneralizedRules.apriori import apriori
+from TemporalGeneralizedRules.Parser import Parser
 
 
 class AprioriTests(unittest.TestCase):

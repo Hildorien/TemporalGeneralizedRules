@@ -1,5 +1,5 @@
 import unittest
-from DataStructures.Parser import Parser
+from TemporalGeneralizedRules.Parser import Parser
 
 
 
