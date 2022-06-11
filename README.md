@@ -89,8 +89,10 @@ tgar.htgar("dataset.csv", 0.05, 0.5, 1.1)
 
 ## Pypy
 
-For a faster performance we recommend using this package with Pypy, a faster implementation of python.
+For a better performance we recommend using this package with Pypy, a faster implementation of python.
+
 https://www.pypy.org/
+
 
 
 
