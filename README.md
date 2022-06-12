@@ -1,6 +1,10 @@
 ## Temporal Generalized Association Rules
 
 This library provides four algorithms related to Association Rule mining. 
+You can download this repository as a package with:
+
+pip install TemporalGeneralizedRules
+
 The algorithms are:
 - vertical_apriori
 - vertical_cumulate
@@ -92,8 +96,6 @@ tgar.htgar("dataset.csv", 0.05, 0.5, 1.1)
 For a better performance we recommend using this package with Pypy, a faster implementation of python.
 
 https://www.pypy.org/
-
-
 
 
 ## Bibliography
