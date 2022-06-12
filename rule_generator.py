@@ -94,7 +94,7 @@ def explode_frequent_itemset_in_potential_rule(frequent_itemset, support_diction
         support_all_items = support_dictionary[hash_candidate(frequent_itemset)]
         confidence = support_all_items / support_antecedent
         rule_data = (antecedent, consequent, support_all_items, confidence, min_conf)
-        hashed_rule = hash(tuple(set(rule_data[0] + rule_data[1])))
+        hashed_rule = hash((rule_data[0], rule_data[1]))
         potential_rule_dict[hashed_rule] = rule_data
 
 
