@@ -1,0 +1,5 @@
+build
+dist
+TemporalGeneralizedRules.egg-info
+.idea
+.ipynb_checkpoints

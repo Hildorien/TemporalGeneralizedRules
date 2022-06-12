@@ -1,8 +1,8 @@
 import unittest
-from utility import findOrderedIntersection, apriori_gen, binary_search_or_first_higher_value, \
+from TemporalGeneralizedRules.utility import findOrderedIntersection, apriori_gen, binary_search_or_first_higher_value, \
     findOrderedIntersectionBetweenBoundaries, maximal_time_period_interval, getFilteredTIDSThatBelongToPeriod
-from utility import getValidJoin
-from DataStructures.Parser import Parser
+from TemporalGeneralizedRules.utility import getValidJoin
+from TemporalGeneralizedRules.Parser import Parser
 
 
 # Testing guide: https://docs.python.org/2/library/unittest.html#organizing-test-code
@@ -84,7 +84,7 @@ class UtilityTests(unittest.TestCase):
         self.assertEqual(dic['Milk']['tids'], [0, 2, 3], 'Milk in transactions 0,2 and 3')
 
     def test_transaction_id_intersection(self):
-        database = Parser().parse("Datasets/sales_formatted_for_test.csv", None, True)
+        database = Parser().parse('Tests/Datasets/sales_formatted_for_test.csv', None, True)
         self.assertEqual(database.transaction_ids_intersection([0, 2]), [4, 5], 'Transaction_id_intersection_test_1')
         self.assertEqual(database.transaction_ids_intersection([2, 1, 0]), [], 'Transaction_id_intersection_test_2')
         self.assertEqual(database.transaction_ids_intersection([3, 6]), [1, 3], 'Transaction_id_intersection_test_3')

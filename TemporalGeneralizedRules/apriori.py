@@ -1,5 +1,5 @@
-from rule_generator import rule_generation
-from utility import generateCanidadtesOfSizeK, hash_candidate, append_tids, calculate_support_for_parallel
+from .rule_generator import rule_generation
+from .utility import generateCanidadtesOfSizeK, hash_candidate, append_tids, calculate_support_for_parallel
 import multiprocessing
 
 

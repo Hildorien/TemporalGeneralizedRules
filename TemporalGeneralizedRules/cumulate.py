@@ -1,10 +1,10 @@
 import multiprocessing
-from Cumulate.cumulate_utility import prune_candidates_in_same_family, count_candidates_in_transaction
-from rule_generator import rule_generation
-from utility import hash_candidate, generateCanidadtesOfSizeK, append_tids, calculate_support_for_parallel
+from .cumulate_utility import prune_candidates_in_same_family
+from .rule_generator import rule_generation
+from .utility import hash_candidate, generateCanidadtesOfSizeK, append_tids, calculate_support_for_parallel
 
 
-def vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_count=False, parallel_rule_gen=False):
+def _vertical_cumulate(vertical_database, min_supp, min_conf, min_r, parallel_count=False, parallel_rule_gen=False):
     """
     :param vertical_database: A Database instance
     :param min_supp: User-defined minimum support

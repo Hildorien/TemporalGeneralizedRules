@@ -1,6 +1,6 @@
-from HTAR.HTAR_utility import getPeriodsIncluded, getTFIUnion
-from rule_generator import rule_generation
-from utility import generateCanidadtesOfSizeK, stringifyPg, hash_candidate, maximal_time_period_interval, \
+from .HTAR_utility import getPeriodsIncluded, getTFIUnion
+from .rule_generator import rule_generation
+from .utility import generateCanidadtesOfSizeK, stringifyPg, hash_candidate, maximal_time_period_interval, \
     append_tids_for_HTAR, calculate_tid_intersections_HTAR_with_boundaries
 import multiprocessing
 

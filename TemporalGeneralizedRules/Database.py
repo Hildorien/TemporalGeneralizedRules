@@ -1,11 +1,11 @@
 import multiprocessing
-from HTAR.HTAR_utility import getPeriodsIncluded
-from utility import findOrderedIntersection, maximal_time_period_interval, \
+from .HTAR_utility import getPeriodsIncluded
+from .utility import findOrderedIntersection, maximal_time_period_interval, \
     getFilteredTIDSThatBelongToPeriod, create_ancestor_set, append_tids_for_HTAR, \
     calculate_tid_intersections_HTAR_with_boundaries, generateCanidadtesOfSizeK, hash_candidate, \
     calculate_tid_intersections_HTAR_with_boundaries_for_paralel, create_minimal_items_dic, \
     append_tids_for_HTAR_for_single_item
-from Cumulate.cumulate_utility import prune_candidates_in_same_family
+from .cumulate_utility import prune_candidates_in_same_family
 
 class Database:
     timestamp_mapping = {}  # {transactionIndex(int) : timestamp(long)}

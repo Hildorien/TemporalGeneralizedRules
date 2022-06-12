@@ -1,10 +1,10 @@
 import unittest
 
-from Apriori.apriori import apriori
-from HTAR.PTT import PTT
-from DataStructures.Parser import Parser
-from HTAR.HTAR import findIndividualTFI, HTAR_BY_PG
-from HTAR.HTAR_utility import getPeriodStampFromTimestamp, getTFIUnion, getPeriodsIncluded
+from TemporalGeneralizedRules.HTAR_utility import getPeriodStampFromTimestamp, getTFIUnion, getPeriodsIncluded
+from TemporalGeneralizedRules.apriori import apriori
+from TemporalGeneralizedRules.Parser import Parser
+from TemporalGeneralizedRules.HTAR import findIndividualTFI, HTAR_BY_PG
+from TemporalGeneralizedRules.PTT import PTT
 
 
 class HTARTests(unittest.TestCase):
@@ -120,7 +120,7 @@ class HTARTests(unittest.TestCase):
         # 10:'T',
         # }
         parser = Parser()
-        database = parser.parse("Datasets/sales_formatted_for_test.csv", None, True)
+        database = parser.parse("Tests/Datasets/sales_formatted_for_test.csv", None, True)
         self.assertEqual(database.supportOf([0]), 0.5, 'SupportTestVanilla1')
         self.assertEqual(database.supportOf([0, 2]), 2/8, 'SupportTestVanilla2')
         self.assertEqual(database.supportOf([0], 0, 18), 1, 'SupportTestWithTimePeriod1')
@@ -143,7 +143,7 @@ class HTARTests(unittest.TestCase):
 
     def test_TFI(self):
         parser = Parser()
-        database = parser.parse("Datasets/sales_formatted_for_test.csv", None, True)
+        database = parser.parse("Tests/Datasets/sales_formatted_for_test.csv", None, True)
         for paralel_running_in_k_level in [False, True]:
             tfi_0_8 = findIndividualTFI(database, 8, 0.55, paralel_running_in_k_level)["TFI"]
             tfi_0_8_lower_lamda = findIndividualTFI(database, 8, 0.02, paralel_running_in_k_level)["TFI"]
@@ -175,7 +175,7 @@ class HTARTests(unittest.TestCase):
 
     def test_TID_and_faps_sales_for_Test(self):
         # {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'J', 8: 'K', 9: 'L'}
-        database = Parser().parse("Datasets/sales_formatted_for_test.csv", None, True)
+        database = Parser().parse("Tests/Datasets/sales_formatted_for_test.csv", None, True)
         self.assertEqual(database.getItemTids(0), [4, 5, 6, 7], 'test_TID_A')
         self.assertEqual(database.getItemTids(1), [7], 'test_TID_B')
         self.assertEqual(database.getItemTids(2), [0, 2, 4, 5], 'test_TID_C')
@@ -188,7 +188,7 @@ class HTARTests(unittest.TestCase):
         self.assertEqual(database.getItemTids(9), [3], 'test_TID_L')
 
     def test_HTAR_generic_data_correctness_and_completeness(self):
-        database = Parser().parse("Datasets/sales_formatted_for_test.csv", None, True)
+        database = Parser().parse("Tests/Datasets/sales_formatted_for_test.csv", None, True)
         #3 levels of complexity
         sups = [0.4, 0.35, 0.002]
         confs = [0.6, 0.6, 0.4]
@@ -210,7 +210,7 @@ class HTARTests(unittest.TestCase):
                 self.compareEqualHTARRules(paralelRun[keys], paralelRun[otherKeys])
 
     def test_leaf_tid_starters(self):
-        database = Parser().parse("Datasets/sales_formatted_for_test.csv", None, True)
+        database = Parser().parse("Tests/Datasets/sales_formatted_for_test.csv", None, True)
         starters_tid = database.getPTTPeriodTIDBoundaryTuples()
         self.assertEqual(starters_tid[7], [0, 2], 'test_starters_tid_1')
         self.assertEqual(starters_tid[10], [3, 3], 'test_starters_tid_2')

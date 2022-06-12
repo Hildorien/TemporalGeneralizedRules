@@ -1,7 +1,7 @@
 import csv
-from DataStructures.Database import Database
-from HTAR.HTAR_utility import getPeriodStampFromTimestamp
-from HTAR.PTT import PTT
+from .Database import Database
+from .HTAR_utility import getPeriodStampFromTimestamp
+from .PTT import PTT
 
 
 class Parser:

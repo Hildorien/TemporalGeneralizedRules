@@ -1,14 +1,14 @@
 import unittest
-from DataStructures.Parser import Parser
-from HTAR.HTAR import HTAR_BY_PG, getGranulesFrequentsAndSupports
-from utility import flatten_list
+from TemporalGeneralizedRules.Parser import Parser
+from TemporalGeneralizedRules.HTAR import HTAR_BY_PG, getGranulesFrequentsAndSupports
+from TemporalGeneralizedRules.utility import flatten_list
 
 
 class HTGARTests(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.sales_formatted_for_test = Parser().parse("Datasets/sales_formatted_for_test.csv",
-                                                       "Taxonomies/sales_formatted_for_test_taxonomy.csv",
+        self.sales_formatted_for_test = Parser().parse("Tests/Datasets/sales_formatted_for_test.csv",
+                                                       "Tests/Taxonomies/sales_formatted_for_test_taxonomy.csv",
                                                        True)
 
     def test_HTGAR_correctness(self):
