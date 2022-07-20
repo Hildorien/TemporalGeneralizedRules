@@ -67,9 +67,9 @@ tgar.apriori("dataset.csv", 0.05, 0.5)
 
 ## Cumulate 
 
-This algorithm has five parameters:
+This algorithm has six parameters:
 - filepath: Filepath of the dataset in csv format with the format discussed in the previous section.
-- taxonomy_filepath: Filepath of the taxonomy in csv format
+- taxonomy_filepath: Filepath of the taxonomy in csv format with the format discussed in the previous section.
 - min_supp: Minimum support threshold.
 - min_conf: Minimum confidence threshold.
 - min_r: Minimum R-interesting threshold.
@@ -90,8 +90,9 @@ tgar.htar("dataset.csv", 0.05, 0.5)
 
 
 ## HTGAR 
-This algorithm has five parameters:
+This algorithm has six parameters:
 - filepath: Filepath of the dataset in csv format with the format discussed in the previous section.
+- taxonomy_filepath: Filepath of the taxonomy in csv format with the format discussed in the previous section.
 - min_supp: Minimum support threshold.
 - min_conf: Minimum confidence threshold.
 - min_r: Minimum R-interesting threshold.
