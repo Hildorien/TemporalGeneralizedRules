@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="TemporalGeneralizedRules",                     # This is the name of the package
-    version="0.0.1",                        # The initial release version
+    version="1.0.2",                        # The initial release version
     author="Ignacio Fernandez y Emiliano Galimberti",                     # Full name of the author
     description="Algorithms for association Rule mining",
     long_description=long_description,      # Long description read from the the readme file
