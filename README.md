@@ -32,8 +32,10 @@ Or if timestamps are provided:
 | 2        | 854420400 | Beer         |
 | 3        | 854420400 | Eggs         |
 
-For taxonomy file use the following format:
+For taxonomy file use the following format (don't provide headers):
 
+| child    | parent       |
+|----------|--------------|
 | Bread    | Dairy        |
 | Milk     | Dairy        |
 | Beer     | Beverage     |
