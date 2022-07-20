@@ -6,10 +6,10 @@ You can download this repository as a package with:
 pip install TemporalGeneralizedRules
 
 The algorithms are:
-- vertical_apriori
-- vertical_cumulate
-- htar
-- htgar
+- Apriori
+- Cumulate
+- HTAR
+- HTGAR
 
 These algorithms use a transactional dataset that is transformed to a vertical format for optimization.
 Dataset MUST follow the following format:
@@ -32,6 +32,14 @@ Or if timestamps are provided:
 | 2        | 854420400 | Beer         |
 | 3        | 854420400 | Eggs         |
 
+For taxonomy file use the following format:
+
+| Bread    | Dairy        |
+| Milk     | Dairy        |
+| Beer     | Beverage     |
+
+One line for each child, parent
+
 Each field is separated by ","
 
 ## TGAR 
@@ -44,7 +52,7 @@ import TemporalGeneralizedRules
 tgar = TemporalGeneralizedRules.TGAR()
 
 
-## Vertical Apriori
+## Apriori
 
 This algorithm has four parameters:
 - filepath: Filepath of the dataset in csv format with the format discussed in the previous section.
@@ -55,17 +63,18 @@ This algorithm has four parameters:
 ### Usage
 tgar.apriori("dataset.csv", 0.05, 0.5)
 
-## Vertical Cumulate 
+## Cumulate 
 
 This algorithm has five parameters:
 - filepath: Filepath of the dataset in csv format with the format discussed in the previous section.
+- taxonomy_filepath: Filepath of the taxonomy in csv format
 - min_supp: Minimum support threshold.
 - min_conf: Minimum confidence threshold.
 - min_r: Minimum R-interesting threshold.
 - parallel_count: Optional parameter that enables parallelization in candidate count phase of the algorithm. It can make execution faster.
 
 ### Usage
-tgar.vertical_cumulate("dataset.csv", 0.05, 0.5, 1.1)
+tgar.cumulate("dataset.csv", 0.05, 0.5, 1.1)
 
 ## HTAR 
 This algorithm has four parameters:
@@ -100,7 +109,15 @@ https://www.pypy.org/
 
 ## Bibliography
 
-The following  were based on the following papers:
-- Apriori : https://dl.acm.org/doi/10.5555/645920.672836
-- Cumulate: https://www.sciencedirect.com/science/article/pii/S0167739X97000198
-- HTAR: https://www.sciencedirect.com/science/article/pii/S2210832716000041
+The algorithms provided in this library were based on the following papers:
+
+- Rakesh Agrawal and Ramakrishnan Srikant. 1994. Fast Algorithms for Mining Association Rules in Large Databases. In Proceedings of the 20th International Conference on Very Large Data Bases (VLDB '94). Morgan Kaufmann Publishers Inc., San Francisco, CA, USA, 487–499. https://dl.acm.org/doi/10.5555/645920.672836
+
+
+- Ramakrishnan Srikant, Rakesh Agrawal, Mining generalized association rules, Future Generation Computer Systems, Volume 13, Issues 2–3, 1997, Pages 161-180, ISSN 0167-739X. https://www.sciencedirect.com/science/article/pii/S0167739X97000198
+
+
+- R. Agrawal and J. C. Shafer, "Parallel mining of association rules," in IEEE Transactions on Knowledge and Data Engineering, vol. 8, no. 6, pp. 962-969, Dec. 1996, doi: 10.1109/69.553164. https://ieeexplore.ieee.org/document/553164
+
+
+- Hong et al., 2016.Hong, T.-P., Lan, G.-C., Su, J.-H., Wu, P.-S., and Wang, S.-L. (2016). Discovery of temporal association rules with hierarchical granular framework. Applied Computing and Informatics, 12(2):134–141 https://www.sciencedirect.com/science/article/pii/S2210832716000041
